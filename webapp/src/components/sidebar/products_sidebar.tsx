@@ -7,27 +7,21 @@ import {useIntl} from 'react-intl';
 import {LHSProductDotMenu} from 'src/components/backstage/lhs_product_dot_menu';
 
 import {pluginUrl} from 'src/browser_routing';
-import {ReservedCategory, useReservedCategoryTitleMapper} from 'src/hooks';
+import {ReservedCategory, useProductsNoPageList, useReservedCategoryTitleMapper} from 'src/hooks';
 
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
 
-interface ProductsList {
-    products: any[];
-}
-
+const defaultProductsFetchParams = {
+    sort: 'name',
+    direction: 'desc',
+};
 const useLHSData = (teamID: string) => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
-    const data: ProductsList = {
-        products: [],
-    };
-    const error = '';
-
-    if (error || !data) {
+    const products = useProductsNoPageList(defaultProductsFetchParams);
+    if (!products) {
         return {groups: [], ready: false};
     }
-
-    const products = data.products;
 
     const productItems = products.map((p) => {
         const icon = 'icon-play-outline';
@@ -43,9 +37,9 @@ const useLHSData = (teamID: string) => {
             itemMenu: (
                 <LHSProductDotMenu
                     productId={p.id}
-                    isFavorite={p.isFavorite}
+                    isFavorite={p.is_favorite}
                 />),
-            isFavorite: p.isFavorite,
+            isFavorite: p.is_favorite,
             className: '',
         };
     });
@@ -83,7 +77,7 @@ const ViewAllProducts = () => {
                 id={'sidebarItem_view_all_products'}
                 aria-label={formatMessage({defaultMessage: 'View all products'})}
                 data-testid={'productsLHSButton'}
-                to={'/mattermost-products/products'}
+                to={'/mattermost-product/products'}
                 exact={true}
             >
                 {viewAllMessage}

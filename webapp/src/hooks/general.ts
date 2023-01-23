@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 
 import {useSelector} from 'react-redux';
@@ -8,9 +8,14 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 
-import {fetchProducts} from 'src/client';
+import {
+    fetchProduct,
+    fetchProducts,
+    fetchProductsNoPage,
+    isFavoriteItem,
+} from 'src/client';
 
-import {FetchProductsParams, Product} from 'src/types/product';
+import {FetchProductsNoPageParams, FetchProductsParams, Product} from 'src/types/product';
 
 export enum ReservedCategory {
     Favorite = 'Favorite',
@@ -31,6 +36,89 @@ export const useReservedCategoryTitleMapper = () => {
     };
 };
 
+export const useSetProductFavorite = (id: string | undefined) => {
+    // TODO: Here make API call and remove this fake interface and function
+    interface Variables {
+        variables: {
+            id: string | undefined;
+            fav: boolean;
+        }
+    }
+
+    const innerUpdateProduct = (variables: Variables) => {
+        return variables;
+    };
+
+    return useCallback((fav: boolean) => {
+        if (id === undefined) {
+            return;
+        }
+        innerUpdateProduct({variables: {id, fav}});
+    }, [id, innerUpdateProduct]);
+};
+
+export const useFavoriteProduct = (id: string): [boolean, () => void] => {
+    const [isFavoriteProduct, setIsFavoriteProduct] = useState(false);
+    const setProductFavorite = useSetProductFavorite(id);
+
+    useEffect(() => {
+        isFavoriteItem(id)
+            .then(setIsFavoriteProduct)
+            .catch(() => setIsFavoriteProduct(false));
+    }, [id]);
+
+    const toggleFavorite = () => {
+        setProductFavorite(!isFavoriteProduct);
+        setIsFavoriteProduct(!isFavoriteProduct);
+    };
+    return [isFavoriteProduct, toggleFavorite];
+};
+
+export function useProduct(id: string): Product | {} {
+    const [product, setProduct] = useState<Product | {}>({});
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchProductAsync() {
+            const productReturn = await fetchProduct(id);
+            if (!isCanceled) {
+                setProduct(productReturn);
+            }
+        }
+
+        fetchProductAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [id]);
+
+    return product;
+}
+
+export function useProductsNoPageList(defaultFetchParams: FetchProductsNoPageParams): Product[] {
+    const [products, setProducts] = useState<Product[]>([]);
+    const currentTeamId = useSelector(getCurrentTeamId);
+
+    // Fetch the queried runs
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchProductsNoPageAsync() {
+            const productsReturn = await fetchProductsNoPage({...defaultFetchParams, team_id: currentTeamId});
+            if (!isCanceled) {
+                setProducts((existingProducts: Product[]) => [...existingProducts, ...productsReturn.items]);
+            }
+        }
+
+        fetchProductsNoPageAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [currentTeamId]);
+
+    return products;
+}
+
 const combineQueryParameters = (oldParams: FetchProductsParams, searchString: string) => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
@@ -48,10 +136,8 @@ export function useProductsList(defaultFetchParams: FetchProductsParams, routed 
     // Fetch the queried runs
     useEffect(() => {
         let isCanceled = false;
-
         async function fetchProductsAsync() {
             const productsReturn = await fetchProducts({...fetchParams, team_id: currentTeamId});
-
             if (!isCanceled) {
                 setProducts((existingProducts: Product[]) => {
                     if (fetchParams.page === 0) {

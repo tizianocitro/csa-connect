@@ -90,7 +90,7 @@ const MainBody = () => {
                 to={`${match.url}/products/:productId`}
             />
             <Route path={`${match.url}/products/:productId`}>
-                <ProductsPage/>
+                <PlaybookRun/>
             </Route>
             <Redirect
                 from={`${match.url}/product`}

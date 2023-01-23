@@ -94,7 +94,7 @@ const ProductsList = ({
                 next={nextPage}
                 hasMore={products.length < totalCount}
                 loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
-                scrollableTarget={'playbooks-backstageRoot'}
+                scrollableTarget={'product-backstageRoot'}
             >
                 {products.map((product) => (
                     <Row

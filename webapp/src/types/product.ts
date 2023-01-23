@@ -6,7 +6,19 @@ export interface Product {
     team_id: string;
     channel_id: string;
     product_id: string;
-    last_status_update_at: number;
+    is_favorite: boolean;
+    created_at: number;
+    last_update_at: number;
+}
+
+export interface FetchProductsNoPageParams {
+    team_id?: string;
+    sort?: string;
+    direction?: string;
+}
+
+export interface FetchProductsNoPageReturn {
+    items: Product[];
 }
 
 export interface FetchProductsParams {

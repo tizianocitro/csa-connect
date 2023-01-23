@@ -34,7 +34,7 @@ const MainContainer = styled.div<{noContainerScroll: boolean}>`
     `)}
 `;
 
-export const BackstageID = 'mattermost-product-backstageRoot';
+export const BackstageID = 'product-backstageRoot';
 
 const Backstage = () => {
     const {pathname} = useLocation();
