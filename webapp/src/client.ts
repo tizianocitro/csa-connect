@@ -4,7 +4,10 @@
 import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
+import qs from 'qs';
+
 import {pluginId} from './manifest';
+import {FetchProductsParams, FetchProductsReturn} from './types/product';
 
 let siteURL = '';
 let basePath = '';
@@ -29,6 +32,17 @@ export const getSiteUrl = (): string => {
 export const getApiUrl = (): string => {
     return apiUrl;
 };
+
+export async function fetchProducts(params: FetchProductsParams) {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+
+    let data = await doGet(`${apiUrl}/products${queryParams}`);
+    if (!data) {
+        data = {items: [], total_count: 0, page_count: 0, has_more: false} as FetchProductsReturn;
+    }
+
+    return data as FetchProductsReturn;
+}
 
 export const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});

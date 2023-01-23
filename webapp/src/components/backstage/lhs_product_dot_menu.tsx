@@ -9,10 +9,7 @@ import DotMenu from 'src/components/dot_menu';
 import {Separator} from 'src/components/backstage/products/shared';
 import {useSetProductFavorite} from 'src/http/hooks';
 
-import {
-    CopyProductLinkMenuItem,
-    FavoriteProductMenuItem
-} from './products/controls';
+import {CopyProductLinkMenuItem, FavoriteProductMenuItem} from './products/controls';
 
 import {DotMenuButtonStyled} from './shared';
 

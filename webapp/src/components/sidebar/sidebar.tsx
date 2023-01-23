@@ -9,8 +9,9 @@ import Scrollbars from 'react-custom-scrollbars';
 
 import {renderThumbVertical, renderTrackHorizontal, renderView} from 'src/components/rhs/rhs_shared';
 
-import Group from './group';
 import {OVERLAY_DELAY} from 'src/constants';
+
+import Group from './group';
 
 export interface GroupItem {
     id?: string;
@@ -44,13 +45,17 @@ const Sidebar = (props: SidebarProps) => {
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};
     }
 
+    const attrs = {
+        shouldUpdatePosition: true,
+    };
+
     return (
         <SidebarComponent>
             <Header>
                 <OverlayTrigger
+                    {...attrs}
                     placement='bottom'
                     delay={OVERLAY_DELAY}
-                    shouldUpdatePosition={true}
                     overlay={team.description?.length ? (
                         <Tooltip id='team-name__tooltip'>{team.description}</Tooltip>
                     ) : <></>}

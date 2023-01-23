@@ -15,6 +15,7 @@ import {applyTheme} from 'src/components/backstage/css_utils';
 
 import {ToastProvider} from './toast_banner';
 import LHSNavigation from './lhs_navigation';
+import MainBody from './main_body';
 
 const BackstageContainer = styled.div`
     background: var(--center-channel-bg);
@@ -35,14 +36,11 @@ const MainContainer = styled.div<{noContainerScroll: boolean}>`
 
 export const BackstageID = 'mattermost-product-backstageRoot';
 
-
 const Backstage = () => {
     const {pathname} = useLocation();
-
     const {url} = useRouteMatch();
-    // TODO: Study how this works
     const noContainerScroll = matchPath<{productId?: string;}>(pathname, {
-        path: [`${url}/mattermost-product/:productId`, `${url}/mattermost-product`],
+        path: [`${url}/products/:productId`, `${url}/mattermost-product`],
     });
 
     const currentTheme = useSelector<GlobalState, Theme>(getTheme);
@@ -71,7 +69,6 @@ const Backstage = () => {
                     <MainBody/>
                 </MainContainer>
             </ToastProvider>
-            <BackstageRHS/>
         </BackstageContainer>
     );
 };

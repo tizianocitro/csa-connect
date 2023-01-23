@@ -12,6 +12,7 @@ type Props = {
     children: ReactNode;
     className?: string;
     style?: CSSProperties;
+    shouldUpdatePosition?: boolean;
 }
 
 const Tooltip = ({

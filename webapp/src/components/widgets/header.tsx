@@ -9,6 +9,7 @@ type Props = {
     level?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     subtitle?: ReactNode;
     right?: ReactNode;
+    css?: string;
 };
 
 type HeadingTag = keyof Pick<JSX.IntrinsicElements, 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'>;

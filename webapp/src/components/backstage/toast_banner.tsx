@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
+
 import styled from 'styled-components';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+
 import {Toast, ToastProps} from './toast';
 
 const Ctx = React.createContext({} as ToastFuncs);

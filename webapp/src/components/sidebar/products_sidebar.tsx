@@ -6,10 +6,11 @@ import {useIntl} from 'react-intl';
 
 import {LHSProductDotMenu} from 'src/components/backstage/lhs_product_dot_menu';
 
+import {pluginUrl} from 'src/browser_routing';
+import {ReservedCategory, useReservedCategoryTitleMapper} from 'src/hooks';
+
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
-import {useReservedCategoryTitleMapper, ReservedCategory} from 'src/hooks';
-import {pluginUrl} from 'src/browser_routing';
 
 interface ProductsList {
     products: any[];
@@ -17,7 +18,9 @@ interface ProductsList {
 
 const useLHSData = (teamID: string) => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
-    const data: ProductsList[] = [];
+    const data: ProductsList = {
+        products: [],
+    };
     const error = '';
 
     if (error || !data) {
@@ -28,7 +31,7 @@ const useLHSData = (teamID: string) => {
 
     const productItems = products.map((p) => {
         const icon = 'icon-play-outline';
-        const link = pluginUrl(`/product/${p.id}?from=products_lhs`);
+        const link = pluginUrl(`/products/${p.id}?from=products_lhs`);
 
         return {
             areaLabel: p.name,
