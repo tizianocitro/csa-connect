@@ -24,6 +24,8 @@ import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 import ErrorPage from 'src/components/error_page';
 import ProductsPage from 'src/components/backstage/products_page';
 
+import ProductDetails from './products/product_details';
+
 const useInitTeamRoutingLogic = () => {
     const dispatch = useDispatch();
     const location = useLocation();
@@ -90,7 +92,7 @@ const MainBody = () => {
                 to={`${match.url}/products/:productId`}
             />
             <Route path={`${match.url}/products/:productId`}>
-                <PlaybookRun/>
+                <ProductDetails/>
             </Route>
             <Redirect
                 from={`${match.url}/product`}

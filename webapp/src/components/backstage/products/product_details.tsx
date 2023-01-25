@@ -2,19 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {Redirect, useLocation, useRouteMatch} from 'react-router-dom';
-import {selectTeam} from 'mattermost-webapp/packages/mattermost-redux/src/actions/teams';
 
 import {useProduct} from 'src/hooks';
 import {pluginErrorUrl} from 'src/browser_routing';
 import {ErrorPageTypes} from 'src/constants';
 import {useDefaultRedirectOnTeamChange} from 'src/components/backstage/main_body';
 
-import Summary from './summary';
-import {RunHeader} from './header';
+import Summary from 'src/components/backstage/summary';
+
 import {Product} from 'src/types/product';
+
+import {ProductHeader} from './header';
 
 export enum ProductSections {
     SectionSummary = 'product-summary',
@@ -22,30 +22,24 @@ export enum ProductSections {
     SectionTable = 'product-table',
 }
 
-const PlaybookRunDetails = () => {
-    const dispatch = useDispatch();
+const ProductDetails = () => {
     const match = useRouteMatch<{productId: string}>();
     const productId = match.params.productId;
     const {hash: urlHash} = useLocation();
     const maybeProduct = useProduct(productId);
-
-    // not found or error
-    if (!maybeProduct) {
-        return <Redirect to={pluginErrorUrl(ErrorPageTypes.DEFAULT)}/>;
-    }
     const product = maybeProduct as Product;
 
     // This may be needed in future to get the channel related to something
     // const [channel] = useChannel(product?.channel_id ?? '');
-
-    useEffect(() => {
-        const teamId = product?.team_id;
-        if (!teamId) {
-            return;
-        }
-        dispatch(selectTeam(teamId));
-    }, [dispatch, product?.team_id]);
-
+    // The following useEffect would break the sidebar because it would retrigger useProductNoPage
+    // because it changes the teamId
+    // useEffect(() => {
+    //    const teamId = product?.team_id;
+    //    if (!teamId) {
+    //        return;
+    //    }
+    //    dispatch(selectTeam(teamId));
+    // }, [dispatch, product?.team_id]);
     useDefaultRedirectOnTeamChange(product?.team_id);
 
     // When first loading the page, the element with the ID corresponding to the URL
@@ -59,6 +53,11 @@ const PlaybookRunDetails = () => {
         }
     }, [urlHash]);
 
+    // not found or error
+    if (!maybeProduct) {
+        return <Redirect to={pluginErrorUrl(ErrorPageTypes.DEFAULT)}/>;
+    }
+
     // Loading state
     if (!product) {
         return null;
@@ -68,7 +67,7 @@ const PlaybookRunDetails = () => {
         <Container>
             <MainWrapper>
                 <Header>
-                    <RunHeader
+                    <ProductHeader
                         product={product}
                     />
                 </Header>
@@ -126,4 +125,4 @@ const Header = styled.header`
     background-color: var(--center-channel-bg);
 `;
 
-export default PlaybookRunDetails;
+export default ProductDetails;

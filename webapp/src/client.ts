@@ -6,14 +6,16 @@ import {ClientError} from '@mattermost/client';
 
 import qs from 'qs';
 
-import {pluginId} from './manifest';
+import {Product} from 'mattermost-webapp/packages/types/src/cloud';
+
 import {
     FetchProductsNoPageParams,
     FetchProductsNoPageReturn,
     FetchProductsParams,
     FetchProductsReturn,
 } from './types/product';
-import { Product } from 'mattermost-webapp/packages/types/src/cloud';
+
+import {pluginId} from './manifest';
 
 let siteURL = '';
 let basePath = '';

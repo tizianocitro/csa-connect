@@ -16,7 +16,7 @@ const defaultProductsFetchParams = {
     sort: 'name',
     direction: 'desc',
 };
-const useLHSData = (teamID: string) => {
+const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
     const products = useProductsNoPageList(defaultProductsFetchParams);
     if (!products) {
@@ -96,7 +96,7 @@ const addViewAllsToGroups = (groups: SidebarGroup[]) => {
 
 const ProductsSidebar = () => {
     const teamID = useSelector(getCurrentTeamId);
-    const {groups, ready} = useLHSData(teamID);
+    const {groups, ready} = useLHSData();
 
     if (!ready) {
         return (
