@@ -18,13 +18,6 @@ interface Props {
 
 const searchDebounceDelayMilliseconds = 300;
 
-const ProductListFilters = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 1rem 16px;
-    gap: 4px;
-`;
-
 const Filters = ({fetchParams, setFetchParams}: Props) => {
     const {formatMessage} = useIntl();
 
@@ -50,5 +43,12 @@ const Filters = ({fetchParams, setFetchParams}: Props) => {
         </ProductListFilters>
     );
 };
+
+const ProductListFilters = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1rem 16px;
+    gap: 4px;
+`;
 
 export default Filters;

@@ -25,36 +25,6 @@ interface Props {
     filterPill: React.ReactNode | null
 }
 
-const ProductList = styled.div`
-    font-family: 'Open Sans', sans-serif;
-    color: rgba(var(--center-channel-color-rgb), 0.90);
-`;
-
-const Footer = styled.div`
-    margin: 10px 0 20px;
-    font-size: 14px;
-`;
-
-const Count = styled.div`
-    padding-top: 8px;
-    width: 100%;
-    text-align: center;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-`;
-
-const SpinnerContainer = styled.div`
-    width: 100%;
-    height: 24px;
-    text-align: center;
-    margin-top: 10px;
-    overflow: visible;
-`;
-
-const StyledSpinner = styled(LoadingSpinner)`
-    width: auto;
-    height: 100%;
-`;
-
 const ProductsList = ({
     products,
     totalCount,
@@ -114,5 +84,35 @@ const ProductsList = ({
         </ProductList>
     );
 };
+
+const ProductList = styled.div`
+    font-family: 'Open Sans', sans-serif;
+    color: rgba(var(--center-channel-color-rgb), 0.90);
+`;
+
+const Footer = styled.div`
+    margin: 10px 0 20px;
+    font-size: 14px;
+`;
+
+const Count = styled.div`
+    padding-top: 8px;
+    width: 100%;
+    text-align: center;
+    color: rgba(var(--center-channel-color-rgb), 0.56);
+`;
+
+const SpinnerContainer = styled.div`
+    width: 100%;
+    height: 24px;
+    text-align: center;
+    margin-top: 10px;
+    overflow: visible;
+`;
+
+const StyledSpinner = styled(LoadingSpinner)`
+    width: auto;
+    height: 100%;
+`;
 
 export default ProductsList;
