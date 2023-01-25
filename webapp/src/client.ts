@@ -4,6 +4,17 @@
 import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
+import qs from 'qs';
+
+import {Product} from 'mattermost-webapp/packages/types/src/cloud';
+
+import {
+    FetchProductsNoPageParams,
+    FetchProductsNoPageReturn,
+    FetchProductsParams,
+    FetchProductsReturn,
+} from './types/product';
+
 import {pluginId} from './manifest';
 
 let siteURL = '';
@@ -29,6 +40,108 @@ export const getSiteUrl = (): string => {
 export const getApiUrl = (): string => {
     return apiUrl;
 };
+
+export const isFavoriteItem = async (id: string) => {
+    const data = await doGet<void>(`${apiUrl}/products/favorites?id=${id}`);
+    return Boolean(data);
+};
+
+export async function fetchProduct(id: string) {
+    let data = await doGet(`${apiUrl}/products/${id}`);
+    data = {
+        id: '1',
+        name: 'My First Product',
+        summary: 'My First Product',
+        summary_modified_at: 21122022,
+        team_id: 'Lab',
+        channel_id: '1',
+        product_id: '1',
+        is_favorite: false,
+        created_at: 21122022,
+        last_update_at: 21122022,
+    };
+    return data as Product;
+}
+
+export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+
+    let data = await doGet(`${apiUrl}/products${queryParams}`);
+    if (!data) {
+        data = {items: []} as FetchProductsNoPageReturn;
+    }
+
+    data = {
+        items: [
+            {
+                id: '1',
+                name: 'My First Product',
+                summary: 'My First Product',
+                summary_modified_at: 21122022,
+                team_id: 'Lab',
+                channel_id: '1',
+                product_id: '1',
+                is_favorite: false,
+                created_at: 21122022,
+                last_update_at: 21122022,
+            },
+            {
+                id: '2',
+                name: 'My Second Product',
+                summary: 'My Second Product',
+                summary_modified_at: 21122022,
+                team_id: 'Lab',
+                channel_id: '2',
+                product_id: '2',
+                is_favorite: true,
+                created_at: 21122022,
+                last_update_at: 21122022,
+            },
+        ],
+    };
+    return data as FetchProductsNoPageReturn;
+}
+
+export async function fetchProducts(params: FetchProductsParams) {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+
+    let data = await doGet(`${apiUrl}/products${queryParams}`);
+    if (!data) {
+        data = {items: [], total_count: 0, page_count: 0, has_more: false} as FetchProductsReturn;
+    }
+    data = {
+        items: [
+            {
+                id: '1',
+                name: 'My First Product',
+                summary: 'My First Product',
+                summary_modified_at: 21122022,
+                team_id: 'Lab',
+                channel_id: '1',
+                product_id: '1',
+                is_favorite: false,
+                created_at: 21122022,
+                last_update_at: 21122022,
+            },
+            {
+                id: '2',
+                name: 'My Second Product',
+                summary: 'My Second Product',
+                summary_modified_at: 21122022,
+                team_id: 'Lab',
+                channel_id: '2',
+                product_id: '2',
+                is_favorite: true,
+                created_at: 21122022,
+                last_update_at: 21122022,
+            },
+        ],
+        total_count: 2,
+        has_more: false,
+        page_count: 0,
+    };
+    return data as FetchProductsReturn;
+}
 
 export const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});

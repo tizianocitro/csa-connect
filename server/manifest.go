@@ -38,16 +38,7 @@ const manifestStr = `
   "settings_schema": {
     "header": "",
     "footer": "",
-    "settings": [
-      {
-        "key": "EnableExperimentalFeatures",
-        "display_name": "Enable Experimental Features:",
-        "type": "bool",
-        "help_text": "Enable experimental features that come with in-progress UI, bugs, and cool stuff.",
-        "placeholder": "",
-        "default": null
-      }
-    ]
+    "settings": []
   }
 }
 `
