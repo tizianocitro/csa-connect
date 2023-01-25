@@ -15,6 +15,7 @@ import Summary from 'src/components/backstage/summary';
 import {Product} from 'src/types/product';
 
 import {ProductHeader} from './header';
+import Table from './table/table';
 
 export enum ProductSections {
     SectionSummary = 'product-summary',
@@ -75,6 +76,10 @@ const ProductDetails = () => {
                     <Body>
                         <Summary
                             id={ProductSections.SectionSummary}
+                            product={product}
+                        />
+                        <Table
+                            id={ProductSections.SectionTable}
                             product={product}
                         />
                     </Body>

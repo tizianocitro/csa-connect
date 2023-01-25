@@ -3,7 +3,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-
 import {useIntl} from 'react-intl';
 
 import MarkdownEdit from 'src/components/markdown_edit';
@@ -39,7 +38,7 @@ const Summary = ({id, product}: Props) => {
     return (
         <Container
             id={id}
-            data-testid={'run-summary-section'}
+            data-testid={'product-summary-section'}
         >
             <Header>
                 <AnchorLinkTitle
