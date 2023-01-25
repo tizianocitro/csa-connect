@@ -29,8 +29,8 @@ const Table = ({id, product}: Props) => {
                 />
             </Header>
             <ProductTable
-                id='productsList'
-                className='productsList'
+                id='productsTable'
+                className='productsTable'
             >
                 <TableHeader/>
                 <TableRow
