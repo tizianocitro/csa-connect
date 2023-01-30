@@ -138,8 +138,8 @@ export async function fetchProducts(params: FetchProductsParams) {
 export async function addChannelToProduct(
     product_id: string,
     team_id: string,
-    channel_name?: string,
     channel_id?: string,
+    channel_name?: string,
     create_public_channel?: boolean
 ) {
     const data = await doPost(`${apiUrl}/products/add_channel`, JSON.stringify({

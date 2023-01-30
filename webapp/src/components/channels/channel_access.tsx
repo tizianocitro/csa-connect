@@ -22,11 +22,9 @@ import ClearIndicator from 'src/components/channels/clear_indicator';
 import MenuList from 'src/components/channels/menu_list';
 import {ChannelProduct} from 'src/types/product';
 
-type ProductSubset = Pick<ChannelProduct, 'create_public_channel' | 'channel_name_template' | 'delete_at' | 'channel_mode' | 'channel_id'>;
-
 interface Props {
-    product: ProductSubset;
-    setProduct: React.Dispatch<React.SetStateAction<ProductSubset>>;
+    product: ChannelProduct;
+    setProduct: React.Dispatch<React.SetStateAction<ChannelProduct>>;
     setChangesMade?: (b: boolean) => void;
 }
 

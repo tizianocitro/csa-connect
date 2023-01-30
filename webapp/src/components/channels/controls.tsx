@@ -19,12 +19,15 @@ const addChannel = (product: ChannelProduct, teamId: string) => {
         return;
     }
 
+    const createNewChannel = product.channel_mode === 'create_new_channel';
+    const linkExistingChannel = product.channel_mode === 'link_existing_channel';
+
     addChannelToProduct(
         product.id,
         teamId,
-        product.channel_name_template,
-        product.channel_mode === 'link_existing_channel' ? product.channel_id : undefined,
-        product.channel_mode === 'create_new_channel' ? product.create_public_channel : undefined,
+        linkExistingChannel ? product.channel_id : undefined,
+        createNewChannel ? product.channel_name_template : undefined,
+        createNewChannel ? product.create_public_channel : false,
     )
         .then(() => {
             // redirect to channel
