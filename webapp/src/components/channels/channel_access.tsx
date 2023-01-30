@@ -31,7 +31,7 @@ interface Props {
 export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => {
     const {formatMessage} = useIntl();
     const teamId = useSelector(getCurrentTeamId);
-    const archived = product.delete_at !== 0;
+    const archived = false;
 
     const handlePublicChange = (isPublic: boolean) => {
         setProduct({

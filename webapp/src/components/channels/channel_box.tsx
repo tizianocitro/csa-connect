@@ -26,7 +26,7 @@ const ChannelBox = (props: Props) => {
                 />
             </Setting>
             <CreateProductChannel
-                product={product}
+                product={productForCreateChannel}
                 teamId={props.teamId}
             />
         </StyledSection>
