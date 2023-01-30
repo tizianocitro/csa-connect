@@ -3,7 +3,7 @@
     "name": "Mattermost Product",
     "description": "A Mattermost Product plugin.",
     "homepage_url": "https://github.com/tizianocitro/mattermost-product/",
-    "support_url": "https://github.comtizianocitro/mattermost-product/issues",
+    "support_url": "https://github.com/tizianocitro/mattermost-product/issues",
     "icon_path": "assets/plugin_icon.svg",
     "min_server_version": "7.6.0",
     "server": {
