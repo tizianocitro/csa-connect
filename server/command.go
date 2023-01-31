@@ -49,7 +49,7 @@ func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.Com
 	case "dialog":
 		dialogRequest = model.OpenDialogRequest{
 			TriggerId: args.TriggerId,
-			URL:       fmt.Sprintf("%s/%s/get_product_url", *serverConfig.ServiceSettings.SiteURL, "mattermost-product"),
+			URL:       fmt.Sprintf("%s/plugins/%s/get_product_url", *serverConfig.ServiceSettings.SiteURL, "mattermost-product"),
 			Dialog:    getProductURLDialog(),
 		}
 	case "":
