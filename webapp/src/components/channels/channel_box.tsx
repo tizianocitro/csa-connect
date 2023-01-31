@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import styled from 'styled-components';
 
 import {CreateAChannel} from 'src/components/channels/channel_access';
 import {Section} from 'src/components/channels/styles';
 import {Product} from 'src/types/product';
 import {convertProductToChannelProduct} from 'src/hooks';
+import {setNameErrorMessage, setProductForCreateChannel, setSelectErrorMessage} from 'src/reducer';
+import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
 import {CreateProductChannel} from './controls';
 
@@ -13,16 +15,17 @@ interface Props {
     teamId: string;
 }
 
+// const [productForCreateChannel, setProductForCreateChannel] = useState(channelProduct);
 const ChannelBox = ({product, teamId}: Props) => {
-    const [selectErrorMessage, setSelectErrorMessage] = useState('');
-    const [nameErrorMessage, setNameErrorMessage] = useState('');
+    const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
+    const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
     const channelProduct = convertProductToChannelProduct(product);
-    const [productForCreateChannel, setProductForCreateChannel] = useState(channelProduct);
+    const [productForCreateChannel, dispatchProductForCreateChannel] = useReducer(setProductForCreateChannel, channelProduct);
 
     const cleanErrorMessages = () => {
-        setSelectErrorMessage('');
-        setNameErrorMessage('');
+        dispatchSelectErrorMessage(selectErrorMessageAction(''));
+        dispatchNameErrorMessage(nameErrorMessageAction(''));
     };
     return (
         <StyledSection>
@@ -31,15 +34,15 @@ const ChannelBox = ({product, teamId}: Props) => {
                     product={productForCreateChannel}
                     selectErrorMessage={selectErrorMessage}
                     nameErrorMessage={nameErrorMessage}
-                    setProduct={setProductForCreateChannel}
+                    dispatchProductForCreateChannel={dispatchProductForCreateChannel}
                     cleanErrorMessages={cleanErrorMessages}
                 />
             </Setting>
             <CreateProductChannel
                 product={productForCreateChannel}
                 teamId={teamId}
-                setSelectErrorMessage={setSelectErrorMessage}
-                setNameErrorMessage={setNameErrorMessage}
+                dispatchSelectErrorMessage={dispatchSelectErrorMessage}
+                dispatchNameErrorMessage={dispatchNameErrorMessage}
             />
         </StyledSection>
     );

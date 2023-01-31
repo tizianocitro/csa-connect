@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {Dispatch} from 'react';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -21,12 +21,13 @@ import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/channels/clear_indicator';
 import MenuList from 'src/components/channels/menu_list';
 import {ChannelProduct} from 'src/types/product';
+import {productForCreateChannelAction} from 'src/actions';
 
 interface Props {
     product: ChannelProduct;
     selectErrorMessage: string,
     nameErrorMessage: string,
-    setProduct: React.Dispatch<React.SetStateAction<ChannelProduct>>;
+    dispatchProductForCreateChannel: Dispatch<any>;
     cleanErrorMessages: () => void,
     setChangesMade?: (b: boolean) => void;
 }
@@ -35,7 +36,7 @@ export const CreateAChannel = ({
     product,
     selectErrorMessage,
     nameErrorMessage,
-    setProduct,
+    dispatchProductForCreateChannel,
     cleanErrorMessages,
     setChangesMade,
 }: Props) => {
@@ -45,34 +46,34 @@ export const CreateAChannel = ({
 
     const handlePublicChange = (isPublic: boolean) => {
         cleanErrorMessages();
-        setProduct({
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             create_public_channel: isPublic,
-        });
+        }));
         setChangesMade?.(true);
     };
     const handleChannelNameTemplateChange = (channelNameTemplate: string) => {
         cleanErrorMessages();
-        setProduct({
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_name_template: channelNameTemplate,
-        });
+        }));
         setChangesMade?.(true);
     };
     const handleChannelModeChange = (mode: 'create_new_channel' | 'link_existing_channel') => {
         cleanErrorMessages();
-        setProduct({
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_mode: mode,
-        });
+        }));
         setChangesMade?.(true);
     };
     const handleChannelIdChange = (channel_id: string) => {
         cleanErrorMessages();
-        setProduct({
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_id,
-        });
+        }));
         setChangesMade?.(true);
     };
 

@@ -1,26 +1,28 @@
 
-import React from 'react';
+import React, {Dispatch} from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch} from 'react-redux';
 
 import {PrimaryButton} from 'src/components/assets/buttons';
 
 // import {openChannelProductModal} from 'src/actions';
 import {ChannelProduct} from 'src/types/product';
 import {addChannelToProduct} from 'src/client';
+import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
 type ControlProps = {
     product: ChannelProduct,
     teamId: string,
-    setSelectErrorMessage: React.Dispatch<React.SetStateAction<string>>,
-    setNameErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    dispatchSelectErrorMessage: Dispatch<any>,
+    dispatchNameErrorMessage: Dispatch<any>,
 };
 
 const addChannel = (
     product: ChannelProduct,
     teamId: string,
-    setSelectErrorMessage: React.Dispatch<React.SetStateAction<string>>,
-    setNameErrorMessage: React.Dispatch<React.SetStateAction<string>>,
+    dispatchSelectErrorMessage: Dispatch<any>,
+    dispatchNameErrorMessage: Dispatch<any>,
 ) => {
     if (!product) {
         return;
@@ -30,11 +32,11 @@ const addChannel = (
     const createNewChannel = channel_mode === 'create_new_channel';
     const linkExistingChannel = channel_mode === 'link_existing_channel';
     if (linkExistingChannel && channel_id === '') {
-        setSelectErrorMessage('A channel has to be selected.');
+        dispatchSelectErrorMessage(selectErrorMessageAction('A channel has to be selected.'));
         return;
     }
     if (createNewChannel && channel_name_template === '') {
-        setNameErrorMessage('Channel name cannot be empty.');
+        dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
         return;
     }
     addChannelToProduct(
@@ -62,14 +64,15 @@ const addChannel = (
 export const CreateProductChannel = ({
     product,
     teamId,
-    setSelectErrorMessage,
-    setNameErrorMessage,
+    dispatchSelectErrorMessage,
+    dispatchNameErrorMessage,
 }: ControlProps) => {
+    const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const title = formatMessage({defaultMessage: 'Add channel'});
     return (
         <PrimaryButtonLarger
-            onClick={() => addChannel(product, teamId, setSelectErrorMessage, setNameErrorMessage)}
+            onClick={() => addChannel(product, teamId, dispatchSelectErrorMessage, dispatchNameErrorMessage)}
             title={title}
             data-testid='create-product-channel-button'
         >
