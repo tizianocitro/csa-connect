@@ -13,21 +13,33 @@ interface Props {
     teamId: string;
 }
 
-const ChannelBox = (props: Props) => {
-    const product = convertProductToChannelProduct(props.product);
-    const [productForCreateChannel, setProductForCreateChannel] = useState(product);
+const ChannelBox = ({product, teamId}: Props) => {
+    const [selectErrorMessage, setSelectErrorMessage] = useState('');
+    const [nameErrorMessage, setNameErrorMessage] = useState('');
 
+    const channelProduct = convertProductToChannelProduct(product);
+    const [productForCreateChannel, setProductForCreateChannel] = useState(channelProduct);
+
+    const cleanErrorMessages = () => {
+        setSelectErrorMessage('');
+        setNameErrorMessage('');
+    };
     return (
         <StyledSection>
             <Setting id={'product-channel-action'}>
                 <CreateAChannel
                     product={productForCreateChannel}
+                    selectErrorMessage={selectErrorMessage}
+                    nameErrorMessage={nameErrorMessage}
                     setProduct={setProductForCreateChannel}
+                    cleanErrorMessages={cleanErrorMessages}
                 />
             </Setting>
             <CreateProductChannel
                 product={productForCreateChannel}
-                teamId={props.teamId}
+                teamId={teamId}
+                setSelectErrorMessage={setSelectErrorMessage}
+                setNameErrorMessage={setNameErrorMessage}
             />
         </StyledSection>
     );

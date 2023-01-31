@@ -24,32 +24,43 @@ import {ChannelProduct} from 'src/types/product';
 
 interface Props {
     product: ChannelProduct;
+    selectErrorMessage: string,
+    nameErrorMessage: string,
     setProduct: React.Dispatch<React.SetStateAction<ChannelProduct>>;
+    cleanErrorMessages: () => void,
     setChangesMade?: (b: boolean) => void;
 }
 
-export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => {
+export const CreateAChannel = ({
+    product,
+    selectErrorMessage,
+    nameErrorMessage,
+    setProduct,
+    cleanErrorMessages,
+    setChangesMade,
+}: Props) => {
     const {formatMessage} = useIntl();
     const teamId = useSelector(getCurrentTeamId);
     const archived = false;
 
     const handlePublicChange = (isPublic: boolean) => {
+        cleanErrorMessages();
         setProduct({
             ...product,
             create_public_channel: isPublic,
         });
         setChangesMade?.(true);
     };
-
     const handleChannelNameTemplateChange = (channelNameTemplate: string) => {
+        cleanErrorMessages();
         setProduct({
             ...product,
             channel_name_template: channelNameTemplate,
         });
         setChangesMade?.(true);
     };
-
     const handleChannelModeChange = (mode: 'create_new_channel' | 'link_existing_channel') => {
+        cleanErrorMessages();
         setProduct({
             ...product,
             channel_mode: mode,
@@ -57,6 +68,7 @@ export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => 
         setChangesMade?.(true);
     };
     const handleChannelIdChange = (channel_id: string) => {
+        cleanErrorMessages();
         setProduct({
             ...product,
             channel_id,
@@ -97,6 +109,9 @@ export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => 
                         teamId={teamId}
                         isMulti={false}
                     />
+                    <ErrorMessage display={selectErrorMessage !== ''}>
+                        {selectErrorMessage}
+                    </ErrorMessage>
                 </SelectorWrapper>
             </AutomationHeader>
             <AutomationHeader id={'create-new-channel'}>
@@ -148,10 +163,13 @@ export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => 
                         input={product.channel_name_template}
                         onChange={handleChannelNameTemplateChange}
                         pattern={'[\\S][\\s\\S]*[\\S]'} // at least two non-whitespace characters
-                        placeholderText={formatMessage({defaultMessage: 'Channel name template (optional)'})}
+                        placeholderText={formatMessage({defaultMessage: 'Channel name template'})}
                         type={'text'}
                         errorText={formatMessage({defaultMessage: 'Channel name is not valid.'})}
                     />
+                    <ErrorMessage display={nameErrorMessage !== ''}>
+                        {nameErrorMessage}
+                    </ErrorMessage>
                 </HorizontalSplit>
             </AutomationHeader>
         </Container>
@@ -221,4 +239,10 @@ export const ChannelModeRadio = styled(RadioInput)`
     && {
         margin: 0 8px;
     }
+`;
+
+const ErrorMessage = styled.div<{display?: boolean}>`
+    color: var(--error-text);
+    margin-left: auto;
+    display: ${(props) => (props.display ? 'inline-block' : 'none')};
 `;
