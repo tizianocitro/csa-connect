@@ -1,10 +1,12 @@
-import React, {ComponentProps, useCallback} from 'react';
+import React, {useReducer} from 'react';
 import styled from 'styled-components';
 
 import {CreateAChannel} from 'src/components/channels/channel_access';
 import {Section} from 'src/components/channels/styles';
 import {Product} from 'src/types/product';
-import {convertProductToChannelProduct, useProxyState, useUpdateProduct} from 'src/hooks';
+import {convertProductToChannelProduct} from 'src/hooks';
+import {setNameErrorMessage, setProductForCreateChannel, setSelectErrorMessage} from 'src/reducer';
+import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
 import {CreateProductChannel} from './controls';
 
@@ -13,33 +15,34 @@ interface Props {
     teamId: string;
 }
 
-const ChannelBox = (props: Props) => {
-    const product = convertProductToChannelProduct(props.product);
-    const updateProduct = useUpdateProduct(product.id);
+// const [productForCreateChannel, setProductForCreateChannel] = useState(channelProduct);
+const ChannelBox = ({product, teamId}: Props) => {
+    const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
+    const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
-    const [
-        productForCreateChannel,
-        setProductForCreateChannel,
-    ] = useProxyState<ComponentProps<typeof CreateAChannel>['product']>(product, useCallback((update) => {
-        updateProduct({
-            createPublicChannel: update.create_public_channel,
-            channelNameTemplate: update.channel_name_template,
-            channelMode: update.channel_mode,
-            channelId: update.channel_id,
-        });
-    }, [updateProduct]));
+    const channelProduct = convertProductToChannelProduct(product);
+    const [productForCreateChannel, dispatchProductForCreateChannel] = useReducer(setProductForCreateChannel, channelProduct);
 
+    const cleanErrorMessages = () => {
+        dispatchSelectErrorMessage(selectErrorMessageAction(''));
+        dispatchNameErrorMessage(nameErrorMessageAction(''));
+    };
     return (
         <StyledSection>
             <Setting id={'product-channel-action'}>
                 <CreateAChannel
                     product={productForCreateChannel}
-                    setProduct={setProductForCreateChannel}
+                    selectErrorMessage={selectErrorMessage}
+                    nameErrorMessage={nameErrorMessage}
+                    dispatchProductForCreateChannel={dispatchProductForCreateChannel}
+                    cleanErrorMessages={cleanErrorMessages}
                 />
             </Setting>
             <CreateProductChannel
-                product={product}
-                teamId={props.teamId}
+                product={productForCreateChannel}
+                teamId={teamId}
+                dispatchSelectErrorMessage={dispatchSelectErrorMessage}
+                dispatchNameErrorMessage={dispatchNameErrorMessage}
             />
         </StyledSection>
     );

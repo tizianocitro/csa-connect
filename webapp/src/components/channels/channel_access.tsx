@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {Dispatch} from 'react';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -21,48 +21,59 @@ import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/channels/clear_indicator';
 import MenuList from 'src/components/channels/menu_list';
 import {ChannelProduct} from 'src/types/product';
-
-type ProductSubset = Pick<ChannelProduct, 'create_public_channel' | 'channel_name_template' | 'delete_at' | 'channel_mode' | 'channel_id'>;
+import {productForCreateChannelAction} from 'src/actions';
 
 interface Props {
-    product: ProductSubset;
-    setProduct: React.Dispatch<React.SetStateAction<ProductSubset>>;
+    product: ChannelProduct;
+    selectErrorMessage: string,
+    nameErrorMessage: string,
+    dispatchProductForCreateChannel: Dispatch<any>;
+    cleanErrorMessages: () => void,
     setChangesMade?: (b: boolean) => void;
 }
 
-export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => {
+export const CreateAChannel = ({
+    product,
+    selectErrorMessage,
+    nameErrorMessage,
+    dispatchProductForCreateChannel,
+    cleanErrorMessages,
+    setChangesMade,
+}: Props) => {
     const {formatMessage} = useIntl();
     const teamId = useSelector(getCurrentTeamId);
-    const archived = product.delete_at !== 0;
+    const archived = false;
 
     const handlePublicChange = (isPublic: boolean) => {
-        setProduct({
+        cleanErrorMessages();
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             create_public_channel: isPublic,
-        });
+        }));
         setChangesMade?.(true);
     };
-
     const handleChannelNameTemplateChange = (channelNameTemplate: string) => {
-        setProduct({
+        cleanErrorMessages();
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_name_template: channelNameTemplate,
-        });
+        }));
         setChangesMade?.(true);
     };
-
     const handleChannelModeChange = (mode: 'create_new_channel' | 'link_existing_channel') => {
-        setProduct({
+        cleanErrorMessages();
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_mode: mode,
-        });
+        }));
         setChangesMade?.(true);
     };
     const handleChannelIdChange = (channel_id: string) => {
-        setProduct({
+        cleanErrorMessages();
+        dispatchProductForCreateChannel(productForCreateChannelAction({
             ...product,
             channel_id,
-        });
+        }));
         setChangesMade?.(true);
     };
 
@@ -99,6 +110,9 @@ export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => 
                         teamId={teamId}
                         isMulti={false}
                     />
+                    <ErrorMessage display={selectErrorMessage !== ''}>
+                        {selectErrorMessage}
+                    </ErrorMessage>
                 </SelectorWrapper>
             </AutomationHeader>
             <AutomationHeader id={'create-new-channel'}>
@@ -150,10 +164,13 @@ export const CreateAChannel = ({product, setProduct, setChangesMade}: Props) => 
                         input={product.channel_name_template}
                         onChange={handleChannelNameTemplateChange}
                         pattern={'[\\S][\\s\\S]*[\\S]'} // at least two non-whitespace characters
-                        placeholderText={formatMessage({defaultMessage: 'Channel name template (optional)'})}
+                        placeholderText={formatMessage({defaultMessage: 'Channel name template'})}
                         type={'text'}
                         errorText={formatMessage({defaultMessage: 'Channel name is not valid.'})}
                     />
+                    <ErrorMessage display={nameErrorMessage !== ''}>
+                        {nameErrorMessage}
+                    </ErrorMessage>
                 </HorizontalSplit>
             </AutomationHeader>
         </Container>
@@ -223,4 +240,10 @@ export const ChannelModeRadio = styled(RadioInput)`
     && {
         margin: 0 8px;
     }
+`;
+
+const ErrorMessage = styled.div<{display?: boolean}>`
+    color: var(--error-text);
+    margin-left: auto;
+    display: ${(props) => (props.display ? 'inline-block' : 'none')};
 `;

@@ -88,7 +88,8 @@ endif
 ## Ensures NPM dependencies are installed without having to run this all the time.
 webapp/node_modules: $(wildcard webapp/package.json)
 ifneq ($(HAS_WEBAPP),)
-	cd webapp && $(NPM) install --no-audit 
+	cd webapp && node skip_integrity_check.js
+	cd webapp && $(NPM) install --no-audit --ignore-scripts --legacy-peer-deps
 	touch $@
 endif
 
