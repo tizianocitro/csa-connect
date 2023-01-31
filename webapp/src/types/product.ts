@@ -3,12 +3,20 @@ export interface Product {
     name: string;
     summary: string;
     summary_modified_at: number;
-    team_id: string;
-    channel_id: string;
     product_id: string;
+    channels_ids?: string[]; // To show in product page
     is_favorite: boolean;
     created_at: number;
     last_update_at: number;
+    delete_at: number;
+}
+
+export interface ChannelProduct extends Product {
+    team_id: string;
+    channel_id: string;
+    channel_mode: string;
+    channel_name_template: string;
+    create_public_channel: boolean;
 }
 
 export interface FetchProductsNoPageParams {
@@ -38,3 +46,6 @@ export interface FetchProductsReturn {
     items: Product[];
 }
 
+export interface AddChannelResult {
+    channel_id?: string;
+}

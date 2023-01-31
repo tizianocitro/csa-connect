@@ -1,4 +1,11 @@
-import {useCallback, useEffect, useState} from 'react';
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
+import {useUpdateEffect} from 'react-use';
 import {useIntl} from 'react-intl';
 
 import {useSelector} from 'react-redux';
@@ -7,6 +14,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
+import {debounce, isEqual} from 'lodash';
 
 import {
     fetchProduct,
@@ -15,7 +23,13 @@ import {
     isFavoriteItem,
 } from 'src/client';
 
-import {FetchProductsNoPageParams, FetchProductsParams, Product} from 'src/types/product';
+import {
+    ChannelProduct,
+    FetchProductsNoPageParams,
+    FetchProductsParams,
+    Product,
+} from 'src/types/product';
+import {resolve} from 'src/utils';
 
 export enum ReservedCategory {
     Favorite = 'Favorite',
@@ -95,6 +109,17 @@ export function useProduct(id: string): Product | {} {
     return product;
 }
 
+export const convertProductToChannelProduct = (product: Product): ChannelProduct => {
+    return {
+        ...product,
+        team_id: '',
+        channel_id: '',
+        channel_mode: 'link_existing_channel', // Default is creation create_new_channel, but also link_existing_channel
+        channel_name_template: '',
+        create_public_channel: true,
+    };
+};
+
 export function useProductsNoPageList(defaultFetchParams: FetchProductsNoPageParams): Product[] {
     const [products, setProducts] = useState<Product[]>([]);
     const currentTeamId = useSelector(getCurrentTeamId);
@@ -168,3 +193,47 @@ export function useProductsList(defaultFetchParams: FetchProductsParams, routed 
 
     return [products, totalCount, fetchParams, setFetchParams];
 }
+
+/**
+ * For controlled props or other pieces of state that need immediate updates with a debounced side effect.
+ * @remarks
+ * This is a problem solving hook; it is not intended for general use unless it is specifically needed.
+ * Also consider {@link https://github.com/streamich/react-use/blob/master/docs/useDebounce.md react-use#useDebounce}.
+ *
+ * @example
+ * const [debouncedValue, setDebouncedValue] = useState('…');
+ * const [val, setVal] = useProxyState(debouncedValue, setDebouncedValue, 500);
+ * const input = <input type='text' value={val} onChange={({currentTarget}) => setVal(currentTarget.value)}/>;
+ */
+export const useProxyState = <T>(
+    prop: T,
+    onChange: (val: T) => void,
+    wait = 500,
+): [T, React.Dispatch<React.SetStateAction<T>>] => {
+    const check = useRef(prop);
+    const [value, setValue] = useState(prop);
+
+    useUpdateEffect(() => {
+        if (!isEqual(value, check.current)) {
+            // check failed; don't destroy pending changes (values set mid-cycle between send/sync)
+            return;
+        }
+        check.current = prop; // sync check
+        setValue(prop);
+    }, [prop]);
+
+    const onChangeDebounced = useMemo(() => debounce((v) => {
+        check.current = v; // send check
+        onChange(v);
+    }, wait), [wait, onChange]);
+
+    useEffect(() => onChangeDebounced.cancel, [onChangeDebounced]);
+
+    return [value, useCallback((update) => {
+        setValue((v) => {
+            const newValue = resolve(update, v);
+            onChangeDebounced(newValue);
+            return newValue;
+        });
+    }, [setValue, onChangeDebounced])];
+};

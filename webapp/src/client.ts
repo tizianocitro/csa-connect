@@ -9,6 +9,7 @@ import qs from 'qs';
 import {Product} from 'mattermost-webapp/packages/types/src/cloud';
 
 import {
+    AddChannelResult,
     FetchProductsNoPageParams,
     FetchProductsNoPageReturn,
     FetchProductsParams,
@@ -53,12 +54,11 @@ export async function fetchProduct(id: string) {
         name: 'My First Product',
         summary: 'My First Product',
         summary_modified_at: 21122022,
-        team_id: 'Lab',
-        channel_id: '1',
         product_id: '1',
         is_favorite: false,
         created_at: 21122022,
         last_update_at: 21122022,
+        delete_at: 0,
     };
     return data as Product;
 }
@@ -78,8 +78,6 @@ export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
                 name: 'My First Product',
                 summary: 'My First Product',
                 summary_modified_at: 21122022,
-                team_id: 'Lab',
-                channel_id: '1',
                 product_id: '1',
                 is_favorite: false,
                 created_at: 21122022,
@@ -90,8 +88,6 @@ export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
                 name: 'My Second Product',
                 summary: 'My Second Product',
                 summary_modified_at: 21122022,
-                team_id: 'Lab',
-                channel_id: '2',
                 product_id: '2',
                 is_favorite: true,
                 created_at: 21122022,
@@ -116,8 +112,6 @@ export async function fetchProducts(params: FetchProductsParams) {
                 name: 'My First Product',
                 summary: 'My First Product',
                 summary_modified_at: 21122022,
-                team_id: 'Lab',
-                channel_id: '1',
                 product_id: '1',
                 is_favorite: false,
                 created_at: 21122022,
@@ -128,8 +122,6 @@ export async function fetchProducts(params: FetchProductsParams) {
                 name: 'My Second Product',
                 summary: 'My Second Product',
                 summary_modified_at: 21122022,
-                team_id: 'Lab',
-                channel_id: '2',
                 product_id: '2',
                 is_favorite: true,
                 created_at: 21122022,
@@ -141,6 +133,23 @@ export async function fetchProducts(params: FetchProductsParams) {
         page_count: 0,
     };
     return data as FetchProductsReturn;
+}
+
+export async function addChannelToProduct(
+    product_id: string,
+    team_id: string,
+    channel_id?: string,
+    channel_name?: string,
+    create_public_channel?: boolean
+) {
+    const data = await doPost(`${apiUrl}/products/add_channel`, JSON.stringify({
+        team_id,
+        channel_name,
+        product_id,
+        channel_id,
+        create_public_channel,
+    }));
+    return data as AddChannelResult;
 }
 
 export const doGet = async <TData = any>(url: string) => {
