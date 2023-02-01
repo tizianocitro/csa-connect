@@ -12,13 +12,6 @@ import (
 	"github.com/tizianocitro/mattermost-product/server/command"
 )
 
-func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(command.GetProductURLCommand()); err != nil {
-		return errors.Wrapf(err, "failed to register %s command", command.GetProductURLCommandName)
-	}
-	return nil
-}
-
 // Executes a command that has been previously registered via the RegisterCommand API.
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	trigger := strings.TrimPrefix(strings.Fields(args.Command)[0], "/")
@@ -34,44 +27,44 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 }
 
 func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.CommandResponse {
-	var dialogRequest model.OpenDialogRequest
 	serverConfig := p.API.GetConfig()
-	fields := strings.Fields(args.Command)
-	arg := ""
-	if len(fields) == 2 {
-		arg = fields[1]
-	}
+	name := command.GetNameFromArgs(args)
 
-	switch arg {
+	switch name {
 	case "help":
-		return &model.CommandResponse{
-			ResponseType: model.CommandResponseTypeEphemeral,
-			Text:         command.GetProductURLHelp,
-		}
+		return command.HelpGetProductURLResponse()
 	case "dialog":
-		dialogRequest = model.OpenDialogRequest{
-			TriggerId: args.TriggerId,
-			URL:       fmt.Sprintf("%s/plugins/%s/get_product_url", *serverConfig.ServiceSettings.SiteURL, "mattermost-product"),
-			Dialog:    command.GetProductURLDialog(),
-		}
+		return command.OpenDialogGetProductURLRequest(&command.ProductURLDialogConfig{
+			Args: args,
+			PluginConfig: command.PluginConfig{
+				PathPrefix: "plugins",
+				PluginID:   p.pluginID,
+				SiteURL:    *serverConfig.ServiceSettings.SiteURL,
+				PluginAPI: command.PluginAPI{
+					API: p.API,
+				},
+			},
+		})
 	case "":
-		return &model.CommandResponse{
-			ResponseType: model.CommandResponseTypeEphemeral,
-			Text:         command.EmptyProductName,
-		}
+		return command.EmptyNameGetProductURLResponse()
 	default:
-		return &model.CommandResponse{
-			ResponseType: model.CommandResponseTypeInChannel,
-			Text:         command.GetProductURL(arg, *serverConfig.ServiceSettings.SiteURL),
-		}
+		return command.GetProductURLResponse(&command.ProductURLConfig{
+			Name: name,
+			PluginConfig: command.PluginConfig{
+				PathPrefix: p.pluginURLPathPrefix,
+				PluginID:   p.pluginID,
+				SiteURL:    *serverConfig.ServiceSettings.SiteURL,
+				PluginAPI: command.PluginAPI{
+					API: p.API,
+				},
+			},
+		})
 	}
-	if err := p.API.OpenInteractiveDialog(dialogRequest); err != nil {
-		errorMessage := fmt.Sprintf("Failed to open the interactive dialog for %s command", command.GetProductURLCommandName)
-		p.API.LogError(errorMessage, "err", err.Error())
-		return &model.CommandResponse{
-			ResponseType: model.CommandResponseTypeEphemeral,
-			Text:         errorMessage,
-		}
+}
+
+func (p *Plugin) registerCommands() error {
+	if err := p.API.RegisterCommand(command.GetProductURLCommand()); err != nil {
+		return errors.Wrapf(err, "failed to register %s command", command.GetProductURLCommandName)
 	}
-	return &model.CommandResponse{}
+	return nil
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -13,52 +12,74 @@ import (
 )
 
 func (p *Plugin) handleGetProductURL(w http.ResponseWriter, r *http.Request) {
-	p.API.LogInfo("Got request")
 	serverConfig := p.API.GetConfig()
-	request := &model.SubmitDialogRequest{}
-	body, readErr := io.ReadAll(r.Body)
-	if readErr != nil {
-		p.API.LogError("Failed to read request")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	if unmarshalErr := json.Unmarshal(body, request); unmarshalErr != nil {
-		p.API.LogError("Failed to unmarshal request")
+	request, err := p.getDialogRequestFromBody(r)
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	p.API.LogInfo("Checking user")
-	userID, getUserErr := user.GetUserIDByUserRequestID(p.API, request.UserId)
-	if getUserErr != nil {
+	userID, err := p.getUserIDByUserRequestID(request)
+	if err != nil {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
 
-	p.API.LogInfo("Check if request was canceled")
+	if p.isRequestCanceled(request) {
+		return
+	}
+
+	if err := command.CreateGetProductURLPost(&command.ProductURLPostConfig{
+		UserID: userID,
+		PluginConfig: command.PluginConfig{
+			PathPrefix: p.pluginURLPathPrefix,
+			PluginID:   p.pluginID,
+			SiteURL:    *serverConfig.ServiceSettings.SiteURL,
+			PluginAPI: command.PluginAPI{
+				API: p.API,
+			},
+		},
+	}, request); err != nil {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	p.completeRequest(w)
+}
+
+func (p *Plugin) getDialogRequestFromBody(r *http.Request) (*model.SubmitDialogRequest, error) {
+	request := &model.SubmitDialogRequest{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		p.API.LogError("Failed to read body from request", "request", r)
+		return nil, err
+	}
+	if err = json.Unmarshal(body, request); err != nil {
+		p.API.LogError("Failed to unmarshal body", "body", body, "request", r)
+		return nil, err
+	}
+	return request, nil
+}
+
+func (p *Plugin) getUserIDByUserRequestID(request *model.SubmitDialogRequest) (string, error) {
+	p.API.LogInfo("Getting user id from request", "requestUserId", request.UserId)
+	userID, err := user.GetUserIDByUserRequestID(p.API, request.UserId)
+	if err != nil {
+		return "", err
+	}
+	return userID, nil
+}
+
+func (p *Plugin) isRequestCanceled(request *model.SubmitDialogRequest) bool {
+	p.API.LogInfo("Checking if request was canceled")
 	if request.Cancelled {
 		p.API.LogInfo("Request was canceled")
-		return
+		return true
 	}
+	return false
+}
 
-	productSelectorFieldName := command.ProductSelectorFieldName
-	productID, ok := request.Submission[productSelectorFieldName].(string)
-	if !ok {
-		p.API.LogError("Request is missing field", "field", productSelectorFieldName)
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	// Using p.botID instead of user.Id will make the post come from the bot
-	p.API.LogInfo("Creating post")
-	if _, createPostErr := p.API.CreatePost(&model.Post{
-		UserId:    userID,
-		ChannelId: request.ChannelId,
-		Message:   fmt.Sprintf("%s/%s/products/%s", *serverConfig.ServiceSettings.SiteURL, "mattermost-product", productID),
-	}); createPostErr != nil {
-		p.API.LogError("Failed to post message", "err", createPostErr.Error())
-		return
-	}
+func (p *Plugin) completeRequest(w http.ResponseWriter) {
 	p.API.LogInfo("Completed request")
 	w.WriteHeader(http.StatusOK)
 }
