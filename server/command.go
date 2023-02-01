@@ -8,11 +8,13 @@ import (
 
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
+
+	"github.com/tizianocitro/mattermost-product/server/command"
 )
 
 func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(getProductURLCommand()); err != nil {
-		return errors.Wrapf(err, "failed to register %s command", getProductURLCommandName)
+	if err := p.API.RegisterCommand(command.GetProductURLCommand()); err != nil {
+		return errors.Wrapf(err, "failed to register %s command", command.GetProductURLCommandName)
 	}
 	return nil
 }
@@ -21,7 +23,7 @@ func (p *Plugin) registerCommands() error {
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	trigger := strings.TrimPrefix(strings.Fields(args.Command)[0], "/")
 	switch trigger {
-	case getProductURLCommandName:
+	case command.GetProductURLCommandName:
 		return p.executeGetProductURLCommand(args), nil
 	default:
 		return &model.CommandResponse{
@@ -44,27 +46,27 @@ func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.Com
 	case "help":
 		return &model.CommandResponse{
 			ResponseType: model.CommandResponseTypeEphemeral,
-			Text:         getProductURLHelp,
+			Text:         command.GetProductURLHelp,
 		}
 	case "dialog":
 		dialogRequest = model.OpenDialogRequest{
 			TriggerId: args.TriggerId,
 			URL:       fmt.Sprintf("%s/plugins/%s/get_product_url", *serverConfig.ServiceSettings.SiteURL, "mattermost-product"),
-			Dialog:    getProductURLDialog(),
+			Dialog:    command.GetProductURLDialog(),
 		}
 	case "":
 		return &model.CommandResponse{
 			ResponseType: model.CommandResponseTypeEphemeral,
-			Text:         emptyProductName,
+			Text:         command.EmptyProductName,
 		}
 	default:
 		return &model.CommandResponse{
 			ResponseType: model.CommandResponseTypeInChannel,
-			Text:         getProductURL(arg, *serverConfig.ServiceSettings.SiteURL),
+			Text:         command.GetProductURL(arg, *serverConfig.ServiceSettings.SiteURL),
 		}
 	}
 	if err := p.API.OpenInteractiveDialog(dialogRequest); err != nil {
-		errorMessage := fmt.Sprintf("Failed to open the interactive dialog for %s command", getProductURLCommandName)
+		errorMessage := fmt.Sprintf("Failed to open the interactive dialog for %s command", command.GetProductURLCommandName)
 		p.API.LogError(errorMessage, "err", err.Error())
 		return &model.CommandResponse{
 			ResponseType: model.CommandResponseTypeEphemeral,

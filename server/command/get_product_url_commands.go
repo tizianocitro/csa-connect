@@ -1,4 +1,4 @@
-package main
+package command
 
 import (
 	"fmt"
@@ -7,19 +7,20 @@ import (
 )
 
 const (
-	getProductURLCommandName = "product"
-	getProductURLHelp        = "###### Get the URL of a product given the URL."
+	GetProductURLCommandName = "product"
+	GetProductURLHelp        = "###### Get the URL of a product given the URL."
 
-	emptyProductName         = "A name is required."
-	productSelectorFieldName = "productSelector"
+	EmptyProductName = "A name is required."
+
+	ProductSelectorFieldName = "productSelector"
 
 	productURLDesc        = "Get a product URL"
-	getProductURLCallback = "getProductUrlCallback"
+	getProductURLCallback = "handleGetProductURL"
 )
 
-func getProductURLCommand() *model.Command {
+func GetProductURLCommand() *model.Command {
 	return &model.Command{
-		Trigger:          getProductURLCommandName,
+		Trigger:          GetProductURLCommandName,
 		AutoComplete:     true,
 		AutoCompleteDesc: productURLDesc,
 		DisplayName:      "GetProductUrl",
@@ -27,18 +28,18 @@ func getProductURLCommand() *model.Command {
 	}
 }
 
-func getProductURL(name string, url string) string {
+func GetProductURL(name string, url string) string {
 	return fmt.Sprintf("%s/%s/products/%d", url, "mattermost-product", 1)
 }
 
-func getProductURLDialog() model.Dialog {
+func GetProductURLDialog() model.Dialog {
 	return model.Dialog{
 		CallbackId: getProductURLCallback,
 		Title:      productURLDesc,
 		IconURL:    "http://www.mattermost.org/wp-content/uploads/2016/04/icon.png",
 		Elements: []model.DialogElement{{
 			DisplayName: "Product Selector",
-			Name:        productSelectorFieldName,
+			Name:        ProductSelectorFieldName,
 			Type:        "select",
 			Placeholder: "Select a product...",
 			HelpText:    "Choose a product from the list.",
@@ -57,7 +58,7 @@ func getProductURLDialog() model.Dialog {
 }
 
 func getGetProductURLAutocompleteData() *model.AutocompleteData {
-	command := model.NewAutocompleteData(getProductURLCommandName, "", "Get a product URL.")
+	command := model.NewAutocompleteData(GetProductURLCommandName, "", "Get a product URL.")
 
 	name := model.NewAutocompleteData("name", "", "The product name")
 	// name.AddNamedTextArgument("name", "The product name with pattern p([a-z]+)ch", "", "p([a-z]+)ch", true)
