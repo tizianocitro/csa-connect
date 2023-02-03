@@ -3,8 +3,8 @@
 package main
 
 import (
-	"strings"
 	"encoding/json"
+	"strings"
 
 	"github.com/mattermost/mattermost-server/v6/model"
 )
@@ -16,9 +16,9 @@ const manifestStr = `
   "id": "mattermost-product",
   "name": "Mattermost Product",
   "description": "A Mattermost Product plugin.",
-  "homepage_url": "https://github.com/mattermost/mattermost-plugin-playbooks/",
-  "support_url": "https://github.com/mattermost/mattermost-plugin-playbooks/issues",
-  "release_notes_url": "https://github.com/mattermost/mattermost-plugin-playbooks/releases/tag/",
+  "homepage_url": "https://github.com/tizianocitro/mattermost-product/",
+  "support_url": "https://github.com/tizianocitro/mattermost-product/issues",
+  "release_notes_url": "https://github.com/tizianocitro/mattermost-product/releases/tag/",
   "icon_path": "assets/plugin_icon.svg",
   "version": "+",
   "min_server_version": "7.6.0",

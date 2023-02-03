@@ -1,11 +1,17 @@
-module github.com/mattermost/mattermost-plugin-playbooks
+module github.com/tizianocitro/mattermost-product
 
 go 1.18
 
 require github.com/mattermost/mattermost-server/v6 v6.0.0-20221206174448-c3c81cb3d6a2
 
 require (
+	github.com/mattermost/mattermost-plugin-api v0.0.21
+	github.com/pkg/errors v0.9.1
+)
+
+require (
 	github.com/blang/semver v3.5.1+incompatible // indirect
+	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/dyatlov/go-opengraph/opengraph v0.0.0-20220524092352-606d7b1e5f8a // indirect
@@ -39,7 +45,6 @@ require (
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
