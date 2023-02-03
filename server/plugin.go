@@ -31,10 +31,11 @@ type Plugin struct {
 }
 
 func (p *Plugin) OnActivate() error {
+	p.client = pluginapi.NewClient(p.API, p.Driver)
+
 	p.pluginID = p.getPluginIDFromManifest()
 	p.pluginURLPathPrefix = p.getPluginURLPathPrefix()
-
-	botID, err := p.generateBotID()
+	botID, err := p.getBotID()
 	if err != nil {
 		return err
 	}
@@ -67,17 +68,14 @@ func (p *Plugin) getPluginURLPathPrefix() string {
 	return "products"
 }
 
-func (p *Plugin) generateBotID() (string, error) {
-	p.client = pluginapi.NewClient(p.API, p.Driver)
-
-	bot := &model.Bot{
+func (p *Plugin) getBotID() (string, error) {
+	botID, err := p.client.Bot.EnsureBot(&model.Bot{
 		Username:    "mattermostproductbot",
 		DisplayName: "Mattermost Product Bot",
 		Description: "A bot account created by the Mattermost Product.",
-	}
-	botID, ensureBotErr := p.client.Bot.EnsureBot(bot)
-	if ensureBotErr != nil {
-		return "", errors.Wrap(ensureBotErr, "failed to ensure bot")
+	})
+	if err != nil {
+		return "", errors.Wrap(err, "failed to ensure bot, so cannot get botID")
 	}
 	return botID, nil
 }
