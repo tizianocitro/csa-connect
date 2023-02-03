@@ -135,24 +135,18 @@ func CreateGetProductURLPost(config *ProductURLPostConfig, request *model.Submit
 	return nil
 }
 
-// If you call sub-slice like this -> a[x:] then x must be within the range of length (inclusive)
-// If you call sub-slice like this -> a[:y] then y must be within the range of capacity (inclusive)
-// If you call sub-slice like this -> a[x:y] then x and y must be within the range of capacity (inclusive) and x <= y
 func GetNameFromArgs(args *model.CommandArgs) string {
 	fields := strings.Fields(args.Command)
-	nameWasNotProvided := len(fields) < 2
-	if nameWasNotProvided {
+	if nameWasNotProvided := len(fields) < 2; nameWasNotProvided {
 		return ""
 	}
 	excludeTheCommandName := 1
 	nameFields := fields[excludeTheCommandName:]
-	nameHasNoWhiteSpaces := len(nameFields) < 2
-	if nameHasNoWhiteSpaces {
+	if nameHasNoWhiteSpaces := len(nameFields) < 2; nameHasNoWhiteSpaces {
 		firstNameWord := 0
 		return nameFields[firstNameWord]
 	}
-	whiteSpaceBetweenNameWords := " "
-	return strings.Join(nameFields, whiteSpaceBetweenNameWords)
+	return strings.Join(nameFields, " ")
 }
 
 func getGetProductURLAutocompleteData() *model.AutocompleteData {
