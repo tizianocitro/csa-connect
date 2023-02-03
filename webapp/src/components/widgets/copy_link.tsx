@@ -13,6 +13,8 @@ import Tooltip from 'src/components/widgets/tooltip';
 type Props = {
     id: string;
     to: string;
+    iconWidth?: string;
+    iconHeight?: string;
 } & ({
     name: string;
     tooltipMessage?: never
@@ -28,6 +30,8 @@ const CopyLink = ({
     to,
     name,
     tooltipMessage,
+    iconWidth,
+    iconHeight,
     ...attrs
 }: Props & Attrs) => {
     const {formatMessage} = useIntl();
@@ -53,18 +57,22 @@ const CopyLink = ({
                 clicked={wasCopied}
                 {...attrs}
                 className={'icon-link-variant ' + attrs.className}
+                iconWidth={iconWidth}
+                iconHeight={iconHeight}
             />
         </Tooltip>
     );
 };
 
-const CopyIcon = styled.button<{clicked: boolean}>`
+// width: 1.25em;
+// height: 1.25em;
+const CopyIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeight?: string}>`
     display: inline-block;
 
     border-radius: 4px;
     padding: 0;
-    width: 1.25em;
-    height: 1.25em;
+    width: ${(props) => (props.iconWidth ? props.iconWidth : '1.25em')};
+    height: ${(props) => (props.iconHeight ? props.iconHeight : '1.25em')};
 
     :before {
         margin: 0;

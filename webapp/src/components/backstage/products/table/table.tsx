@@ -11,9 +11,10 @@ import TableRow from './table_row';
 interface Props {
     id: string;
     product: Product;
+    urlHash: string;
 }
 
-const Table = ({id, product}: Props) => {
+const Table = ({id, product, urlHash}: Props) => {
     const {formatMessage} = useIntl();
 
     const title = formatMessage({defaultMessage: 'Info Table'});
@@ -36,6 +37,7 @@ const Table = ({id, product}: Props) => {
                 <TableRow
                     key={product.id}
                     product={product}
+                    urlHash={urlHash}
                 />
                 <Footer>
                     <FooterText>
