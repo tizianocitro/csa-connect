@@ -2,7 +2,6 @@
 import React, {Dispatch} from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
 
 import {PrimaryButton} from 'src/components/assets/buttons';
 
@@ -11,7 +10,7 @@ import {ChannelProduct} from 'src/types/product';
 import {addChannelToProduct} from 'src/client';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
-type ControlProps = {
+type AddChannelProps = {
     product: ChannelProduct,
     teamId: string,
     dispatchSelectErrorMessage: Dispatch<any>,
@@ -28,24 +27,24 @@ const addChannel = (
         return;
     }
 
-    const {id, channel_mode, channel_id, channel_name_template, create_public_channel} = product;
-    const createNewChannel = channel_mode === 'create_new_channel';
-    const linkExistingChannel = channel_mode === 'link_existing_channel';
-    if (linkExistingChannel && channel_id === '') {
+    const {id, channelMode, channelId, channelNameTemplate, createPublicChannel} = product;
+    const createNewChannel = channelMode === 'create_new_channel';
+    const linkExistingChannel = channelMode === 'link_existing_channel';
+    if (linkExistingChannel && channelId === '') {
         dispatchSelectErrorMessage(selectErrorMessageAction('A channel has to be selected.'));
         return;
     }
-    if (createNewChannel && channel_name_template === '') {
+    if (createNewChannel && channelNameTemplate === '') {
         dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
         return;
     }
-    addChannelToProduct(
-        id,
-        teamId,
-        linkExistingChannel ? channel_id : undefined,
-        createNewChannel ? channel_name_template : undefined,
-        createNewChannel ? create_public_channel : false,
-    )
+    addChannelToProduct({
+        product_id: id,
+        team_id: teamId,
+        channel_id: linkExistingChannel ? channelId : undefined,
+        channel_name: createNewChannel ? channelNameTemplate : undefined,
+        create_public_channel: createNewChannel ? createPublicChannel : false,
+    })
         .then(() => {
             // redirect to channel
         })
@@ -66,8 +65,7 @@ export const CreateProductChannel = ({
     teamId,
     dispatchSelectErrorMessage,
     dispatchNameErrorMessage,
-}: ControlProps) => {
-    const dispatch = useDispatch();
+}: AddChannelProps) => {
     const {formatMessage} = useIntl();
     const title = formatMessage({defaultMessage: 'Add channel'});
     return (

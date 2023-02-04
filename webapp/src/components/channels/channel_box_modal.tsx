@@ -51,13 +51,13 @@ const ChannelBoxModal = ({product}: Props) => {
             return;
         }
 
-        addChannelToProduct(
-            product.id,
-            teamId,
-            channelName,
-            linkExistingChannel ? channelId : undefined,
-            createNewChannel ? createPublicChannel : undefined,
-        )
+        addChannelToProduct({
+            product_id: product.id,
+            team_id: teamId,
+            channel_name: channelName,
+            channel_id: linkExistingChannel ? channelId : undefined,
+            create_public_channel: createNewChannel ? createPublicChannel : undefined,
+        })
             .then(() => {
                 // redirect to channel
             })

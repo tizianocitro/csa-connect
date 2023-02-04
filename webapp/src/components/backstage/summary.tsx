@@ -22,7 +22,7 @@ const Summary = ({id, product}: Props) => {
     const title = formatMessage({defaultMessage: 'Summary'});
     const modifiedAt = (
         <Timestamp
-            value={product.summary_modified_at}
+            value={product.summaryModifiedAt}
             units={PAST_TIME_SPEC}
         />
     );
@@ -45,7 +45,7 @@ const Summary = ({id, product}: Props) => {
                     title={title}
                     id={id}
                 />
-                {product.summary_modified_at > 0 && modifiedAtMessage}
+                {product.summaryModifiedAt > 0 && modifiedAtMessage}
             </Header>
             <MarkdownEdit
                 placeholder={placeholder}

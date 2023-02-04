@@ -13,7 +13,7 @@ interface Props {
 
 const TableRow = ({urlHash, product}: Props) => {
     const {url} = useRouteMatch();
-    const {id, name, is_favorite} = product;
+    const {id, name, isFavorite} = product;
     const itemId = buildIdForUrlHashReference('table-row-item', id);
     return (
         <RowItem
@@ -37,7 +37,7 @@ const TableRow = ({urlHash, product}: Props) => {
                 <RowText>{name}</RowText>
             </div>
             <div className='col-sm-4'>
-                <RowText>{`${is_favorite}`}</RowText>
+                <RowText>{`${isFavorite}`}</RowText>
             </div>
         </RowItem>
     );

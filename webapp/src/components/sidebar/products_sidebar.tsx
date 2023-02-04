@@ -37,9 +37,9 @@ const useLHSData = () => {
             itemMenu: (
                 <LHSProductDotMenu
                     productId={p.id}
-                    isFavorite={p.is_favorite}
+                    isFavorite={p.isFavorite}
                 />),
-            isFavorite: p.is_favorite,
+            isFavorite: p.isFavorite,
             className: '',
         };
     });

@@ -1,28 +1,27 @@
 export interface Product {
+    channelsIds?: string[];
+    createdAt: number;
     id: string;
+    isFavorite: boolean;
+    lastUpdateAt: number;
     name: string;
+    productId: string;
     summary: string;
-    summary_modified_at: number;
-    product_id: string;
-    channels_ids?: string[]; // To show in product page
-    is_favorite: boolean;
-    created_at: number;
-    last_update_at: number;
-    delete_at: number;
+    summaryModifiedAt: number;
 }
 
 export interface ChannelProduct extends Product {
-    team_id: string;
-    channel_id: string;
-    channel_mode: string;
-    channel_name_template: string;
-    create_public_channel: boolean;
+    channelId: string;
+    channelMode: string;
+    channelNameTemplate: string;
+    createPublicChannel: boolean;
+    teamId: string;
 }
 
 export interface FetchProductsNoPageParams {
-    team_id?: string;
-    sort?: string;
     direction?: string;
+    sort?: string;
+    team_id?: string;
 }
 
 export interface FetchProductsNoPageReturn {
@@ -30,22 +29,30 @@ export interface FetchProductsNoPageReturn {
 }
 
 export interface FetchProductsParams {
+    direction?: string;
     page: number;
     per_page: number;
-    team_id?: string;
-    sort?: string;
-    direction?: string;
-    search_term?: string;
     product_id?: string;
+    search_term?: string;
+    sort?: string;
+    team_id?: string;
 }
 
 export interface FetchProductsReturn {
-    total_count: number;
-    page_count: number;
-    has_more: boolean;
+    hasMore: boolean;
     items: Product[];
+    pageCount: number;
+    totalCount: number;
+}
+
+export interface AddChannelParams {
+    channel_id?: string;
+    channel_name?: string;
+    create_public_channel?: boolean;
+    product_id: string;
+    team_id: string;
 }
 
 export interface AddChannelResult {
-    channel_id?: string;
+    channelId?: string;
 }

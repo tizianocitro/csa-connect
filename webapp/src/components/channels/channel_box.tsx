@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {CreateAChannel} from 'src/components/channels/channel_access';
 import {Section} from 'src/components/channels/styles';
 import {Product} from 'src/types/product';
-import {convertProductToChannelProduct} from 'src/hooks';
+import {useConvertProductToChannelProduct} from 'src/hooks';
 import {setNameErrorMessage, setProductForCreateChannel, setSelectErrorMessage} from 'src/reducer';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
@@ -20,7 +20,7 @@ const ChannelBox = ({product, teamId}: Props) => {
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
     const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
-    const channelProduct = convertProductToChannelProduct(product);
+    const channelProduct = useConvertProductToChannelProduct(product);
     const [productForCreateChannel, dispatchProductForCreateChannel] = useReducer(setProductForCreateChannel, channelProduct);
 
     const cleanErrorMessages = () => {

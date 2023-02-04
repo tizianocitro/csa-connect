@@ -9,6 +9,7 @@ import qs from 'qs';
 import {Product} from 'mattermost-webapp/packages/types/src/cloud';
 
 import {
+    AddChannelParams,
     AddChannelResult,
     FetchProductsNoPageParams,
     FetchProductsNoPageReturn,
@@ -53,12 +54,11 @@ export async function fetchProduct(id: string) {
         id: '1',
         name: 'My First Product',
         summary: 'My First Product',
-        summary_modified_at: 21122022,
-        product_id: '1',
-        is_favorite: false,
-        created_at: 21122022,
-        last_update_at: 21122022,
-        delete_at: 0,
+        summaryModifiedAt: 21122022,
+        productId: '1',
+        isFavorite: false,
+        createdAt: 21122022,
+        lastUpdateAt: 21122022,
     };
     return data as Product;
 }
@@ -77,21 +77,21 @@ export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
                 id: '1',
                 name: 'My First Product',
                 summary: 'My First Product',
-                summary_modified_at: 21122022,
-                product_id: '1',
-                is_favorite: false,
-                created_at: 21122022,
-                last_update_at: 21122022,
+                summaryModifiedAt: 21122022,
+                productId: '1',
+                isFavorite: false,
+                createdAt: 21122022,
+                lastUpdateAt: 21122022,
             },
             {
                 id: '2',
                 name: 'My Second Product',
                 summary: 'My Second Product',
-                summary_modified_at: 21122022,
-                product_id: '2',
-                is_favorite: true,
-                created_at: 21122022,
-                last_update_at: 21122022,
+                summaryModifiedAt: 21122022,
+                productId: '2',
+                isFavorite: true,
+                createdAt: 21122022,
+                lastUpdateAt: 21122022,
             },
         ],
     };
@@ -103,7 +103,7 @@ export async function fetchProducts(params: FetchProductsParams) {
 
     let data = await doGet(`${apiUrl}/products${queryParams}`);
     if (!data) {
-        data = {items: [], total_count: 0, page_count: 0, has_more: false} as FetchProductsReturn;
+        data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchProductsReturn;
     }
     data = {
         items: [
@@ -111,37 +111,37 @@ export async function fetchProducts(params: FetchProductsParams) {
                 id: '1',
                 name: 'My First Product',
                 summary: 'My First Product',
-                summary_modified_at: 21122022,
-                product_id: '1',
-                is_favorite: false,
-                created_at: 21122022,
-                last_update_at: 21122022,
+                summaryModifiedAt: 21122022,
+                productId: '1',
+                isFavorite: false,
+                createdAt: 21122022,
+                lastUpdateAt: 21122022,
             },
             {
                 id: '2',
                 name: 'My Second Product',
                 summary: 'My Second Product',
-                summary_modified_at: 21122022,
-                product_id: '2',
-                is_favorite: true,
-                created_at: 21122022,
-                last_update_at: 21122022,
+                summaryModifiedAt: 21122022,
+                productId: '2',
+                isFavorite: true,
+                createdAt: 21122022,
+                lastUpdateAt: 21122022,
             },
         ],
-        total_count: 2,
-        has_more: false,
-        page_count: 0,
+        totalCount: 2,
+        hasMore: false,
+        pageCount: 0,
     };
     return data as FetchProductsReturn;
 }
 
-export async function addChannelToProduct(
-    product_id: string,
-    team_id: string,
-    channel_id?: string,
-    channel_name?: string,
-    create_public_channel?: boolean
-) {
+export async function addChannelToProduct({
+    product_id,
+    team_id,
+    channel_id,
+    channel_name,
+    create_public_channel,
+}: AddChannelParams) {
     const data = await doPost(`${apiUrl}/products/add_channel`, JSON.stringify({
         team_id,
         channel_name,

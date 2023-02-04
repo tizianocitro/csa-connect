@@ -109,14 +109,14 @@ export function useProduct(id: string): Product | {} {
     return product;
 }
 
-export const convertProductToChannelProduct = (product: Product): ChannelProduct => {
+export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
     return {
         ...product,
-        team_id: '',
-        channel_id: '',
-        channel_mode: 'link_existing_channel', // Default is creation create_new_channel, but also link_existing_channel
-        channel_name_template: '',
-        create_public_channel: true,
+        teamId: '',
+        channelId: '',
+        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
+        channelNameTemplate: '',
+        createPublicChannel: true,
     };
 };
 
@@ -170,7 +170,7 @@ export function useProductsList(defaultFetchParams: FetchProductsParams, routed 
                     }
                     return [...existingProducts, ...productsReturn.items];
                 });
-                setTotalCount(productsReturn.total_count);
+                setTotalCount(productsReturn.totalCount);
             }
         }
 
