@@ -88,6 +88,7 @@ const ProductDetails = () => {
                         <Table
                             id={ProductSections.SectionTable}
                             product={product}
+                            urlHash={urlHash}
                         />
                         <ChannelsSection
                             id={ProductSections.SectionChannelBox}

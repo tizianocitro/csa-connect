@@ -8,8 +8,58 @@ import React from 'react';
 import StatusBadge from 'src/components/backstage/status_badge';
 
 import {BaseInput} from 'src/components/assets/inputs';
-import {getSiteUrl} from 'src/client';
 import CopyLink from 'src/components/widgets/copy_link';
+import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
+
+interface AnchorLinkTitleProps {
+    title: string;
+    id: string;
+}
+
+export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
+    const {url} = useRouteMatch();
+    const itemId = buildIdForUrlHashReference('section-link', props.id);
+
+    return (
+        <LinkTitle>
+            <CopyLink
+                id={itemId}
+                to={buildToForCopy(`${url}#${props.id}`)}
+                name={props.title}
+                area-hidden={true}
+            />
+            {props.title}
+        </LinkTitle>
+    );
+};
+
+const LinkTitle = styled.h3`
+    font-family: Metropolis, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    padding-left: 8px;
+    margin: 0;
+    white-space: nowrap;
+    display: inline-block;
+
+    ${CopyLink} {
+        margin-left: -1.25em;
+        opacity: 1;
+        transition: opacity ease 0.15s;
+    }
+    &:not(:hover) ${CopyLink}:not(:hover) {
+        opacity: 0;
+    }
+`;
+
+export const Separator = styled.hr`
+    display: flex;
+    align-content: center;
+    border-top: 1px solid rgba(var(--center-channel-color-rgb),0.08);
+    margin: 5px auto;
+    width: 100%;
+`;
 
 export const Content = styled.div`
     background: var(--center-channel-bg);
@@ -63,59 +113,4 @@ export const StyledInput = styled(BaseInput)<{error?: boolean}>`
     )}
 
     scroll-margin-top: 36px;
-`;
-
-interface AnchorLinkTitleProps {
-    title: string;
-    id: string;
-
-}
-
-export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
-    const {url} = useRouteMatch();
-
-    return (
-        <LinkTitle>
-            <CopyLink
-                id={`section-link-${props.id}`}
-                to={getSiteUrl() + `${url}#${props.id}`}
-                name={props.title}
-                area-hidden={true}
-            />
-            {props.title}
-        </LinkTitle>
-    );
-};
-
-const LinkTitle = styled.h3`
-    font-family: Metropolis, sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    padding-left: 8px;
-    margin: 0;
-    white-space: nowrap;
-    display: inline-block;
-
-    ${CopyLink} {
-        margin-left: -1.25em;
-        opacity: 1;
-        transition: opacity ease 0.15s;
-    }
-    &:not(:hover) ${CopyLink}:not(:hover) {
-        opacity: 0;
-    }
-`;
-
-export enum Role {
-    Viewer = 'viewer',
-    Participant = 'participant',
-}
-
-export const Separator = styled.hr`
-    display: flex;
-    align-content: center;
-    border-top: 1px solid rgba(var(--center-channel-color-rgb),0.08);
-    margin: 5px auto;
-    width: 100%;
 `;
