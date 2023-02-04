@@ -67,6 +67,12 @@ type ProductURLPostConfig struct {
 	UserID string
 }
 
+type ProductURLMarkdownConfig struct {
+	PluginConfig
+	ID   string
+	Name string
+}
+
 func GetProductURLCommand() *model.Command {
 	return &model.Command{
 		AutoComplete:     getProductURLAutoComplete,
@@ -120,15 +126,15 @@ func OpenDialogGetProductURLRequest(config *ProductURLDialogConfig) *model.Comma
 
 func CreateGetProductURLPost(config *ProductURLPostConfig, request *model.SubmitDialogRequest) error {
 	api := config.API
-	productID, ok := request.Submission[productSelectorFieldName].(string)
+	productName, ok := request.Submission[productSelectorFieldName].(string)
 	if !ok {
 		api.LogError("Request is missing field", "field", productSelectorFieldName)
 		return fmt.Errorf("request is missing field %s", productSelectorFieldName)
 	}
 
 	// Using p.botID instead of user.Id will make the post come from the bot
-	api.LogInfo("Creating post for product", "productId", productID)
-	if _, err := api.CreatePost(createPost(config, request, productID)); err != nil {
+	api.LogInfo("Creating post for product", "productName", productName)
+	if _, err := api.CreatePost(createPost(config, request, productName)); err != nil {
 		api.LogError("Failed to post message", "err", err.Error())
 		return err
 	}
@@ -166,9 +172,21 @@ func getGetProductURLAutocompleteData() *model.AutocompleteData {
 }
 
 func getProductURL(config *ProductURLConfig) string {
-	// TODO: Here you need to retrieve the productId given the product name
-	config.API.LogInfo(fmt.Sprintf("Product name is %s", config.Name))
-	return fmt.Sprintf("%s/%s/%s/%s", config.SiteURL, config.PluginID, config.PathPrefix, "1")
+	name := config.Name
+	config.API.LogInfo(fmt.Sprintf("Getting URL for product %s", name))
+	id := getIDByName(name)
+	return getMarkdownProductURL(&ProductURLMarkdownConfig{
+		ID:   id,
+		Name: name,
+		PluginConfig: PluginConfig{
+			PathPrefix: config.PathPrefix,
+			PluginID:   config.PluginID,
+			SiteURL:    config.SiteURL,
+			PluginAPI: PluginAPI{
+				API: config.API,
+			},
+		},
+	})
 }
 
 func getProductURLDialog() model.Dialog {
@@ -197,17 +215,50 @@ func buildModelDialogElements() []model.DialogElement {
 func buildSelectElementOtions() []*model.PostActionOptions {
 	return []*model.PostActionOptions{{
 		Text:  "My First Product",
-		Value: "1",
+		Value: "My First Product",
 	}, {
 		Text:  "My Second Product",
-		Value: "2",
+		Value: "My Second Product",
 	}}
 }
 
-func createPost(config *ProductURLPostConfig, request *model.SubmitDialogRequest, productID string) *model.Post {
+func createPost(config *ProductURLPostConfig, request *model.SubmitDialogRequest, name string) *model.Post {
+	id := getIDByName(name)
+	config.API.LogInfo(fmt.Sprintf("Creating a post with URL for product %s", name))
 	return &model.Post{
 		UserId:    config.UserID,
 		ChannelId: request.ChannelId,
-		Message:   fmt.Sprintf("%s/%s/%s/%s", config.SiteURL, config.PluginID, config.PathPrefix, productID),
+		Message: getMarkdownProductURL(&ProductURLMarkdownConfig{
+			ID:   id,
+			Name: name,
+			PluginConfig: PluginConfig{
+				PathPrefix: config.PathPrefix,
+				PluginID:   config.PluginID,
+				SiteURL:    config.SiteURL,
+				PluginAPI: PluginAPI{
+					API: config.API,
+				},
+			},
+		}),
 	}
+}
+
+// TODO: Make proper call to DB, this is just a mock
+func getIDByName(name string) string {
+	if name == "My Second Product" {
+		return "2"
+	}
+	return "1"
+}
+
+func getMarkdownProductURL(config *ProductURLMarkdownConfig) string {
+	// The format is [link text here](link here)
+	return fmt.Sprintf(
+		"[%s](%s/%s/%s/%s)",
+		config.Name,
+		config.SiteURL,
+		config.PluginID,
+		config.PathPrefix,
+		config.ID,
+	)
 }
