@@ -59,6 +59,28 @@ export async function fetchProduct(id: string) {
         isFavorite: false,
         createdAt: 21122022,
         lastUpdateAt: 21122022,
+        elements: [
+            {
+                id: '1',
+                name: 'My First Element',
+                description: 'My First Element Description',
+            },
+            {
+                id: '2',
+                name: 'My Second Element',
+                description: 'My Second Element Description',
+            },
+            {
+                id: '3',
+                name: 'My Third Element',
+                description: 'My Third Element Description',
+            },
+            {
+                id: '4',
+                name: 'My Fourth Element',
+                description: 'My Fouth Element Description',
+            },
+        ],
     };
     return data as Product;
 }

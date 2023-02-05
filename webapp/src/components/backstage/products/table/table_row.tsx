@@ -3,18 +3,18 @@ import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
 import CopyLink from 'src/components/widgets/copy_link';
-import {Product} from 'src/types/product';
+import {ProductElement} from 'src/types/product';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
 
-interface Props {
-    product: Product;
+type Props = {
+    element: ProductElement;
     urlHash: string;
-}
+};
 
-const TableRow = ({urlHash, product}: Props) => {
+const TableRow = ({urlHash, element}: Props) => {
     const {url} = useRouteMatch();
-    const {id, name, isFavorite} = product;
-    const itemId = buildIdForUrlHashReference('table-row-item', id);
+    const {id, name, description} = element;
+    const itemId = buildIdForUrlHashReference('product-element', id);
     return (
         <RowItem
             className='row'
@@ -30,14 +30,14 @@ const TableRow = ({urlHash, product}: Props) => {
                 iconWidth={'1.45em'}
                 iconHeight={'1.45em'}
             />
-            <div className='col-sm-4'>
+            <div className='col-sm-2'>
                 <RowText>{id}</RowText>
             </div>
             <div className='col-sm-4'>
                 <RowText>{name}</RowText>
             </div>
-            <div className='col-sm-4'>
-                <RowText>{`${isFavorite}`}</RowText>
+            <div className='col-sm-6'>
+                <RowText>{`${description}`}</RowText>
             </div>
         </RowItem>
     );

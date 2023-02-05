@@ -8,16 +8,21 @@ import {AnchorLinkTitle} from 'src/components/backstage/products/shared';
 import TableHeader from './table_header';
 import TableRow from './table_row';
 
-interface Props {
+type Props = {
     id: string;
     product: Product;
     urlHash: string;
-}
+};
 
+// <TableRow
+//    key={product.id}
+//    product={product}
+//    urlHash={urlHash}
+// />
 const Table = ({id, product, urlHash}: Props) => {
     const {formatMessage} = useIntl();
 
-    const title = formatMessage({defaultMessage: 'Info Table'});
+    const title = formatMessage({defaultMessage: 'Elements Info'});
     return (
         <Container
             id={id}
@@ -29,29 +34,33 @@ const Table = ({id, product, urlHash}: Props) => {
                     id={id}
                 />
             </Header>
-            <ProductTable
-                id='productsTable'
-                className='productsTable'
+            <InnertTable
+                id='innerTable'
+                className='innerTable'
             >
                 <TableHeader/>
-                <TableRow
-                    key={product.id}
-                    product={product}
-                    urlHash={urlHash}
-                />
+                {product.elements?.map((el, _) => {
+                    return (
+                        <TableRow
+                            key={el.id}
+                            element={el}
+                            urlHash={urlHash}
+                        />
+                    );
+                })}
                 <Footer>
                     <FooterText>
                         <FormattedMessage
-                            defaultMessage='Product info table'
+                            defaultMessage='Product elements info'
                         />
                     </FooterText>
                 </Footer>
-            </ProductTable>
+            </InnertTable>
         </Container>
     );
 };
 
-const ProductTable = styled.div`
+const InnertTable = styled.div`
     font-family: 'Open Sans', sans-serif;
     color: rgba(var(--center-channel-color-rgb), 0.90);
 `;

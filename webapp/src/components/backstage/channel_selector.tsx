@@ -179,11 +179,13 @@ const ChannelContainer = styled.div`
     flex-direction: row;
 
 `;
+
 const ChanneIcon = styled.div`
     display: flex;
     align-self: center;
     color: rgba(var(--center-channel-color-rgb), 0.56);
 `;
+
 const ChannelDisplay = styled.div`
     margin-left: 4px;
     font-size: 12px;

@@ -1,6 +1,7 @@
 export interface Product {
     channelsIds?: string[];
     createdAt: number;
+    elements?: ProductElement[];
     id: string;
     isFavorite: boolean;
     lastUpdateAt: number;
@@ -8,6 +9,12 @@ export interface Product {
     productId: string;
     summary: string;
     summaryModifiedAt: number;
+}
+
+export interface ProductElement {
+    id: string;
+    name: string;
+    description: string;
 }
 
 export interface ChannelProduct extends Product {
