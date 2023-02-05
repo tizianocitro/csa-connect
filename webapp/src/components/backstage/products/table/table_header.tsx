@@ -7,9 +7,9 @@ import {ColHeader} from 'src/components/col_header';
 const TableHeader = () => {
     const {formatMessage} = useIntl();
     return (
-        <ProductTableHeader>
+        <InnerTableHeader>
             <div className='row'>
-                <div className='col-sm-4'>
+                <div className='col-sm-2'>
                     <ColHeader
                         name={formatMessage({defaultMessage: 'ID'})}
                     />
@@ -19,17 +19,17 @@ const TableHeader = () => {
                         name={formatMessage({defaultMessage: 'Name'})}
                     />
                 </div>
-                <div className='col-sm-4'>
+                <div className='col-sm-6'>
                     <ColHeader
-                        name={formatMessage({defaultMessage: 'Favorite'})}
+                        name={formatMessage({defaultMessage: 'Description'})}
                     />
                 </div>
             </div>
-        </ProductTableHeader>
+        </InnerTableHeader>
     );
 };
 
-const ProductTableHeader = styled.div`
+const InnerTableHeader = styled.div`
     font-weight: 600;
     font-size: 11px;
     line-height: 36px;
