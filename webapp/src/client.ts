@@ -18,6 +18,7 @@ import {
 } from './types/product';
 
 import {pluginId} from './manifest';
+import {FetchChannelsParams, FetchChannelsReturn} from './types/channels';
 
 let siteURL = '';
 let basePath = '';
@@ -152,9 +153,36 @@ export async function fetchProducts(params: FetchProductsParams) {
         ],
         totalCount: 2,
         hasMore: false,
+        pageCount: 1,
+    };
+
+    // pageCount = totalCount / perPage
+    return data as FetchProductsReturn;
+}
+
+export async function fetchProductChannels(params: FetchChannelsParams) {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+
+    let data = await doGet(`${apiUrl}/products/get_channels${queryParams}`);
+    if (!data) {
+        data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchChannelsReturn;
+    }
+    data = {
+        items: [
+            {
+                id: 'demo',
+                name: 'Demo',
+            },
+            {
+                id: 'my-first-product-channel',
+                name: 'My First Product Channel',
+            },
+        ],
+        totalCount: 2,
+        hasMore: false,
         pageCount: 0,
     };
-    return data as FetchProductsReturn;
+    return data as FetchChannelsReturn;
 }
 
 export async function addChannelToProduct({

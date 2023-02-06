@@ -2,15 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {useIntl} from 'react-intl';
 
-import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
-
 import {useProductsList} from 'src/hooks';
-
+import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
 import Header from 'src/components/widgets/header';
 
 import ProductsList from './products_list/products_list';
@@ -29,7 +25,7 @@ const ProductsPage = () => {
     return (
         <ProductListContainer>
             <Header
-                data-testid='titleProductRun'
+                data-testid='titleProduct'
                 level={2}
                 heading={formatMessage({defaultMessage: 'Products'})}
                 subtitle={formatMessage({defaultMessage: 'All the products will show here'})}

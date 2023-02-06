@@ -10,23 +10,22 @@ import {FormattedMessage} from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import LoadingSpinner from 'src/components/assets/loading_spinner';
+import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
 
-import {FetchProductsParams, Product} from 'src/types/product';
-
-import Row from './row';
-import ProductsListHeader from './products_list_header';
+import ChannelsListHeader from './channels_list_header';
 import Filters from './filters';
+import Row from './row';
 
 interface Props {
-    products: Product[];
+    channels: ProductChannel[];
     totalCount: number;
-    fetchParams: FetchProductsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>;
+    fetchParams: FetchChannelsParams;
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchChannelsParams>>;
     filterPill: React.ReactNode | null;
 }
 
-const ProductsList = ({
-    products,
+const ChannelsList = ({
+    channels,
     totalCount,
     fetchParams,
     setFetchParams,
@@ -37,39 +36,39 @@ const ProductsList = ({
     );
 
     const nextPage = () => {
-        setFetchParams((oldParam: FetchProductsParams) => ({...oldParam, page: oldParam.page + 1}));
+        setFetchParams((oldParam: FetchChannelsParams) => ({...oldParam, page: oldParam.page + 1}));
     };
 
     return (
-        <ProductList
-            id='productsList'
-            className='productsList'
+        <ChannelList
+            id='channelsList'
+            className='channelsList'
         >
             <Filters
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}
             />
             {filterPill}
-            <ProductsListHeader
+            <ChannelsListHeader
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}
             />
-            {products.length === 0 && isFiltering &&
+            {channels.length === 0 && isFiltering &&
                 <div className='text-center pt-8'>
-                    <FormattedMessage defaultMessage='There are no products matching those filters.'/>
+                    <FormattedMessage defaultMessage='There are no channels matching those filters.'/>
                 </div>
             }
             <InfiniteScroll
-                dataLength={products.length}
+                dataLength={channels.length}
                 next={nextPage}
-                hasMore={products.length < totalCount}
+                hasMore={channels.length < totalCount}
                 loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
-                scrollableTarget={'product-backstageRoot'}
+                scrollableTarget={'product-channels-backstageRoot'}
             >
-                {products.map((product) => (
+                {channels.map((channel) => (
                     <Row
-                        key={product.id}
-                        product={product}
+                        key={channel.id}
+                        channel={channel}
                     />
                 ))}
             </InfiniteScroll>
@@ -81,11 +80,11 @@ const ProductsList = ({
                     />
                 </Count>
             </Footer>
-        </ProductList>
+        </ChannelList>
     );
 };
 
-const ProductList = styled.div`
+const ChannelList = styled.div`
     font-family: 'Open Sans', sans-serif;
     color: rgba(var(--center-channel-color-rgb), 0.90);
 `;
@@ -115,4 +114,4 @@ const StyledSpinner = styled(LoadingSpinner)`
     height: 100%;
 `;
 
-export default ProductsList;
+export default ChannelsList;

@@ -9,20 +9,9 @@ import {useIntl} from 'react-intl';
 import {SortableColHeader} from 'src/components/sortable_col_header';
 import {FetchProductsParams} from 'src/types/product';
 
-const ProductListHeader = styled.div`
-    font-weight: 600;
-    font-size: 11px;
-    line-height: 36px;
-    color: rgba(var(--center-channel-color-rgb), 0.72);
-    background-color: rgba(var(--center-channel-color-rgb), 0.04);
-    padding: 0 1.6rem;
-    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-`;
-
 interface Props {
-    fetchParams: FetchProductsParams
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>
+    fetchParams: FetchProductsParams;
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>;
 }
 
 const ProductsListHeader = ({fetchParams, setFetchParams}: Props) => {
@@ -53,7 +42,7 @@ const ProductsListHeader = ({fetchParams, setFetchParams}: Props) => {
             <div className='row'>
                 <div className='col-sm-4'>
                     <SortableColHeader
-                        name={formatMessage({defaultMessage: 'Product name'})}
+                        name={formatMessage({defaultMessage: 'Name'})}
                         direction={fetchParams.direction ? fetchParams.direction : 'desc'}
                         active={fetchParams.sort ? fetchParams.sort === 'name' : false}
                         onClick={() => colHeaderClicked('name')}
@@ -63,5 +52,16 @@ const ProductsListHeader = ({fetchParams, setFetchParams}: Props) => {
         </ProductListHeader>
     );
 };
+
+const ProductListHeader = styled.div`
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 36px;
+    color: rgba(var(--center-channel-color-rgb), 0.72);
+    background-color: rgba(var(--center-channel-color-rgb), 0.04);
+    padding: 0 1.6rem;
+    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+`;
 
 export default ProductsListHeader;
