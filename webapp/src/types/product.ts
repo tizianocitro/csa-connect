@@ -6,7 +6,6 @@ export interface Product {
     isFavorite: boolean;
     lastUpdateAt: number;
     name: string;
-    productId: string;
     summary: string;
     summaryModifiedAt: number;
 }
@@ -15,14 +14,6 @@ export interface ProductElement {
     id: string;
     name: string;
     description: string;
-}
-
-export interface ChannelProduct extends Product {
-    channelId: string;
-    channelMode: string;
-    channelNameTemplate: string;
-    createPublicChannel: boolean;
-    teamId: string;
 }
 
 export interface FetchProductsNoPageParams {
@@ -50,16 +41,4 @@ export interface FetchProductsReturn {
     items: Product[];
     pageCount: number;
     totalCount: number;
-}
-
-export interface AddChannelParams {
-    channel_id?: string;
-    channel_name?: string;
-    create_public_channel?: boolean;
-    product_id: string;
-    team_id: string;
-}
-
-export interface AddChannelResult {
-    channelId?: string;
 }

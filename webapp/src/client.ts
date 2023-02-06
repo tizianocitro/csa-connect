@@ -9,8 +9,6 @@ import qs from 'qs';
 import {Product} from 'mattermost-webapp/packages/types/src/cloud';
 
 import {
-    AddChannelParams,
-    AddChannelResult,
     FetchProductsNoPageParams,
     FetchProductsNoPageReturn,
     FetchProductsParams,
@@ -18,7 +16,12 @@ import {
 } from './types/product';
 
 import {pluginId} from './manifest';
-import {FetchChannelsParams, FetchChannelsReturn} from './types/channels';
+import {
+    AddChannelParams,
+    AddChannelResult,
+    FetchChannelsParams,
+    FetchChannelsReturn
+} from './types/channels';
 
 let siteURL = '';
 let basePath = '';
@@ -89,7 +92,7 @@ export async function fetchProduct(id: string) {
 export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
-    let data = await doGet(`${apiUrl}/products${queryParams}`);
+    let data = await doGet(`${apiUrl}/products/products_no_page${queryParams}`);
     if (!data) {
         data = {items: []} as FetchProductsNoPageReturn;
     }
@@ -163,7 +166,7 @@ export async function fetchProducts(params: FetchProductsParams) {
 export async function fetchProductChannels(params: FetchChannelsParams) {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
-    let data = await doGet(`${apiUrl}/products/get_channels${queryParams}`);
+    let data = await doGet(`${apiUrl}/products/${params.product_id}/get_channels${queryParams}`);
     if (!data) {
         data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchChannelsReturn;
     }
@@ -192,7 +195,7 @@ export async function addChannelToProduct({
     channel_name,
     create_public_channel,
 }: AddChannelParams) {
-    const data = await doPost(`${apiUrl}/products/add_channel`, JSON.stringify({
+    const data = await doPatch(`${apiUrl}/products/${product_id}/add_channel`, JSON.stringify({
         team_id,
         channel_name,
         product_id,
