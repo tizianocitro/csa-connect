@@ -18,6 +18,7 @@ import {debounce, isEqual} from 'lodash';
 
 import {
     fetchProduct,
+    fetchProductChannels,
     fetchProducts,
     fetchProductsNoPage,
     isFavoriteItem,
@@ -30,6 +31,9 @@ import {
     Product,
 } from 'src/types/product';
 import {resolve} from 'src/utils';
+import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
+
+type FetchParams = FetchProductsParams | FetchChannelsParams;
 
 export enum ReservedCategory {
     Favorite = 'Favorite',
@@ -181,7 +185,55 @@ export function useProductsList(defaultFetchParams: FetchProductsParams, routed 
         };
     }, [fetchParams, currentTeamId]);
 
-    // Update the query string when the fetchParams change
+    useUpdateFetchParams(routed, fetchParams, history, location);
+
+    return [products, totalCount, fetchParams, setFetchParams];
+}
+
+export function useProductChannelsList(defaultFetchParams: FetchChannelsParams, routed = true):
+[ProductChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] {
+    const [channels, setChannels] = useState<ProductChannel[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const history = useHistory();
+    const location = useLocation();
+    const currentTeamId = useSelector(getCurrentTeamId);
+    const [fetchParams, setFetchParams] = useState(combineQueryParameters(defaultFetchParams, location.search));
+
+    // Fetch the queried runs
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchProductChannelsAsync() {
+            const channelsReturn = await fetchProductChannels({...fetchParams, team_id: currentTeamId});
+            if (!isCanceled) {
+                setChannels((existingChannels: ProductChannel[]) => {
+                    if (fetchParams.page === 0) {
+                        return channelsReturn.items;
+                    }
+                    return [...existingChannels, ...channelsReturn.items];
+                });
+                setTotalCount(channelsReturn.totalCount);
+            }
+        }
+
+        fetchProductChannelsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [fetchParams, currentTeamId]);
+
+    useUpdateFetchParams(routed, fetchParams, history, location);
+
+    return [channels, totalCount, fetchParams, setFetchParams];
+}
+
+// Update the query string when the fetchParams change
+const useUpdateFetchParams = (
+    routed: boolean,
+    fetchParams: FetchParams,
+    history: any,
+    location: any,
+) => {
     useEffect(() => {
         if (routed) {
             const newFetchParams: Record<string, unknown> = {...fetchParams};
@@ -190,9 +242,7 @@ export function useProductsList(defaultFetchParams: FetchProductsParams, routed 
             history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
         }
     }, [fetchParams, history]);
-
-    return [products, totalCount, fetchParams, setFetchParams];
-}
+};
 
 /**
  * For controlled props or other pieces of state that need immediate updates with a debounced side effect.

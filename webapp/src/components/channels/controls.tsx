@@ -67,14 +67,14 @@ export const CreateProductChannel = ({
     dispatchNameErrorMessage,
 }: AddChannelProps) => {
     const {formatMessage} = useIntl();
-    const title = formatMessage({defaultMessage: 'Add channel'});
+    const title = formatMessage({defaultMessage: 'Add Channel'});
     return (
         <PrimaryButtonLarger
             onClick={() => addChannel(product, teamId, dispatchSelectErrorMessage, dispatchNameErrorMessage)}
             title={title}
             data-testid='create-product-channel-button'
         >
-            <FormattedMessage defaultMessage='Add a channel'/>
+            <FormattedMessage defaultMessage='Add Channel'/>
         </PrimaryButtonLarger>
     );
 };
