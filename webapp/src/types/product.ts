@@ -1,5 +1,7 @@
+import {ProductChannel} from "./channels";
+
 export interface Product {
-    channelsIds?: string[];
+    channels?: ProductChannel[];
     createdAt: number;
     elements?: ProductElement[];
     id: string;
