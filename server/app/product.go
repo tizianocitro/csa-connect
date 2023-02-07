@@ -1,7 +1,7 @@
 package app
 
 type Product struct {
-	ChannelsIDs       []string         `json:"channelIds" export:"channelIds"`
+	Channels          []ProductChannel `json:"channels" export:"channels"`
 	CreatedAt         int              `json:"createdAt" export:"createdAt"`
 	Elements          []ProductElement `json:"element" export:"element"`
 	ID                string           `json:"id" export:"id"`
@@ -13,16 +13,16 @@ type Product struct {
 }
 
 type ProductElement struct {
+	Description string `json:"description" export:"description"`
 	ID          string `json:"id" export:"id"`
 	Name        string `json:"name" export:"name"`
-	Description string `json:"description" export:"description"`
 }
 
 // ProductFilterOptions specifies the parameters when getting products.
 type ProductFilterOptions struct {
-	Sort       SortField
 	Direction  SortDirection
 	SearchTerm string
+	Sort       SortField
 
 	// Pagination options.
 	Page    int
@@ -30,8 +30,8 @@ type ProductFilterOptions struct {
 }
 
 type GetProductsResults struct {
-	TotalCount int       `json:"total_count"`
-	PageCount  int       `json:"page_count"`
 	HasMore    bool      `json:"has_more"`
 	Items      []Product `json:"items"`
+	PageCount  int       `json:"page_count"`
+	TotalCount int       `json:"total_count"`
 }

@@ -22,8 +22,8 @@ type ProductHandler struct {
 	pluginAPI      *pluginapi.Client
 }
 
-// NewPlaybookHandler returns a new product api handler
-func NewPlaybookHandler(router *mux.Router, productService app.ProductService, api *pluginapi.Client) *ProductHandler {
+// NewProductHandler returns a new product api handler
+func NewProductHandler(router *mux.Router, productService app.ProductService, api *pluginapi.Client) *ProductHandler {
 	handler := &ProductHandler{
 		ErrorHandler:   &ErrorHandler{},
 		productService: productService,
