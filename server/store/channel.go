@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 type ProductChannelEntity struct {
 	ID        string `json:"id" export:"id"`

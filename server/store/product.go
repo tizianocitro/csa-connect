@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 type ProductEntity struct {
 	CreatedAt         int    `json:"createdAt" export:"createdAt"`

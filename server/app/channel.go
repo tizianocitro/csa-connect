@@ -32,6 +32,6 @@ type AddChannelParams struct {
 }
 
 type AddChannelResult struct {
-	ChannelID   string `json:"channelId" export:"channelId"`
-	ChannelName string `json:"channelName" export:"channelName"`
+	ID   string `json:"id" export:"id"`
+	Name string `json:"name" export:"name"`
 }

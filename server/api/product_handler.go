@@ -8,10 +8,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 
-	"github.com/gorilla/mux"
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
+
 	"github.com/tizianocitro/mattermost-product/server/app"
 )
 
@@ -111,7 +112,7 @@ func (h *ProductHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode channel product", err)
 		return
 	}
-	result, err := h.productService.addChannel(productID, params)
+	result, err := h.productService.AddChannel(productID, params)
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return
