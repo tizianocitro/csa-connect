@@ -30,6 +30,6 @@ export interface AddChannelParams {
 }
 
 export interface AddChannelResult {
-    channelId?: string;
-    channelName?: string;
+    id?: string;
+    name?: string;
 }
