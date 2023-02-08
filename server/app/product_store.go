@@ -6,7 +6,7 @@ type ProductStore interface {
 	Get(id string) (Product, error)
 
 	// GetProductsNoPage retrieves all products
-	GetProductsNoPage() ([]Product, error)
+	GetProductsNoPage() (GetProductsNoPageResults, error)
 
 	// GetProducts retrieves all products given a set of filters
 	GetProducts(opts ProductFilterOptions) (GetProductsResults, error)

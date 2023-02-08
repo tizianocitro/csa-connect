@@ -25,7 +25,7 @@ func (s *ProductService) GetProducts(opts ProductFilterOptions) (GetProductsResu
 	return s.store.GetProducts(opts)
 }
 
-func (s *ProductService) GetProductsNoPage() ([]Product, error) {
+func (s *ProductService) GetProductsNoPage() (GetProductsNoPageResults, error) {
 	return s.store.GetProductsNoPage()
 }
 

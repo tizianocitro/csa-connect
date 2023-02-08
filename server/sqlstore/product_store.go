@@ -36,7 +36,7 @@ func NewProductStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ProductS
 			"CreatedAt",
 			"ID",
 			"IsFavorite",
-			"LastUpdateAt",
+			"LastUpdatedAt",
 			"Name",
 			"Summary",
 			"SummaryModifiedAt",
@@ -50,7 +50,7 @@ func NewProductStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ProductS
 			"Name",
 			"ProductID",
 		).
-		From("MP_Elements").
+		From("MP_Element").
 		OrderBy("Name ASC")
 
 	channelsSelect := sqlStore.builder.
@@ -59,7 +59,7 @@ func NewProductStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ProductS
 			"Name",
 			"ProductID",
 		).
-		From("MP_Channels")
+		From("MP_Channel")
 
 	return &productStore{
 		pluginAPI:      pluginAPI,
@@ -84,7 +84,7 @@ func (p *productStore) Get(id string) (app.Product, error) {
 	defer p.store.finalizeTransaction(tx)
 
 	var product ProductEntity
-	err = p.store.getBuilder(tx, &product, p.productsSelect.Where(sq.Eq{"p.ID": id}))
+	err = p.store.getBuilder(tx, &product, p.productsSelect.Where(sq.Eq{"ID": id}))
 	if err == sql.ErrNoRows {
 		return app.Product{}, errors.Wrapf(app.ErrNotFound, "product does not exist for id '%s'", id)
 	} else if err != nil {
@@ -107,19 +107,21 @@ func (p *productStore) Get(id string) (app.Product, error) {
 		return app.Product{}, errors.Wrap(err, "could not commit transaction")
 	}
 
-	return toProduct(product, elements, nil), nil
+	return *p.toProduct(product, elements, nil), nil
 }
 
 // GetProductsNoPage retrieves all products
-func (p *productStore) GetProductsNoPage() ([]app.Product, error) {
+func (p *productStore) GetProductsNoPage() (app.GetProductsNoPageResults, error) {
 	var productsEntities []ProductEntity
 	err := p.store.selectBuilder(p.store.db, &productsEntities, p.productsSelect)
 	if err == sql.ErrNoRows {
-		return nil, errors.Wrap(app.ErrNotFound, "no products found")
+		return app.GetProductsNoPageResults{}, errors.Wrap(app.ErrNotFound, "no products found")
 	} else if err != nil {
-		return nil, errors.Wrap(err, "failed to get products")
+		return app.GetProductsNoPageResults{}, errors.Wrap(err, "failed to get products")
 	}
-	return toProducts(productsEntities), nil
+	return app.GetProductsNoPageResults{
+		Items: p.toProducts(productsEntities),
+	}, nil
 }
 
 // GetProducts retrieves all playbooks given a set of filters.
@@ -171,20 +173,21 @@ func (p *productStore) GetProducts(opts app.ProductFilterOptions) (app.GetProduc
 		TotalCount: total,
 		PageCount:  pageCount,
 		HasMore:    hasMore,
-		Items:      toProducts(productsEntities),
+		Items:      p.toProducts(productsEntities),
 	}, nil
 }
 
 // GetChannels retrieves all channels for a product given a set of filters
 func (p *productStore) GetChannels(productID string, opts app.ProductChannelFilterOptions) (app.GetProductChannelsResults, error) {
-	queryForResults, err := applyProductChannelFilterOptions(p.channelsSelect, opts)
+	queryForResults, err := applyProductChannelFilterOptions(p.channelsSelect.Where(sq.Eq{"ProductID": productID}), opts)
 	if err != nil {
 		return app.GetProductChannelsResults{}, errors.Wrap(err, "failed to apply sort options")
 	}
 
 	queryForTotal := p.store.builder.
 		Select("COUNT(*)").
-		From("MP_Channel")
+		From("MP_Channel").
+		Where(sq.Eq{"ProductID": productID})
 
 	if opts.SearchTerm != "" {
 		column := "Name"
@@ -224,7 +227,7 @@ func (p *productStore) GetChannels(productID string, opts app.ProductChannelFilt
 		TotalCount: total,
 		PageCount:  pageCount,
 		HasMore:    hasMore,
-		Items:      toChannels(channelsEntities),
+		Items:      p.toChannels(channelsEntities),
 	}, nil
 }
 
@@ -241,7 +244,7 @@ func (p *productStore) AddChannel(productID string, params app.AddChannelParams)
 	defer p.store.finalizeTransaction(tx)
 
 	var product ProductEntity
-	err = p.store.getBuilder(tx, &product, p.productsSelect.Where(sq.Eq{"p.ID": productID}))
+	err = p.store.getBuilder(tx, &product, p.productsSelect.Where(sq.Eq{"ID": productID}))
 	if err == sql.ErrNoRows {
 		return app.AddChannelResult{}, errors.Wrapf(app.ErrNotFound, "product with given id does not exist")
 	} else if err != nil {
@@ -250,7 +253,7 @@ func (p *productStore) AddChannel(productID string, params app.AddChannelParams)
 
 	channelsIdsSelect := p.store.builder.
 		Select("ID").
-		From("MP_Channels").
+		From("MP_Channel").
 		Where(sq.Eq{"ProductID": productID})
 
 	var channelsIds []string
@@ -278,6 +281,10 @@ func (p *productStore) AddChannel(productID string, params app.AddChannelParams)
 		if execErr != nil {
 			return app.AddChannelResult{}, errors.Wrap(err, "could not add channel to product")
 		}
+		return app.AddChannelResult{
+			ID:   params.ChannelID,
+			Name: channel.Name,
+		}, nil
 	}
 
 	channelType := model.ChannelTypePrivate
@@ -402,60 +409,61 @@ func applyProductChannelFilterOptions(builder sq.SelectBuilder, options app.Prod
 	return builder, nil
 }
 
-func toProducts(productsEntities []ProductEntity) []app.Product {
+func (p *productStore) toProduct(
+	productEntity ProductEntity,
+	elementsEntities []ProductElementEntity,
+	channelsEntities []ProductChannelEntity,
+) *app.Product {
+	product := &app.Product{}
+	err := util.Convert(productEntity, product)
+	if err != nil {
+		p.pluginAPI.API.LogError("Failed to convert product entity to product", "err", err.Error())
+		return &app.Product{}
+	}
+	product.Elements = p.toElements(elementsEntities)
+	product.Channels = p.toChannels(channelsEntities)
+	return product
+}
+
+func (p *productStore) toProducts(productsEntities []ProductEntity) []app.Product {
 	if productsEntities == nil {
 		return nil
 	}
-	products := make([]app.Product, len(productsEntities))
+	products := make([]app.Product, 0, len(productsEntities))
 	for _, product := range productsEntities {
-		products = append(products, toProduct(product, nil, nil))
+		products = append(products, *p.toProduct(product, nil, nil))
 	}
 	return products
 }
 
-func toProduct(
-	productEntity ProductEntity,
-	elementsEntities []ProductElementEntity,
-	channelsEntities []ProductChannelEntity,
-) app.Product {
-	product := app.Product{}
-	err := util.Convert(productEntity, product)
-	if err != nil {
-		return app.Product{}
-	}
-	product.Elements = toElements(elementsEntities)
-	product.Channels = toChannels(channelsEntities)
-	return product
-}
-
-func toElements(elementsEntities []ProductElementEntity) []app.ProductElement {
+func (p *productStore) toElements(elementsEntities []ProductElementEntity) []app.ProductElement {
 	if elementsEntities == nil {
 		return nil
 	}
 	elements := make([]app.ProductElement, 0, len(elementsEntities))
 	for _, el := range elementsEntities {
-		element := app.ProductElement{}
+		element := &app.ProductElement{}
 		err := util.Convert(el, element)
 		if err != nil {
 			return nil
 		}
-		elements = append(elements, element)
+		elements = append(elements, *element)
 	}
 	return elements
 }
 
-func toChannels(channelsEntities []ProductChannelEntity) []app.ProductChannel {
+func (p *productStore) toChannels(channelsEntities []ProductChannelEntity) []app.ProductChannel {
 	if channelsEntities == nil {
 		return nil
 	}
 	channels := make([]app.ProductChannel, 0, len(channelsEntities))
 	for _, c := range channelsEntities {
-		channel := app.ProductChannel{}
+		channel := &app.ProductChannel{}
 		err := util.Convert(c, channel)
 		if err != nil {
 			return nil
 		}
-		channels = append(channels, channel)
+		channels = append(channels, *channel)
 	}
 	return channels
 }

@@ -30,9 +30,9 @@ type ConfigurationAPI interface {
 // from pluginapi that the store currently uses.
 type PluginAPIClient struct {
 	API           plugin.API
-	Store         StoreAPI
-	KV            KVAPI
 	Configuration ConfigurationAPI
+	KV            KVAPI
+	Store         StoreAPI
 }
 
 // NewClient receives a pluginapi.Client and returns the PluginAPIClient, which is what the
@@ -40,8 +40,8 @@ type PluginAPIClient struct {
 func NewClient(api *pluginapi.Client, pluginAPI plugin.API) PluginAPIClient {
 	return PluginAPIClient{
 		API:           pluginAPI,
-		Store:         api.Store,
-		KV:            &api.KV,
 		Configuration: &api.Configuration,
+		KV:            &api.KV,
+		Store:         api.Store,
 	}
 }

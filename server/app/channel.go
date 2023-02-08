@@ -17,9 +17,9 @@ type ProductChannelFilterOptions struct {
 }
 
 type GetProductChannelsResults struct {
-	TotalCount int              `json:"total_count"`
-	PageCount  int              `json:"page_count"`
-	HasMore    bool             `json:"has_more"`
+	TotalCount int              `json:"totalCount"`
+	PageCount  int              `json:"pageCount"`
+	HasMore    bool             `json:"hasMore"`
 	Items      []ProductChannel `json:"items"`
 }
 

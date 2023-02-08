@@ -19,12 +19,12 @@ import (
 // ProductHandler is the API handler.
 type ProductHandler struct {
 	*ErrorHandler
-	productService app.ProductService
+	productService *app.ProductService
 	pluginAPI      *pluginapi.Client
 }
 
 // NewProductHandler returns a new product api handler
-func NewProductHandler(router *mux.Router, productService app.ProductService, api *pluginapi.Client) *ProductHandler {
+func NewProductHandler(router *mux.Router, productService *app.ProductService, api *pluginapi.Client) *ProductHandler {
 	handler := &ProductHandler{
 		ErrorHandler:   &ErrorHandler{},
 		productService: productService,
@@ -38,8 +38,8 @@ func NewProductHandler(router *mux.Router, productService app.ProductService, ap
 
 	productRouter := productsRouter.PathPrefix("/{id:[A-Za-z0-9]+}").Subrouter()
 	productRouter.HandleFunc("", withContext(handler.getProduct)).Methods(http.MethodGet)
-	productsRouter.HandleFunc("/get_channels", withContext(handler.getProductChannels)).Methods(http.MethodGet)
-	productsRouter.HandleFunc("/add_channel", withContext(handler.addChannel)).Methods(http.MethodPatch)
+	productRouter.HandleFunc("/get_channels", withContext(handler.getProductChannels)).Methods(http.MethodGet)
+	productRouter.HandleFunc("/add_channel", withContext(handler.addChannel)).Methods(http.MethodPatch)
 
 	return handler
 }
@@ -59,12 +59,12 @@ func (h *ProductHandler) getProducts(c *Context, w http.ResponseWriter, r *http.
 }
 
 func (h *ProductHandler) getProductsNoPage(c *Context, w http.ResponseWriter, r *http.Request) {
-	products, err := h.productService.GetProductsNoPage()
+	result, err := h.productService.GetProductsNoPage()
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return
 	}
-	ReturnJSON(w, products, http.StatusOK)
+	ReturnJSON(w, result, http.StatusOK)
 }
 
 func (h *ProductHandler) isFavorited(c *Context, w http.ResponseWriter, r *http.Request) {

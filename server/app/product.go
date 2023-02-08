@@ -3,10 +3,10 @@ package app
 type Product struct {
 	Channels          []ProductChannel `json:"channels" export:"channels"`
 	CreatedAt         int              `json:"createdAt" export:"createdAt"`
-	Elements          []ProductElement `json:"element" export:"element"`
+	Elements          []ProductElement `json:"elements" export:"elements"`
 	ID                string           `json:"id" export:"id"`
 	IsFavorite        bool             `json:"isFavorite" export:"isFavorite"`
-	LastUpdateAt      int              `json:"lastUpdateAt" export:"lastUpdateAt"`
+	LastUpdatedAt     int              `json:"lastUpdatedAt" export:"lastUpdatedAt"`
 	Name              string           `json:"name" export:"name"`
 	Summary           string           `json:"summary" export:"summary"`
 	SummaryModifiedAt int              `json:"summaryModifiedAt" export:"summaryModifiedAt"`
@@ -34,4 +34,8 @@ type GetProductsResults struct {
 	Items      []Product `json:"items"`
 	PageCount  int       `json:"page_count"`
 	TotalCount int       `json:"total_count"`
+}
+
+type GetProductsNoPageResults struct {
+	Items []Product `json:"items"`
 }
