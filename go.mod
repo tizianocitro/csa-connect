@@ -5,12 +5,13 @@ go 1.18
 require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/mattermost/mattermost-server/v6 v6.0.0-20221206174448-c3c81cb3d6a2
+	github.com/mattermost/morph v1.0.5-0.20221115094356-4c18a75b1f5e
 	golang.org/x/exp v0.0.0-20230206171751-46f607a40771
 )
 
 require (
 	github.com/Masterminds/squirrel v1.5.2
-	github.com/blang/semver v3.5.1+incompatible // indirect
+	github.com/blang/semver v3.5.1+incompatible
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/graph-gophers/graphql-go v1.4.0 // indirect
