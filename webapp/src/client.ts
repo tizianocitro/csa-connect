@@ -20,7 +20,7 @@ import {
     AddChannelParams,
     AddChannelResult,
     FetchChannelsParams,
-    FetchChannelsReturn
+    FetchChannelsReturn,
 } from './types/channels';
 
 let siteURL = '';
@@ -52,43 +52,67 @@ export const isFavoriteItem = async (id: string) => {
     return Boolean(data);
 };
 
+/* data = {
+    id: '1',
+    name: 'My First Product',
+    summary: 'My First Product',
+    summaryModifiedAt: 21122022,
+    productId: '1',
+    isFavorite: false,
+    createdAt: 21122022,
+    lastUpdateAt: 21122022,
+    elements: [
+        {
+            id: '1',
+            name: 'My First Element',
+            description: 'My First Element Description',
+        },
+        {
+            id: '2',
+            name: 'My Second Element',
+            description: 'My Second Element Description',
+        },
+        {
+            id: '3',
+            name: 'My Third Element',
+            description: 'My Third Element Description',
+        },
+        {
+            id: '4',
+            name: 'My Fourth Element',
+            description: 'My Fouth Element Description',
+        },
+    ],
+}; */
 export async function fetchProduct(id: string) {
-    let data = await doGet(`${apiUrl}/products/${id}`);
-    data = {
-        id: '1',
-        name: 'My First Product',
-        summary: 'My First Product',
-        summaryModifiedAt: 21122022,
-        productId: '1',
-        isFavorite: false,
-        createdAt: 21122022,
-        lastUpdateAt: 21122022,
-        elements: [
-            {
-                id: '1',
-                name: 'My First Element',
-                description: 'My First Element Description',
-            },
-            {
-                id: '2',
-                name: 'My Second Element',
-                description: 'My Second Element Description',
-            },
-            {
-                id: '3',
-                name: 'My Third Element',
-                description: 'My Third Element Description',
-            },
-            {
-                id: '4',
-                name: 'My Fourth Element',
-                description: 'My Fouth Element Description',
-            },
-        ],
-    };
+    const data = await doGet(`${apiUrl}/products/${id}`);
     return data as Product;
 }
 
+/* data = {
+    items: [
+        {
+            id: '1',
+            name: 'My First Product',
+            summary: 'My First Product',
+            summaryModifiedAt: 21122022,
+            productId: '1',
+            isFavorite: false,
+            createdAt: 21122022,
+            lastUpdateAt: 21122022,
+        },
+        {
+            id: '2',
+            name: 'My Second Product',
+            summary: 'My Second Product',
+            summaryModifiedAt: 21122022,
+            productId: '2',
+            isFavorite: true,
+            createdAt: 21122022,
+            lastUpdateAt: 21122022,
+        },
+    ],
+}; */
 export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
@@ -96,34 +120,36 @@ export async function fetchProductsNoPage(params: FetchProductsNoPageParams) {
     if (!data) {
         data = {items: []} as FetchProductsNoPageReturn;
     }
-
-    data = {
-        items: [
-            {
-                id: '1',
-                name: 'My First Product',
-                summary: 'My First Product',
-                summaryModifiedAt: 21122022,
-                productId: '1',
-                isFavorite: false,
-                createdAt: 21122022,
-                lastUpdateAt: 21122022,
-            },
-            {
-                id: '2',
-                name: 'My Second Product',
-                summary: 'My Second Product',
-                summaryModifiedAt: 21122022,
-                productId: '2',
-                isFavorite: true,
-                createdAt: 21122022,
-                lastUpdateAt: 21122022,
-            },
-        ],
-    };
     return data as FetchProductsNoPageReturn;
 }
 
+/* data = {
+    items: [
+        {
+            id: '1',
+            name: 'My First Product',
+            summary: 'My First Product',
+            summaryModifiedAt: 21122022,
+            productId: '1',
+            isFavorite: false,
+            createdAt: 21122022,
+            lastUpdateAt: 21122022,
+        },
+        {
+            id: '2',
+            name: 'My Second Product',
+            summary: 'My Second Product',
+            summaryModifiedAt: 21122022,
+            productId: '2',
+            isFavorite: true,
+            createdAt: 21122022,
+            lastUpdateAt: 21122022,
+        },
+    ],
+    totalCount: 2,
+    hasMore: false,
+    pageCount: 1,
+}; */
 export async function fetchProducts(params: FetchProductsParams) {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
@@ -131,38 +157,26 @@ export async function fetchProducts(params: FetchProductsParams) {
     if (!data) {
         data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchProductsReturn;
     }
-    data = {
-        items: [
-            {
-                id: '1',
-                name: 'My First Product',
-                summary: 'My First Product',
-                summaryModifiedAt: 21122022,
-                productId: '1',
-                isFavorite: false,
-                createdAt: 21122022,
-                lastUpdateAt: 21122022,
-            },
-            {
-                id: '2',
-                name: 'My Second Product',
-                summary: 'My Second Product',
-                summaryModifiedAt: 21122022,
-                productId: '2',
-                isFavorite: true,
-                createdAt: 21122022,
-                lastUpdateAt: 21122022,
-            },
-        ],
-        totalCount: 2,
-        hasMore: false,
-        pageCount: 1,
-    };
 
     // pageCount = totalCount / perPage
     return data as FetchProductsReturn;
 }
 
+/* data = {
+    items: [
+        {
+            id: 'demo',
+            name: 'Demo',
+        },
+        {
+            id: 'my-first-product-channel',
+            name: 'My First Product Channel',
+        },
+    ],
+    totalCount: 2,
+    hasMore: false,
+    pageCount: 0,
+}; */
 export async function fetchProductChannels(params: FetchChannelsParams) {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
@@ -170,21 +184,6 @@ export async function fetchProductChannels(params: FetchChannelsParams) {
     if (!data) {
         data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchChannelsReturn;
     }
-    data = {
-        items: [
-            {
-                id: 'demo',
-                name: 'Demo',
-            },
-            {
-                id: 'my-first-product-channel',
-                name: 'My First Product Channel',
-            },
-        ],
-        totalCount: 2,
-        hasMore: false,
-        pageCount: 0,
-    };
     return data as FetchChannelsReturn;
 }
 

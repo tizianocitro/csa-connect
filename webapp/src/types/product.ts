@@ -1,4 +1,4 @@
-import {ProductChannel} from "./channels";
+import {ProductChannel} from './channels';
 
 export interface Product {
     channels?: ProductChannel[];
@@ -6,7 +6,7 @@ export interface Product {
     elements?: ProductElement[];
     id: string;
     isFavorite: boolean;
-    lastUpdateAt: number;
+    lastUpdatedAt: number;
     name: string;
     summary: string;
     summaryModifiedAt: number;
@@ -16,6 +16,14 @@ export interface ProductElement {
     id: string;
     name: string;
     description: string;
+}
+
+export interface ChannelProduct extends Product {
+    channelId: string;
+    channelMode: string;
+    channelNameTemplate: string;
+    createPublicChannel: boolean;
+    teamId: string;
 }
 
 export interface FetchProductsNoPageParams {

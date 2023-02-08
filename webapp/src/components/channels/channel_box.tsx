@@ -55,6 +55,7 @@ const ChannelBox = ({product, teamId}: Props) => {
                 </Setting>
                 <CreateProductChannel
                     product={productForCreateChannel}
+                    productId={product.id}
                     teamId={teamId}
                     dispatchSelectErrorMessage={dispatchSelectErrorMessage}
                     dispatchNameErrorMessage={dispatchNameErrorMessage}

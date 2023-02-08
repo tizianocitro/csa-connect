@@ -77,6 +77,7 @@ const ProductDetails = () => {
                 <Header>
                     <ProductHeader
                         product={product}
+                        productId={productId}
                     />
                 </Header>
                 <Main>

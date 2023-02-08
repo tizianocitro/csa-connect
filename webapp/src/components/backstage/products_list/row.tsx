@@ -15,7 +15,7 @@ interface Props {
 
 const Row = (props: Props) => {
     function openProductDetails(product: Product) {
-        navigateToPluginUrl(`/products/${product.id}?from=run_list`);
+        navigateToPluginUrl(`/products/${product.id}?from=products_list`);
     }
 
     return (

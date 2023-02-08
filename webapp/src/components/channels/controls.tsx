@@ -12,6 +12,7 @@ import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
 type AddChannelProps = {
     product: ChannelProduct,
+    productId: string;
     teamId: string,
     dispatchSelectErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
@@ -62,12 +63,14 @@ const addChannel = (
 // }}
 export const CreateProductChannel = ({
     product,
+    productId,
     teamId,
     dispatchSelectErrorMessage,
     dispatchNameErrorMessage,
 }: AddChannelProps) => {
     const {formatMessage} = useIntl();
     const title = formatMessage({defaultMessage: 'Add Channel'});
+    product.id = productId;
     return (
         <PrimaryButtonLarger
             onClick={() => addChannel(product, teamId, dispatchSelectErrorMessage, dispatchNameErrorMessage)}

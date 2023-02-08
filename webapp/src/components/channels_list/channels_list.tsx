@@ -53,19 +53,24 @@ const ChannelsList = ({
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}
             />
-            {channels.length === 0 && isFiltering &&
+            {channels == null &&
+                <div className='text-center pt-8'>
+                    <FormattedMessage defaultMessage='There are no channels for this product.'/>
+                </div>
+            }
+            {channels?.length === 0 && isFiltering &&
                 <div className='text-center pt-8'>
                     <FormattedMessage defaultMessage='There are no channels matching those filters.'/>
                 </div>
             }
             <InfiniteScroll
-                dataLength={channels.length}
+                dataLength={channels?.length}
                 next={nextPage}
-                hasMore={channels.length < totalCount}
+                hasMore={channels?.length < totalCount}
                 loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
                 scrollableTarget={'product-channels-backstageRoot'}
             >
-                {channels.map((channel) => (
+                {channels?.map((channel) => (
                     <Row
                         key={channel.id}
                         channel={channel}
