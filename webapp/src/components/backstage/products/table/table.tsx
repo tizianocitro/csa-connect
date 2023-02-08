@@ -9,6 +9,7 @@ import TableHeader from './table_header';
 import TableRow from './table_row';
 
 type Props = {
+    fullUrl?: string;
     id: string;
     product: Product;
     urlHash: string;
@@ -19,7 +20,7 @@ type Props = {
 //    product={product}
 //    urlHash={urlHash}
 // />
-const Table = ({id, product, urlHash}: Props) => {
+const Table = ({fullUrl, id, product, urlHash}: Props) => {
     const {formatMessage} = useIntl();
 
     const title = formatMessage({defaultMessage: 'Elements Info'});
@@ -45,6 +46,7 @@ const Table = ({id, product, urlHash}: Props) => {
                             key={el.id}
                             element={el}
                             urlHash={urlHash}
+                            fullUrl={fullUrl}
                         />
                     );
                 })}

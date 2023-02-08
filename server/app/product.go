@@ -30,10 +30,10 @@ type ProductFilterOptions struct {
 }
 
 type GetProductsResults struct {
-	HasMore    bool      `json:"has_more"`
+	HasMore    bool      `json:"hasMore"`
 	Items      []Product `json:"items"`
-	PageCount  int       `json:"page_count"`
-	TotalCount int       `json:"total_count"`
+	PageCount  int       `json:"pageCount"`
+	TotalCount int       `json:"totalCount"`
 }
 
 type GetProductsNoPageResults struct {
