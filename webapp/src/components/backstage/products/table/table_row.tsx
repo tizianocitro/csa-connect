@@ -8,10 +8,11 @@ import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 
 
 type Props = {
     element: ProductElement;
+    fullUrl?: string;
     urlHash: string;
 };
 
-const TableRow = ({urlHash, element}: Props) => {
+const TableRow = ({urlHash, fullUrl, element}: Props) => {
     const {url} = useRouteMatch();
     const {id, name, description} = element;
     const itemId = buildIdForUrlHashReference('product-element', id);
@@ -24,7 +25,7 @@ const TableRow = ({urlHash, element}: Props) => {
         >
             <CopyLink
                 id={itemId}
-                to={buildToForCopy(`${url}#${itemId}`)}
+                to={fullUrl ? buildToForCopy(`${url}${fullUrl}#${itemId}`) : buildToForCopy(`${url}#${itemId}`)}
                 name={name}
                 area-hidden={true}
                 iconWidth={'1.45em'}

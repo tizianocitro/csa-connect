@@ -1,12 +1,13 @@
+import {ProductChannel} from './channels';
+
 export interface Product {
-    channelsIds?: string[];
+    channels?: ProductChannel[];
     createdAt: number;
     elements?: ProductElement[];
     id: string;
     isFavorite: boolean;
-    lastUpdateAt: number;
+    lastUpdatedAt: number;
     name: string;
-    productId: string;
     summary: string;
     summaryModifiedAt: number;
 }
@@ -50,16 +51,4 @@ export interface FetchProductsReturn {
     items: Product[];
     pageCount: number;
     totalCount: number;
-}
-
-export interface AddChannelParams {
-    channel_id?: string;
-    channel_name?: string;
-    create_public_channel?: boolean;
-    product_id: string;
-    team_id: string;
-}
-
-export interface AddChannelResult {
-    channelId?: string;
 }

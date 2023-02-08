@@ -20,3 +20,16 @@ export interface FetchChannelsReturn {
     pageCount: number;
     totalCount: number;
 }
+
+export interface AddChannelParams {
+    channel_id?: string;
+    channel_name?: string;
+    create_public_channel?: boolean;
+    product_id: string;
+    team_id: string;
+}
+
+export interface AddChannelResult {
+    id?: string;
+    name?: string;
+}

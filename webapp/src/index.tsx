@@ -6,6 +6,7 @@ import {render} from 'react-dom';
 import {Store} from 'redux';
 import {GlobalState} from '@mattermost/types/store';
 import {Client4} from 'mattermost-redux/client';
+import {FormattedMessage} from 'react-intl';
 
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 
@@ -14,6 +15,8 @@ import {pluginId} from 'src/manifest';
 import Backstage from 'src/components/backstage/backstage';
 
 import {setSiteUrl} from 'src/client';
+import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
+import RHSView from 'src/components/rhs/right_hand_sidebar';
 
 const GlobalHeaderCenter = () => {
     return null;
@@ -84,6 +87,17 @@ export default class Plugin {
             enableTeamSidebar,
             enableAppBarComponent,
             'product-playbooks',
+        );
+
+        const {toggleRHSPlugin} = registry.registerRightHandSidebarComponent(
+            RHSView,
+            <FormattedMessage defaultMessage='Mattermost Product'/>,
+        );
+        registry.registerChannelHeaderButtonAction(
+            <ChannelHeaderButtonIcon/>,
+            () => store.dispatch(toggleRHSPlugin),
+            <FormattedMessage defaultMessage='Mattermost Product'/>,
+            <FormattedMessage defaultMessage='Mattermost Product'/>,
         );
     }
 

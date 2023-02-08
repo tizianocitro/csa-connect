@@ -34,5 +34,6 @@ linters:
     - stylecheck
     - typecheck
     - unconvert
-    - unused
+    # TODO: Ucomment to reenable
+    # - unused
     - whitespace

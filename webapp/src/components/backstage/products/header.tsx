@@ -20,10 +20,12 @@ import {ContextMenu} from './context_menu';
 
 interface Props {
     product: Product;
+    productId: string;
 }
 
-export const ProductHeader = ({product}: Props) => {
+export const ProductHeader = ({product, productId}: Props) => {
     const {formatMessage} = useIntl();
+    product.id = productId;
     const [isFavoriteProduct, toggleFavorite] = useFavoriteProduct(product.id);
 
     // Favorite Button State
