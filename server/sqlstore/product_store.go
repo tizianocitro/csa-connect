@@ -12,8 +12,8 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/mattermost/mattermost-server/v6/model"
 
-	"github.com/tizianocitro/mattermost-product/server/app"
-	"github.com/tizianocitro/mattermost-product/server/util"
+	"github.com/tizianocitro/csa-connect/server/app"
+	"github.com/tizianocitro/csa-connect/server/util"
 )
 
 // productStore is a sql store for products. Use NewProductStore to create it.

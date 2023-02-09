@@ -1,9 +1,9 @@
 {
-    "id": "mattermost-product",
-    "name": "Mattermost Product",
-    "description": "A Mattermost Product plugin.",
-    "homepage_url": "https://github.com/tizianocitro/mattermost-product/",
-    "support_url": "https://github.com/tizianocitro/mattermost-product/issues",
+    "id": "cs-aware-connect",
+    "name": "CS-AWARE Connect",
+    "description": "CS-AWARE Connect is a plugin for a Cybersecurity-based collaboration platform.",
+    "homepage_url": "https://github.com/tizianocitro/csa-connect/",
+    "support_url": "https://github.com/tizianocitro/csa-connect/issues",
     "icon_path": "assets/plugin_icon.svg",
     "min_server_version": "7.6.0",
     "server": {

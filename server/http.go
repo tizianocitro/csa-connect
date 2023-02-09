@@ -7,8 +7,8 @@ import (
 
 	"github.com/mattermost/mattermost-server/v6/model"
 
-	"github.com/tizianocitro/mattermost-product/server/command"
-	"github.com/tizianocitro/mattermost-product/server/user"
+	"github.com/tizianocitro/csa-connect/server/command"
+	"github.com/tizianocitro/csa-connect/server/user"
 )
 
 func (p *Plugin) handleGetProductURL(w http.ResponseWriter, r *http.Request) {

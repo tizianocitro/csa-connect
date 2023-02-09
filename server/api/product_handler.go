@@ -13,7 +13,7 @@ import (
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 
-	"github.com/tizianocitro/mattermost-product/server/app"
+	"github.com/tizianocitro/csa-connect/server/app"
 )
 
 // ProductHandler is the API handler.

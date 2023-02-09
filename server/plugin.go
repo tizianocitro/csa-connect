@@ -6,16 +6,16 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/mattermost/mattermost-plugin-api/cluster"
+	// "github.com/mattermost/mattermost-plugin-api/cluster"
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 
-	"github.com/tizianocitro/mattermost-product/server/api"
-	"github.com/tizianocitro/mattermost-product/server/app"
-	"github.com/tizianocitro/mattermost-product/server/command"
-	"github.com/tizianocitro/mattermost-product/server/sqlstore"
+	"github.com/tizianocitro/csa-connect/server/api"
+	"github.com/tizianocitro/csa-connect/server/app"
+	"github.com/tizianocitro/csa-connect/server/command"
+	"github.com/tizianocitro/csa-connect/server/sqlstore"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -62,7 +62,7 @@ func (p *Plugin) OnActivate() error {
 	p.handler = api.NewHandler(p.pluginAPI)
 	p.productService = app.NewProductService(productStore, p.pluginAPI)
 
-	mutex, err := cluster.NewMutex(p.API, "MP_dbMutex")
+	/* mutex, err := cluster.NewMutex(p.API, "MP_dbMutex")
 	if err != nil {
 		return errors.Wrapf(err, "failed creating cluster mutex")
 	}
@@ -71,7 +71,7 @@ func (p *Plugin) OnActivate() error {
 		mutex.Unlock()
 		return errors.Wrapf(err, "failed to run migrations")
 	}
-	mutex.Unlock()
+	mutex.Unlock() */
 
 	api.NewProductHandler(
 		p.handler.APIRouter,
@@ -107,9 +107,9 @@ func (p *Plugin) getPluginURLPathPrefix() string {
 
 func (p *Plugin) getBotID() (string, error) {
 	botID, err := p.pluginAPI.Bot.EnsureBot(&model.Bot{
-		Username:    "mattermostproductbot",
-		DisplayName: "Mattermost Product Bot",
-		Description: "A bot account created by the Mattermost Product.",
+		Username:    "csawareconnect",
+		DisplayName: "CS-AWARE CONNECT Bot",
+		Description: "A bot account created by the CS-AWARE CONNECT product.",
 	})
 	if err != nil {
 		return "", errors.Wrap(err, "failed to ensure bot, so cannot get botID")

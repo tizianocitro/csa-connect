@@ -9,7 +9,7 @@ import (
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
-	"github.com/tizianocitro/mattermost-product/server/command"
+	"github.com/tizianocitro/csa-connect/server/command"
 )
 
 // Executes a command that has been previously registered via the RegisterCommand API.
