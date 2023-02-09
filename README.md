@@ -1,2 +1,2 @@
-# Mattermost Product
-A template for creating a Mattermost product plugin.
+# CSA CONNECT
+A Mattermost product plugin.
