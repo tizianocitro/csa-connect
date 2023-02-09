@@ -8,7 +8,7 @@ import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/tea
 import {GlobalState} from '@mattermost/types/store';
 import {Team} from '@mattermost/types/teams';
 
-import {navigateToChannel} from 'src/browser_routing';
+import {navigateToUrl} from 'src/browser_routing';
 import {ProductChannel} from 'src/types/channels';
 
 interface Props {
@@ -24,8 +24,9 @@ const Row = (props: Props) => {
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};
     }
 
+    // navigateToChannel(team.name, channel.id);
     function openChannel(channel: ProductChannel) {
-        navigateToChannel(team.name, channel.id);
+        navigateToUrl(`/${team.name}/channels/${channel.id}?from=channel_list`);
     }
 
     return (
