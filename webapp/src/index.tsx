@@ -78,7 +78,7 @@ export default class Plugin {
 
         registry.registerProduct(
             '/mattermost-product',
-            'product-playbooks',
+            'power-plug-outline',
             'Mattermost Product',
             '/mattermost-product',
             BackstageWrapped,
