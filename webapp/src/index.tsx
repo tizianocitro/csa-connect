@@ -8,15 +8,15 @@ import {GlobalState} from '@mattermost/types/store';
 import {Client4} from 'mattermost-redux/client';
 import {FormattedMessage} from 'react-intl';
 
-import {GlobalSelectStyle} from 'src/components/backstage/styles';
-
 import {pluginId} from 'src/manifest';
 
+import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import Backstage from 'src/components/backstage/backstage';
 
 import {setSiteUrl} from 'src/client';
 import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
 import RHSView from 'src/components/rhs/right_hand_sidebar';
+import {DEFAULT_PATH} from 'src/constants';
 
 const GlobalHeaderCenter = () => {
     return null;
@@ -77,10 +77,10 @@ export default class Plugin {
         const enableAppBarComponent = true;
 
         registry.registerProduct(
-            '/mattermost-product',
+            `/${DEFAULT_PATH}`,
             'power-plug-outline',
-            'Mattermost Product',
-            '/mattermost-product',
+            'CS AWARE CONNECT',
+            `/${DEFAULT_PATH}`,
             BackstageWrapped,
             GlobalHeaderCenter,
             GlobalHeaderRight,
@@ -91,13 +91,13 @@ export default class Plugin {
 
         const {toggleRHSPlugin} = registry.registerRightHandSidebarComponent(
             RHSView,
-            <FormattedMessage defaultMessage='Mattermost Product'/>,
+            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
         );
         registry.registerChannelHeaderButtonAction(
             <ChannelHeaderButtonIcon/>,
             () => store.dispatch(toggleRHSPlugin),
-            <FormattedMessage defaultMessage='Mattermost Product'/>,
-            <FormattedMessage defaultMessage='Mattermost Product'/>,
+            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
+            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
         );
     }
 

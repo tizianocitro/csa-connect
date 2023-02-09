@@ -3,6 +3,8 @@
 
 import React from 'react';
 
+import {DEFAULT_PATH} from 'src/constants';
+
 // @ts-ignore
 const WebappUtils = window.WebappUtils;
 
@@ -16,7 +18,7 @@ export const navigateToUrl = (urlPath: string | PathLike) => {
 };
 
 export const pluginUrl = (urlPath: string) => {
-    return '/mattermost-product' + urlPath;
+    return '/' + DEFAULT_PATH + urlPath;
 };
 
 export const navigateToPluginUrl = (urlPath: string) => {

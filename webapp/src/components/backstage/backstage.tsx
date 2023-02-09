@@ -12,6 +12,7 @@ import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {useForceDocumentTitle} from 'src/hooks';
 import {applyTheme} from 'src/components/backstage/css_utils';
+import {DEFAULT_PATH} from 'src/constants';
 
 import {ToastProvider} from './toast_banner';
 import LHSNavigation from './lhs_navigation';
@@ -40,7 +41,7 @@ const Backstage = () => {
     const {pathname} = useLocation();
     const {url} = useRouteMatch();
     const noContainerScroll = matchPath<{productId?: string;}>(pathname, {
-        path: [`${url}/products/:productId`, `${url}/mattermost-product`],
+        path: [`${url}/products/:productId`, `${url}/${DEFAULT_PATH}`],
     });
 
     const currentTheme = useSelector<GlobalState, Theme>(getTheme);

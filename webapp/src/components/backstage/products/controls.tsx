@@ -13,6 +13,7 @@ import {copyToClipboard} from 'src/utils';
 import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {SecondaryButton} from 'src/components/assets/buttons';
+import {DEFAULT_PATH} from 'src/constants';
 
 export const FavoriteProductMenuItem = (props: {isFavorite: boolean, toggleFavorite: () => void}) => {
     return (
@@ -39,7 +40,7 @@ export const CopyProductLinkMenuItem = (props: {productId: string}) => {
     return (
         <StyledDropdownMenuItem
             onClick={() => {
-                copyToClipboard(getSiteUrl() + '/mattermost-product/product/' + props.productId);
+                copyToClipboard(getSiteUrl() + '/' + DEFAULT_PATH + '/product/' + props.productId);
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >

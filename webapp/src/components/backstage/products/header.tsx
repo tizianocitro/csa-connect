@@ -15,6 +15,7 @@ import TextEdit from 'src/components/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
 
 import {Product} from 'src/types/product';
+import {DEFAULT_PATH} from 'src/constants';
 
 import {ContextMenu} from './context_menu';
 
@@ -67,7 +68,7 @@ export const ProductHeader = ({product, productId}: Props) => {
                     />
                     <StyledCopyLink
                         id='copy-product-link-tooltip'
-                        to={getSiteUrl() + '/mattermost-product/products/' + product?.id}
+                        to={getSiteUrl() + '/' + DEFAULT_PATH + '/products/' + product?.id}
                         tooltipMessage={formatMessage({defaultMessage: 'Copy link to product'})}
                     />
                 </>

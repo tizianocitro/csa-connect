@@ -8,6 +8,7 @@ import {LHSProductDotMenu} from 'src/components/backstage/lhs_product_dot_menu';
 
 import {pluginUrl} from 'src/browser_routing';
 import {ReservedCategory, useProductsNoPageList, useReservedCategoryTitleMapper} from 'src/hooks';
+import {DEFAULT_PATH} from 'src/constants';
 
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
@@ -77,7 +78,7 @@ const ViewAllProducts = () => {
                 id={'sidebarItem_view_all_products'}
                 aria-label={formatMessage({defaultMessage: 'View all products'})}
                 data-testid={'productsLHSButton'}
-                to={'/mattermost-product/products'}
+                to={`/${DEFAULT_PATH}/products`}
                 exact={true}
             >
                 {viewAllMessage}
