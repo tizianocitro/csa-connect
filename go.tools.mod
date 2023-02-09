@@ -1,4 +1,4 @@
-module github.com/tizianocitro/mattermost-product
+module github.com/tizianocitro/csa-connect
 
 go 1.14
 
