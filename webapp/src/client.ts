@@ -47,11 +47,6 @@ export const getApiUrl = (): string => {
     return apiUrl;
 };
 
-export const isFavoriteItem = async (id: string) => {
-    const data = await doGet<void>(`${apiUrl}/products/favorites?id=${id}`);
-    return Boolean(data);
-};
-
 /* data = {
     id: '1',
     name: 'My First Product',

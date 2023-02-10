@@ -15,7 +15,7 @@ interface Props {
 
 const Row = (props: Props) => {
     function openProductDetails(product: Product) {
-        navigateToPluginUrl(`/products/${product.id}?from=products_list`);
+        navigateToPluginUrl(`/products/${product.id}?from=organizations_list`);
     }
 
     return (
@@ -26,7 +26,7 @@ const Row = (props: Props) => {
         >
             <div className='col-sm-4'>
                 <ProductName>{props.product.name}</ProductName>
-                <InfoLine>{'Product Info Line here'}</InfoLine>
+                <InfoLine>{props.product.description}</InfoLine>
             </div>
         </ProductItem>
     );

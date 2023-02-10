@@ -10,17 +10,13 @@ import {SemiBoldHeading} from 'src/styles/headings';
 
 import {Product} from 'src/types/product';
 
-import {CopyProductLinkMenuItem, FavoriteProductMenuItem} from './controls';
-
-import {Separator} from './shared';
+import {CopyProductLinkMenuItem} from './controls';
 
 interface Props {
     product: Product;
-    isFavoriteProduct: boolean;
-    toggleFavorite: () => void;
 }
 
-export const ContextMenu = ({product, isFavoriteProduct, toggleFavorite}: Props) => {
+export const ContextMenu = ({product}: Props) => {
     return (
         <>
             <DotMenu
@@ -36,12 +32,6 @@ export const ContextMenu = ({product, isFavoriteProduct, toggleFavorite}: Props)
                     </>
                 }
             >
-
-                <FavoriteProductMenuItem
-                    isFavorite={isFavoriteProduct}
-                    toggleFavorite={toggleFavorite}
-                />
-                <Separator/>
                 <CopyProductLinkMenuItem
                     productId={product.id}
                 />

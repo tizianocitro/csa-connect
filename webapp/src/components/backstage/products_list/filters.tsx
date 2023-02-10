@@ -38,7 +38,7 @@ const Filters = ({fetchParams, setFetchParams}: Props) => {
                 testId={'search-filter'}
                 default={fetchParams.search_term}
                 onSearch={onSearch}
-                placeholder={formatMessage({defaultMessage: 'Search by product name'})}
+                placeholder={formatMessage({defaultMessage: 'Search by organization name'})}
             />
         </ProductListFilters>
     );

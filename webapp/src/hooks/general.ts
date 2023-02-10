@@ -21,7 +21,6 @@ import {
     fetchProductChannels,
     fetchProducts,
     fetchProductsNoPage,
-    isFavoriteItem,
 } from 'src/client';
 
 import {
@@ -36,61 +35,27 @@ import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
 type FetchParams = FetchProductsParams | FetchChannelsParams;
 
 export enum ReservedCategory {
-    Favorite = 'Favorite',
-    Products = 'Products',
+    Ecosystem = 'Ecosystem',
+    Organizations = 'Organizations',
 }
 
 export const useReservedCategoryTitleMapper = () => {
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
-        case ReservedCategory.Favorite:
-            return formatMessage({defaultMessage: 'Favorites'});
-        case ReservedCategory.Products:
-            return formatMessage({defaultMessage: 'Products'});
+        case ReservedCategory.Ecosystem:
+            return formatMessage({defaultMessage: 'Ecosystem'});
+        case ReservedCategory.Organizations:
+            return formatMessage({defaultMessage: 'Organizations'});
         default:
             return categoryName;
         }
     };
 };
 
-export const useSetProductFavorite = (id: string | undefined) => {
-    // TODO: Here make API call and remove this fake interface and function
-    interface Variables {
-        variables: {
-            id: string | undefined;
-            fav: boolean;
-        }
-    }
-
-    const innerUpdateProduct = (variables: Variables) => {
-        return variables;
-    };
-
-    return useCallback((fav: boolean) => {
-        if (id === undefined) {
-            return;
-        }
-        innerUpdateProduct({variables: {id, fav}});
-    }, [id, innerUpdateProduct]);
-};
-
-export const useFavoriteProduct = (id: string): [boolean, () => void] => {
-    const [isFavoriteProduct, setIsFavoriteProduct] = useState(false);
-    const setProductFavorite = useSetProductFavorite(id);
-
-    useEffect(() => {
-        isFavoriteItem(id)
-            .then(setIsFavoriteProduct)
-            .catch(() => setIsFavoriteProduct(false));
-    }, [id]);
-
-    const toggleFavorite = () => {
-        setProductFavorite(!isFavoriteProduct);
-        setIsFavoriteProduct(!isFavoriteProduct);
-    };
-    return [isFavoriteProduct, toggleFavorite];
-};
+export function useEcosystem(id: string): Product | {} {
+    return useProduct(id);
+}
 
 export function useProduct(id: string): Product | {} {
     const [product, setProduct] = useState<Product | {}>({});

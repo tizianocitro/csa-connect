@@ -44,7 +44,7 @@ export const CopyProductLinkMenuItem = (props: {productId: string}) => {
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >
-            <LinkVariantIcon size={18}/>
+            <LinkVariantIcon size={16}/>
             <FormattedMessage defaultMessage='Copy link'/>
         </StyledDropdownMenuItem>
     );

@@ -25,10 +25,10 @@ const ProductsPage = () => {
     return (
         <ProductListContainer>
             <Header
-                data-testid='titleProduct'
+                data-testid='titleOrganization'
                 level={2}
-                heading={formatMessage({defaultMessage: 'Products'})}
-                subtitle={formatMessage({defaultMessage: 'All the products will show here'})}
+                heading={formatMessage({defaultMessage: 'Organizations'})}
+                subtitle={formatMessage({defaultMessage: 'All the organizations will show here'})}
                 css={`
                     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                 `}

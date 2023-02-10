@@ -7,8 +7,14 @@ import {useIntl} from 'react-intl';
 import {LHSProductDotMenu} from 'src/components/backstage/lhs_product_dot_menu';
 
 import {pluginUrl} from 'src/browser_routing';
-import {ReservedCategory, useProductsNoPageList, useReservedCategoryTitleMapper} from 'src/hooks';
+import {
+    ReservedCategory,
+    useEcosystem,
+    useProductsNoPageList,
+    useReservedCategoryTitleMapper,
+} from 'src/hooks';
 import {DEFAULT_PATH} from 'src/constants';
+import {Product} from 'src/types/product';
 
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
@@ -17,16 +23,18 @@ const defaultProductsFetchParams = {
     sort: 'name',
     direction: 'desc',
 };
+
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
+    const ecosystem = useEcosystem('0') as Product;
     const products = useProductsNoPageList(defaultProductsFetchParams);
-    if (!products) {
+    if (!products || !ecosystem) {
         return {groups: [], ready: false};
     }
 
     const productItems = products.map((p) => {
         const icon = 'icon-play-outline';
-        const link = pluginUrl(`/products/${p.id}?from=products_lhs`);
+        const link = pluginUrl(`/products/${p.id}?from=organizations_lhs`);
 
         return {
             areaLabel: p.name,
@@ -38,33 +46,26 @@ const useLHSData = () => {
             itemMenu: (
                 <LHSProductDotMenu
                     productId={p.id}
-                    isFavorite={p.isFavorite}
                 />),
-            isFavorite: p.isFavorite,
             className: '',
         };
     });
-    const productsFavorites = productItems.filter((group) => group.isFavorite);
-    const productsWithoutFavorites = productItems.filter((group) => !group.isFavorite);
-
-    let groups = [
+    const productsWithoutEcosystem = productItems.filter((group) => group.display_name !== ecosystem.name);
+    const productsWithEcosystem = productItems.filter((group) => group.display_name === ecosystem.name);
+    const groups = [
         {
             collapsed: false,
-            display_name: normalizeCategoryName(ReservedCategory.Products),
-            id: ReservedCategory.Products,
-            items: productsWithoutFavorites,
+            display_name: normalizeCategoryName(ReservedCategory.Ecosystem),
+            id: ReservedCategory.Ecosystem,
+            items: productsWithEcosystem,
+        },
+        {
+            collapsed: false,
+            display_name: normalizeCategoryName(ReservedCategory.Organizations),
+            id: ReservedCategory.Organizations,
+            items: productsWithoutEcosystem,
         },
     ];
-    if (productsFavorites.length > 0) {
-        groups = [
-            {
-                collapsed: false,
-                display_name: normalizeCategoryName(ReservedCategory.Favorite),
-                id: ReservedCategory.Favorite,
-                items: productsFavorites,
-            },
-        ].concat(groups);
-    }
 
     return {groups, ready: true};
 };
@@ -76,7 +77,7 @@ const ViewAllProducts = () => {
         <ItemContainer>
             <ViewAllNavLink
                 id={'sidebarItem_view_all_products'}
-                aria-label={formatMessage({defaultMessage: 'View all products'})}
+                aria-label={formatMessage({defaultMessage: 'View all organizations'})}
                 data-testid={'productsLHSButton'}
                 to={`/${DEFAULT_PATH}/products`}
                 exact={true}
@@ -89,7 +90,7 @@ const ViewAllProducts = () => {
 
 const addViewAllsToGroups = (groups: SidebarGroup[]) => {
     for (let i = 0; i < groups.length; i++) {
-        if (groups[i].id === ReservedCategory.Products) {
+        if (groups[i].id === ReservedCategory.Organizations) {
             groups[i].afterGroup = <ViewAllProducts/>;
         }
     }

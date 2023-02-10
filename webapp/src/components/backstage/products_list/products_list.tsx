@@ -56,7 +56,7 @@ const ProductsList = ({
             />
             {products.length === 0 && isFiltering &&
                 <div className='text-center pt-8'>
-                    <FormattedMessage defaultMessage='There are no products matching those filters.'/>
+                    <FormattedMessage defaultMessage='There are no organizations matching those filters.'/>
                 </div>
             }
             <InfiniteScroll

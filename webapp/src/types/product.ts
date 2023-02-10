@@ -3,6 +3,7 @@ import {ProductChannel} from './channels';
 export interface Product {
     channels?: ProductChannel[];
     createdAt: number;
+    description?: string;
     elements?: ProductElement[];
     id: string;
     isFavorite: boolean;

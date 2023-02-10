@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {StarIcon, StarOutlineIcon} from '@mattermost/compass-icons/components';
 import React from 'react';
 import {useIntl} from 'react-intl';
 
@@ -10,7 +9,6 @@ import styled, {css} from 'styled-components';
 import {getSiteUrl} from 'src/client';
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
 import CopyLink from 'src/components/widgets/copy_link';
-import {useFavoriteProduct} from 'src/hooks';
 import TextEdit from 'src/components/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
 
@@ -27,10 +25,6 @@ interface Props {
 export const ProductHeader = ({product, productId}: Props) => {
     const {formatMessage} = useIntl();
     product.id = productId;
-    const [isFavoriteProduct, toggleFavorite] = useFavoriteProduct(product.id);
-
-    // Favorite Button State
-    const FavoriteIcon = isFavoriteProduct ? StarIcon : StarOutlineIcon;
 
     // Put before ${PrimaryButton}, ${TertiaryButton}
     // ${CancelSaveContainer} {
@@ -38,13 +32,6 @@ export const ProductHeader = ({product, productId}: Props) => {
     // }
     return (
         <Container data-testid={'product-header-section'}>
-            <StarButton onClick={toggleFavorite}>
-                <FavoriteIcon
-                    size={18}
-                    color={isFavoriteProduct ? 'var(--sidebar-text-active-border)' : 'var(--center-channel-color-56)'}
-                />
-            </StarButton>
-
             <TextEdit
                 disabled={false}
                 placeholder={formatMessage({defaultMessage: 'Product name'})}
@@ -63,8 +50,6 @@ export const ProductHeader = ({product, productId}: Props) => {
                 <>
                     <ContextMenu
                         product={product}
-                        isFavoriteProduct={isFavoriteProduct}
-                        toggleFavorite={toggleFavorite}
                     />
                     <StyledCopyLink
                         id='copy-product-link-tooltip'
@@ -107,20 +92,4 @@ const titleCommon = css`
     border: none;
     border-radius: 4px;
     box-shadow: inset 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.16);
-`;
-
-const StarButton = styled.button`
-    border-radius: 4px;
-    border: 0;
-    display: flex;
-    height: 28px;
-    width: 28px;
-    align-items: center;
-    background: none;
-    margin: 0 6px;
-
-    &:hover {
-       background: rgba(var(--center-channel-color-rgb), 0.08);
-       color: rgba(var(--center-channel-color-rgb), 0.72);
-    }
 `;
