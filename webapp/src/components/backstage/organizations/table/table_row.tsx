@@ -15,7 +15,7 @@ type Props = {
 const TableRow = ({urlHash, fullUrl, element}: Props) => {
     const {url} = useRouteMatch();
     const {id, name, description} = element;
-    const itemId = buildIdForUrlHashReference('product-element', id);
+    const itemId = buildIdForUrlHashReference('organization-element', id);
     return (
         <RowItem
             className='row'

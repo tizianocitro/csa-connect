@@ -11,7 +11,7 @@ import TableRow from './table_row';
 type Props = {
     fullUrl?: string;
     id: string;
-    product: Product;
+    organization: Product;
     urlHash: string;
 };
 
@@ -20,14 +20,14 @@ type Props = {
 //    product={product}
 //    urlHash={urlHash}
 // />
-const Table = ({fullUrl, id, product, urlHash}: Props) => {
+const Table = ({fullUrl, id, organization, urlHash}: Props) => {
     const {formatMessage} = useIntl();
 
     const title = formatMessage({defaultMessage: 'Elements Info'});
     return (
         <Container
             id={id}
-            data-testid={'product-table-section'}
+            data-testid={'organization-table-section'}
         >
             <Header>
                 <AnchorLinkTitle
@@ -40,7 +40,7 @@ const Table = ({fullUrl, id, product, urlHash}: Props) => {
                 className='innerTable'
             >
                 <TableHeader/>
-                {product.elements?.map((el, _) => {
+                {organization.elements?.map((el, _) => {
                     return (
                         <TableRow
                             key={el.id}
@@ -53,7 +53,7 @@ const Table = ({fullUrl, id, product, urlHash}: Props) => {
                 <Footer>
                     <FooterText>
                         <FormattedMessage
-                            defaultMessage='Product elements info'
+                            defaultMessage='Organization elements info'
                         />
                     </FooterText>
                 </Footer>

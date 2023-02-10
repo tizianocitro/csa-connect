@@ -15,7 +15,7 @@ import {Product} from 'src/types/product';
 import Table from 'src/components/backstage/organizations/table/table';
 
 export enum RhsSections {
-    SectionTable = 'product-table',
+    SectionTable = 'organization-table',
 }
 
 const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
@@ -44,8 +44,8 @@ const RHSView = () => {
 
     // TODO: Make the productId dynamic using an API that gives back the id given the channel name
     // If the channel is not associated to a product, show a message that tells so
-    const maybeProduct = useProduct('1');
-    const product = maybeProduct as Product;
+    const maybeOrganization = useProduct('1');
+    const organization = maybeOrganization as Product;
     const {hash: urlHash} = useLocation();
 
     const channelID = useSelector(getCurrentChannelId);
@@ -90,7 +90,7 @@ const RHSView = () => {
             <br/>
             <Table
                 id={RhsSections.SectionTable}
-                product={product}
+                organization={organization}
                 urlHash={urlHash}
                 fullUrl={fullUrl}
             />
