@@ -50,75 +50,75 @@ const Group = (props: GroupProps) => {
     );
 };
 
-export default Group;
-
 const Chevron = styled.i<{isCollapsed?: boolean}>`
-    ${(props) => props.isCollapsed && css`
-        -webkit-transform: rotate(-90deg);
-        -ms-transform: rotate(-90deg);
-        transform: rotate(-90deg);
-        transition: transform 0.15s ease-out; /* should match collapse animation speed */
-    `};
+${(props) => props.isCollapsed && css`
+-webkit-transform: rotate(-90deg);
+-ms-transform: rotate(-90deg);
+transform: rotate(-90deg);
+transition: transform 0.15s ease-out; /* should match collapse animation speed */
+`};
 
-    & {
-        font-size: 12px;
-    }
+& {
+    font-size: 12px;
+}
 `;
 
 const GroupContainer = styled.div`
-    box-sizing: border-box;
-    color: var(--center-channel-color-rgb);
+box-sizing: border-box;
+color: var(--center-channel-color-rgb);
 `;
 
 const Header = styled.div`
-    z-index: 1;
-    top: 0;
-    display: flex;
-    height: 32px;
-    align-items: center;
-    border: none;
-    background-color: var(--sidebar-bg);
-    box-shadow: 0 0 0 0 rgb(0 0 0 / 33%);
-    color: rgba(var(--sidebar-text-rgb), 0.6);
-    font-family: "Open Sans", sans-serif;
-    text-align: left;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    transition: box-shadow 0.25s ease-in-out;
+z-index: 1;
+top: 0;
+display: flex;
+height: 32px;
+align-items: center;
+border: none;
+background-color: var(--sidebar-bg);
+box-shadow: 0 0 0 0 rgb(0 0 0 / 33%);
+color: rgba(var(--sidebar-text-rgb), 0.6);
+font-family: "Open Sans", sans-serif;
+text-align: left;
+text-overflow: ellipsis;
+text-transform: uppercase;
+transition: box-shadow 0.25s ease-in-out;
 `;
 
 const HeaderButton = styled.button`
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-    color: rgba(var(--sidebar-text-rgb), 0.6);
-    text-align: left;
-    text-transform: uppercase;
-    white-space: nowrap;
-    cursor: pointer;
-    padding: 6px 20p 6px 4px;
-    font-size: 12px;
-    font-weight: 600;
+display: flex;
+flex: 1 1 auto;
+align-items: center;
+padding: 0;
+border: none;
+background-color: transparent;
+color: rgba(var(--sidebar-text-rgb), 0.6);
+text-align: left;
+text-transform: uppercase;
+white-space: nowrap;
+cursor: pointer;
+padding: 6px 20p 6px 4px;
+font-size: 12px;
+font-weight: 600;
 
-    :hover{
-        color: var(--sidebar-text);
-    }
+:hover{
+    color: var(--sidebar-text);
+}
 `;
 
 const Body = styled.ul`
-    margin: 0px;
-    padding: 0px;
-    min-height: 2px;
-    margin-bottom: 14px;
+margin: 0px;
+padding: 0px;
+min-height: 2px;
+margin-bottom: 14px;
 `;
 
 const HeaderName = styled.div`
-    padding-left: 0;
-    overflow: hidden;
-    width: 100%;
-    flex: 0 1 auto;
-    text-overflow: ellipsis;
+padding-left: 0;
+overflow: hidden;
+width: 100%;
+flex: 0 1 auto;
+text-overflow: ellipsis;
 `;
+
+export default Group;

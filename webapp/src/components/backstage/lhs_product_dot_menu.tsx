@@ -7,14 +7,14 @@ import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 
 import DotMenu from 'src/components/dot_menu';
 
-import {CopyProductLinkMenuItem} from './products/controls';
+import {CopyOrganizationLinkMenuItem} from './organizations/controls';
 import {DotMenuButtonStyled} from './shared';
 
 interface Props {
-    productId: string;
+    organizationId: string;
 }
 
-export const LHSProductDotMenu = ({productId}: Props) => {
+export const LHSOrganizationDotMenu = ({organizationId}: Props) => {
     return (
         <>
             <DotMenu
@@ -27,8 +27,8 @@ export const LHSProductDotMenu = ({productId}: Props) => {
                 )}
                 dotMenuButton={DotMenuButtonStyled}
             >
-                <CopyProductLinkMenuItem
-                    productId={productId}
+                <CopyOrganizationLinkMenuItem
+                    organizationId={organizationId}
                 />
             </DotMenu>
         </>

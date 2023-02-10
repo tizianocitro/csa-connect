@@ -12,7 +12,7 @@ import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 
 import {useProduct} from 'src/hooks';
 import {Product} from 'src/types/product';
-import Table from 'src/components/backstage/products/table/table';
+import Table from 'src/components/backstage/organizations/table/table';
 
 export enum RhsSections {
     SectionTable = 'product-table',

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {Product} from 'src/types/product';
-import {AnchorLinkTitle} from 'src/components/backstage/products/shared';
+import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
 
 import ChannelBox from './channel_box';
 

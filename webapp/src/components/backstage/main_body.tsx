@@ -19,12 +19,17 @@ import {selectTeam} from 'mattermost-redux/actions/teams';
 
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {ErrorPageTypes} from 'src/constants';
+import {
+    ErrorPageTypes,
+    ORGANIZATIONS_PATH,
+    ORGANIZATION_ID_PARAM,
+    ORGANIZATION_PATH,
+} from 'src/constants';
 import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 import ErrorPage from 'src/components/error_page';
 import ProductsPage from 'src/components/backstage/products_page';
 
-import ProductDetails from './products/product_details';
+import OrganizationDetails from './organizations/organization_details';
 
 const useInitTeamRoutingLogic = () => {
     const dispatch = useDispatch();
@@ -45,7 +50,7 @@ const useInitTeamRoutingLogic = () => {
      */
     const negateTeamRestore = matchPath<{productId?: string;}>(location.pathname, {
         path: [
-            `${url}/products/:productId`,
+            `${url}/${ORGANIZATIONS_PATH}/:${ORGANIZATION_ID_PARAM}`,
         ],
     });
 
@@ -88,17 +93,17 @@ const MainBody = () => {
     return (
         <Switch>
             <Redirect
-                from={`${match.url}/product/:productId`}
-                to={`${match.url}/products/:productId`}
+                from={`${match.url}/${ORGANIZATION_PATH}/:${ORGANIZATION_ID_PARAM}`}
+                to={`${match.url}/${ORGANIZATIONS_PATH}/:${ORGANIZATION_ID_PARAM}`}
             />
-            <Route path={`${match.url}/products/:productId`}>
-                <ProductDetails/>
+            <Route path={`${match.url}/${ORGANIZATIONS_PATH}/:${ORGANIZATION_ID_PARAM}`}>
+                <OrganizationDetails/>
             </Route>
             <Redirect
-                from={`${match.url}/product`}
-                to={`${match.url}/products`}
+                from={`${match.url}/${ORGANIZATION_PATH}`}
+                to={`${match.url}/${ORGANIZATIONS_PATH}`}
             />
-            <Route path={`${match.url}/products`}>
+            <Route path={`${match.url}/${ORGANIZATIONS_PATH}`}>
                 <ProductsPage/>
             </Route>
             <Route path={`${match.url}/error`}>
@@ -108,7 +113,7 @@ const MainBody = () => {
                 exact={true}
                 path={`${match.url}/`}
             >
-                <Redirect to={`${match.url}/products`}/>
+                <Redirect to={`${match.url}/${ORGANIZATIONS_PATH}`}/>
             </Route>
             <Route>
                 <Redirect to={pluginErrorUrl(ErrorPageTypes.DEFAULT)}/>

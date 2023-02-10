@@ -53,7 +53,7 @@ const ChannelsList = ({
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}
             />
-            {channels == null &&
+            {channels === null &&
                 <div className='text-center pt-8'>
                     <FormattedMessage defaultMessage='There are no channels for this product.'/>
                 </div>

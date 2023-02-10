@@ -9,7 +9,7 @@ import {useProductsList} from 'src/hooks';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
 import Header from 'src/components/widgets/header';
 
-import ProductsList from './products_list/products_list';
+import OrganizationsList from './organizations_list/organizations_list';
 
 const defaultProductsFetchParams = {
     page: 0,
@@ -33,8 +33,8 @@ const ProductsPage = () => {
                     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                 `}
             />
-            <ProductsList
-                products={products}
+            <OrganizationsList
+                organizations={products}
                 totalCount={totalCount}
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}
