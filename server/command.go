@@ -16,8 +16,8 @@ import (
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	trigger := strings.TrimPrefix(strings.Fields(args.Command)[0], "/")
 	switch trigger {
-	case command.GetProductURLCommandName:
-		return p.executeGetProductURLCommand(args), nil
+	case command.GetOrganizationURLCommandName:
+		return p.executeGetOrganizationURLCommand(args), nil
 	default:
 		return &model.CommandResponse{
 			ResponseType: model.CommandResponseTypeEphemeral,
@@ -26,15 +26,15 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	}
 }
 
-func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.CommandResponse {
+func (p *Plugin) executeGetOrganizationURLCommand(args *model.CommandArgs) *model.CommandResponse {
 	serverConfig := p.API.GetConfig()
 	name := command.GetNameFromArgs(args)
 
 	switch name {
 	case "help":
-		return command.HelpGetProductURLResponse()
+		return command.HelpGetOrganizationURLResponse()
 	case "dialog":
-		return command.OpenDialogGetProductURLRequest(&command.ProductURLDialogConfig{
+		return command.OpenDialogGetOrganizationURLRequest(&command.OrganizationURLDialogConfig{
 			Args: args,
 			PluginConfig: command.PluginConfig{
 				PathPrefix: "plugins",
@@ -46,9 +46,9 @@ func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.Com
 			},
 		})
 	case "":
-		return command.EmptyNameGetProductURLResponse()
+		return command.EmptyNameGetOrganizationURLResponse()
 	default:
-		return command.GetProductURLResponse(&command.ProductURLConfig{
+		return command.GetOrganizationURLResponse(&command.OrganizationURLConfig{
 			Name: name,
 			PluginConfig: command.PluginConfig{
 				PathPrefix: p.pluginURLPathPrefix,
@@ -63,8 +63,8 @@ func (p *Plugin) executeGetProductURLCommand(args *model.CommandArgs) *model.Com
 }
 
 func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(command.GetProductURLCommand()); err != nil {
-		return errors.Wrapf(err, "failed to register %s command", command.GetProductURLCommandName)
+	if err := p.API.RegisterCommand(command.GetOrganizationURLCommand()); err != nil {
+		return errors.Wrapf(err, "failed to register %s command", command.GetOrganizationURLCommandName)
 	}
 	return nil
 }

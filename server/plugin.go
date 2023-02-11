@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	// "github.com/mattermost/mattermost-plugin-api/cluster"
+	"github.com/mattermost/mattermost-plugin-api/cluster"
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
@@ -35,7 +35,7 @@ type Plugin struct {
 	// How the plugin URLs starts
 	pluginURLPathPrefix string
 
-	productService *app.ProductService
+	organzationService *app.OrganizationService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -57,12 +57,11 @@ func (p *Plugin) OnActivate() error {
 	if err != nil {
 		return errors.Wrapf(err, "failed creating the SQL store")
 	}
-	productStore := sqlstore.NewProductStore(apiClient, sqlStore)
 
 	p.handler = api.NewHandler(p.pluginAPI)
-	p.productService = app.NewProductService(productStore, p.pluginAPI)
+	p.organzationService = app.NewOrganizationService(p.pluginAPI)
 
-	/* mutex, err := cluster.NewMutex(p.API, "MP_dbMutex")
+	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
 		return errors.Wrapf(err, "failed creating cluster mutex")
 	}
@@ -71,11 +70,11 @@ func (p *Plugin) OnActivate() error {
 		mutex.Unlock()
 		return errors.Wrapf(err, "failed to run migrations")
 	}
-	mutex.Unlock() */
+	mutex.Unlock()
 
-	api.NewProductHandler(
+	api.NewOrganizationHandler(
 		p.handler.APIRouter,
-		p.productService,
+		p.organzationService,
 		p.pluginAPI,
 	)
 
@@ -90,8 +89,8 @@ func (p *Plugin) OnActivate() error {
 // See more on https://developers.mattermost.com/extend/plugins/server/reference/
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
-	case command.GetProductURLPath:
-		p.handleGetProductURL(w, r)
+	case command.GetOrganizationURLPath:
+		p.handleGetOrganizationURL(w, r)
 	default:
 		p.handler.ServeHTTP(w, r)
 	}
@@ -102,7 +101,7 @@ func (p *Plugin) getPluginIDFromManifest() string {
 }
 
 func (p *Plugin) getPluginURLPathPrefix() string {
-	return "products"
+	return DefaultPath
 }
 
 func (p *Plugin) getBotID() (string, error) {
