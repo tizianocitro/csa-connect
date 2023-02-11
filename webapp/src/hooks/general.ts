@@ -16,13 +16,14 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProduct, fetchProductChannels} from 'src/client';
+import {fetchProductChannels, fetchTableData} from 'src/client';
 
 import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
 import {FetchOrganizationsNoPageParams, FetchOrganizationsParams, Organization} from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
+import {TableData} from 'src/components/widgets/table/table';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
@@ -51,25 +52,8 @@ export function useEcosystem(): Organization | {} {
     return data.organizations.filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
 }
 
-export function useProduct(id: string): Product | {} {
-    const [product, setProduct] = useState<Product | {}>({});
-    useEffect(() => {
-        let isCanceled = false;
-        async function fetchProductAsync() {
-            const productReturn = await fetchProduct(id);
-            if (!isCanceled) {
-                setProduct(productReturn);
-            }
-        }
-
-        fetchProductAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, [id]);
-
-    return product;
+export function useOrganization(id: string): Product | {} {
+    return data.organizations.filter((o: Organization) => o.id === id)[0];
 }
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
@@ -190,6 +174,27 @@ const useUpdateFetchParams = (
             history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
         }
     }, [fetchParams, history]);
+};
+
+export const useSectionData = (url: string): TableData => {
+    const [tableData, setTableData] = useState<TableData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTableDataAsync() {
+            const tableDataResult = await fetchTableData(url);
+            if (!isCanceled) {
+                setTableData(tableDataResult);
+            }
+        }
+
+        fetchTableDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [tableData]);
+    return tableData as TableData;
 };
 
 /**
