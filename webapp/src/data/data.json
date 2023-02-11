@@ -1,0 +1,170 @@
+{
+    "organizations": [
+        {
+            "name": "Ecosystem",
+            "id": "0",
+            "description": "This organization is for the whole ecosystem",
+            "sections": [
+                {
+                    "name": "Incidents",
+                    "id": "0",
+                    "url": "http://localhost:3000/incidents",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/incidents/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/incidents/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                },
+                {
+                    "name": "Stories",
+                    "id": "1",
+                    "url": "http://localhost:3000/stories",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/stories/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/stories/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                },
+                {
+                    "name": "Policies",
+                    "id": "2",
+                    "url": "http://localhost:3000/policies",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/policies/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/policies/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                }
+            ],
+            "widgets": []
+        },
+        {
+            "name": "Xs",
+            "id": "1",
+            "description": "This is the X organization",
+            "sections": [
+                {
+                    "name": "Incidents",
+                    "id": "0",
+                    "url": "http://localhost:3000/incidents",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/incidents/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/incidents/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                },
+                {
+                    "name": "Stories",
+                    "id": "1",
+                    "url": "http://localhost:3000/stories",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/stories/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/stories/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                },
+                {
+                    "name": "Policies",
+                    "id": "2",
+                    "url": "http://localhost:3000/policies",
+                    "sections": [],
+                    "widgets": [
+                        {
+                            "name": "My Graph",
+                            "type": "graph",
+                            "url": "http://localhost:3000/policies/${id}/graph"
+                        },
+                        {
+                            "name": "My Text Editor",
+                            "type": "text-editor"
+                        },
+                        {
+                            "name": "My Table",
+                            "type": "table",
+                            "url": "http://localhost:3000/policies/${id}/table"
+                        },
+                        {
+                            "type": "channels"
+                        }
+                    ]
+                }
+            ],
+            "widgets": []
+        }
+    ]
+}
