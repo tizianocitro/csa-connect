@@ -8,6 +8,8 @@ import qs from 'qs';
 
 import {Product} from 'mattermost-webapp/packages/types/src/cloud';
 
+import {TableData} from 'src/components/widgets/table/table';
+
 import {
     FetchProductsNoPageParams,
     FetchProductsNoPageReturn,
@@ -197,6 +199,14 @@ export async function addChannelToProduct({
         create_public_channel,
     }));
     return data as AddChannelResult;
+}
+
+export async function fetchTableData(url: string) {
+    let data = await doGet(url);
+    if (!data) {
+        data = {headers: [], rows: []} as TableData;
+    }
+    return data as TableData;
 }
 
 export const doGet = async <TData = any>(url: string) => {
