@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import styled, {css} from 'styled-components';
 
-import Tooltip from 'src/components/widgets/tooltip';
+import Tooltip from 'src/components/common/tooltip';
 
 import {DotMenuButton} from 'src/components/dot_menu';
 

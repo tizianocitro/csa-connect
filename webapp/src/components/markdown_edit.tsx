@@ -5,7 +5,7 @@ import {useUpdateEffect} from 'react-use';
 
 import FormattedMarkdown from 'src/components/formatted_markdown';
 
-import ShowMore from './widgets/show_more';
+import ShowMore from './common/show_more';
 
 interface MarkdownEditProps {
     value: string;

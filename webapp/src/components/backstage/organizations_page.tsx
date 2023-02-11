@@ -7,7 +7,7 @@ import {useIntl} from 'react-intl';
 
 import {useProductsList} from 'src/hooks';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
-import Header from 'src/components/widgets/header';
+import Header from 'src/components/common/header';
 
 import OrganizationsList from './organizations_list/organizations_list';
 

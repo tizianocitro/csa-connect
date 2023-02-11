@@ -8,7 +8,7 @@ import React from 'react';
 import StatusBadge from 'src/components/backstage/status_badge';
 
 import {BaseInput} from 'src/components/assets/inputs';
-import CopyLink from 'src/components/widgets/copy_link';
+import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 
 interface AnchorLinkTitleProps {

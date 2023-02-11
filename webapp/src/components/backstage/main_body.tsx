@@ -27,7 +27,7 @@ import {
 } from 'src/constants';
 import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 import ErrorPage from 'src/components/error_page';
-import ProductsPage from 'src/components/backstage/products_page';
+import OrganizationsPage from 'src/components/backstage/organizations_page';
 
 import OrganizationDetails from './organizations/organization_details';
 
@@ -104,7 +104,7 @@ const MainBody = () => {
                 to={`${match.url}/${ORGANIZATIONS_PATH}`}
             />
             <Route path={`${match.url}/${ORGANIZATIONS_PATH}`}>
-                <ProductsPage/>
+                <OrganizationsPage/>
             </Route>
             <Route path={`${match.url}/error`}>
                 <ErrorPage/>

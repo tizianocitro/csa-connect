@@ -4,7 +4,7 @@
 import React, {useRef} from 'react';
 import styled from 'styled-components';
 
-import TextWithTooltipWhenEllipsis from 'src/components/widgets/text_with_tooltip_when_ellipsis';
+import TextWithTooltipWhenEllipsis from 'src/components/common/text_with_tooltip_when_ellipsis';
 
 interface Props {
     name: string;

@@ -9,17 +9,17 @@ import {useSelector} from 'react-redux';
 //import {SettingsOutlineIcon} from '@mattermost/compass-icons/components';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import {PatternedInput} from 'src/components/channels/patterned_input';
+import {PatternedInput} from 'src/components/widgets/channels/patterned_input';
 import {
     AutomationHeader,
     AutomationLabel,
     AutomationTitle,
     SelectorWrapper,
-} from 'src/components/channels/styles';
+} from 'src/components/widgets/channels/styles';
 import {HorizontalSpacer, RadioInput} from 'src/components/backstage/styles';
 import ChannelSelector from 'src/components/backstage/channel_selector';
-import ClearIndicator from 'src/components/channels/clear_indicator';
-import MenuList from 'src/components/channels/menu_list';
+import ClearIndicator from 'src/components/widgets/channels/clear_indicator';
+import MenuList from 'src/components/widgets/channels/menu_list';
 import {ChannelProduct} from 'src/types/product';
 import {productForCreateChannelAction} from 'src/actions';
 

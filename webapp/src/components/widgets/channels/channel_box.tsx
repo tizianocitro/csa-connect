@@ -2,15 +2,15 @@ import React, {useReducer} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {CreateAChannel} from 'src/components/channels/channel_access';
-import {Section} from 'src/components/channels/styles';
+import {CreateAChannel} from 'src/components/widgets/channels/channel_access';
+import {Section} from 'src/components/widgets/channels/styles';
 import {Product} from 'src/types/product';
 import {useConvertProductToChannelProduct, useProductChannelsList} from 'src/hooks';
 import {setNameErrorMessage, setProductForCreateChannel, setSelectErrorMessage} from 'src/reducer';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
-import ChannelsList from 'src/components/channels_list/channels_list';
-import Header from 'src/components/widgets/header';
+import ChannelsList from 'src/components/widgets/channels_list/channels_list';
+import Header from 'src/components/common/header';
 
 import {CreateProductChannel} from './controls';
 

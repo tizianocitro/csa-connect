@@ -8,7 +8,7 @@ import {useIntl} from 'react-intl';
 import {copyToClipboard} from 'src/utils';
 
 import {OVERLAY_DELAY} from 'src/constants';
-import Tooltip from 'src/components/widgets/tooltip';
+import Tooltip from 'src/components/common/tooltip';
 
 type Props = {
     id: string;

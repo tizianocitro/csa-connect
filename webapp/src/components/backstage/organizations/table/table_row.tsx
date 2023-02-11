@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
-import CopyLink from 'src/components/widgets/copy_link';
+import CopyLink from 'src/components/common/copy_link';
 import {ProductElement} from 'src/types/product';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
 
