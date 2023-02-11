@@ -7,53 +7,52 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {SortableColHeader} from 'src/components/sortable_col_header';
-import {FetchProductsParams} from 'src/types/product';
+import {FetchOrganizationsParams} from 'src/types/organization';
 
 interface Props {
-    fetchParams: FetchProductsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>;
+    fetchParams: FetchOrganizationsParams;
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
 }
 
 const OrganizationsListHeader = ({fetchParams, setFetchParams}: Props) => {
     const {formatMessage} = useIntl();
     function colHeaderClicked(colName: string) {
         if (fetchParams.sort === colName) {
-            // we're already sorting on this column; reverse the direction
-            const newDirection = fetchParams.direction === 'asc' ? 'desc' : 'asc';
+            // if the direction is not provided, the default is ascending
+            // if we're already sorting on the column, reverse the direction
+            const defaultDirection = fetchParams.direction ? fetchParams.direction : 'asc';
+            const newDirection = defaultDirection === 'asc' ? 'desc' : 'asc';
 
-            setFetchParams((oldParams: FetchProductsParams) => {
+            setFetchParams((oldParams: FetchOrganizationsParams) => {
                 return {...oldParams, direction: newDirection, page: 0};
             });
             return;
         }
 
-        // change to a new column; default to descending for time-based columns, ascending otherwise
-        let newDirection = 'desc';
-        if (['name', 'is_active'].indexOf(colName) !== -1) {
-            newDirection = 'asc';
-        }
+        // change to a new column; default to ascending
+        const newDirection = 'asc';
 
-        setFetchParams((oldParams: FetchProductsParams) => {
+        setFetchParams((oldParams: FetchOrganizationsParams) => {
             return {...oldParams, sort: colName, direction: newDirection, page: 0};
         });
     }
     return (
-        <ProductListHeader>
+        <OrganizationListHeader>
             <div className='row'>
                 <div className='col-sm-4'>
                     <SortableColHeader
                         name={formatMessage({defaultMessage: 'Name'})}
-                        direction={fetchParams.direction ? fetchParams.direction : 'desc'}
+                        direction={fetchParams.direction ? fetchParams.direction : 'asc'}
                         active={fetchParams.sort ? fetchParams.sort === 'name' : false}
                         onClick={() => colHeaderClicked('name')}
                     />
                 </div>
             </div>
-        </ProductListHeader>
+        </OrganizationListHeader>
     );
 };
 
-const ProductListHeader = styled.div`
+const OrganizationListHeader = styled.div`
     font-weight: 600;
     font-size: 11px;
     line-height: 36px;

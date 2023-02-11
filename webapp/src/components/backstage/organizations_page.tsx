@@ -5,22 +5,21 @@ import React from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {useProductsList} from 'src/hooks';
+import {useOrganizationsList} from 'src/hooks';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
 import Header from 'src/components/common/header';
 
 import OrganizationsList from './organizations_list/organizations_list';
 
-const defaultProductsFetchParams = {
+const defaultOrganizationsFetchParams = {
     page: 0,
     per_page: BACKSTAGE_LIST_PER_PAGE,
     sort: 'name',
-    direction: 'desc',
 };
 
 const ProductsPage = () => {
     const {formatMessage} = useIntl();
-    const [products, totalCount, fetchParams, setFetchParams] = useProductsList(defaultProductsFetchParams);
+    const [organizations, totalCount, fetchParams, setFetchParams] = useOrganizationsList(defaultOrganizationsFetchParams);
 
     return (
         <ProductListContainer>
@@ -34,7 +33,7 @@ const ProductsPage = () => {
                 `}
             />
             <OrganizationsList
-                organizations={products}
+                organizations={organizations}
                 totalCount={totalCount}
                 fetchParams={fetchParams}
                 setFetchParams={setFetchParams}

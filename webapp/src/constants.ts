@@ -31,3 +31,5 @@ export const POLICIES_PATH = 'policies';
 // In case you change this, pay attention to change the files
 // where it was not possible to use the constant
 export const ORGANIZATION_ID_PARAM = 'organizationId';
+
+export const ECOSYSTEM = 'ecosystem';

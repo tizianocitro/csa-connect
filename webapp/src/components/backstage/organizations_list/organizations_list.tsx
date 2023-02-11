@@ -10,18 +10,17 @@ import {FormattedMessage} from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import LoadingSpinner from 'src/components/assets/loading_spinner';
-
-import {FetchProductsParams, Product} from 'src/types/product';
+import {FetchOrganizationsParams, Organization} from 'src/types/organization';
 
 import Row from './row';
 import OrganizationsListHeader from './organizations_list_header';
 import Filters from './filters';
 
 interface Props {
-    organizations: Product[];
+    organizations: Organization[];
     totalCount: number;
-    fetchParams: FetchProductsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>;
+    fetchParams: FetchOrganizationsParams;
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
     filterPill: React.ReactNode | null;
 }
 
@@ -37,7 +36,7 @@ const OrganizationsList = ({
     );
 
     const nextPage = () => {
-        setFetchParams((oldParam: FetchProductsParams) => ({...oldParam, page: oldParam.page + 1}));
+        setFetchParams((oldParam: FetchOrganizationsParams) => ({...oldParam, page: oldParam.page + 1}));
     };
 
     return (

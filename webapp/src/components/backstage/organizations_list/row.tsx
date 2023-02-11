@@ -7,15 +7,15 @@ import styled from 'styled-components';
 
 import {navigateToPluginUrl} from 'src/browser_routing';
 import {InfoLine} from 'src/components/backstage/styles';
-import {Product} from 'src/types/product';
 import {ORGANIZATIONS_PATH} from 'src/constants';
+import {Organization} from 'src/types/organization';
 
 interface Props {
-    organization: Product;
+    organization: Organization;
 }
 
 const Row = (props: Props) => {
-    function openProductDetails(organization: Product) {
+    function openProductDetails(organization: Organization) {
         navigateToPluginUrl(`/${ORGANIZATIONS_PATH}/${organization.id}?from=organizations_list`);
     }
 

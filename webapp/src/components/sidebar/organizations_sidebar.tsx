@@ -10,11 +10,11 @@ import {pluginUrl} from 'src/browser_routing';
 import {
     ReservedCategory,
     useEcosystem,
-    useProductsNoPageList,
+    useOrganizationsNoPageList,
     useReservedCategoryTitleMapper,
 } from 'src/hooks';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
-import {Product} from 'src/types/product';
+import {Organization} from 'src/types/organization';
 
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
@@ -26,26 +26,26 @@ const defaultOrganizationsFetchParams = {
 
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
-    const ecosystem = useEcosystem('0') as Product;
-    const organizations = useProductsNoPageList(defaultOrganizationsFetchParams);
+    const ecosystem = useEcosystem() as Organization;
+    const organizations = useOrganizationsNoPageList(defaultOrganizationsFetchParams);
     if (!organizations || !ecosystem) {
         return {groups: [], ready: false};
     }
 
-    const organizationsItems = organizations.map((p) => {
+    const organizationsItems = organizations.map((o) => {
         const icon = 'icon-play-outline';
-        const link = pluginUrl(`/${ORGANIZATIONS_PATH}/${p.id}?from=organizations_lhs`);
+        const link = pluginUrl(`/${ORGANIZATIONS_PATH}/${o.id}?from=organizations_lhs`);
 
         return {
-            areaLabel: p.name,
-            display_name: p.name,
-            id: p.id,
+            areaLabel: o.name,
+            display_name: o.name,
+            id: o.id,
             icon,
             link,
             isCollapsed: false,
             itemMenu: (
                 <LHSOrganizationDotMenu
-                    organizationId={p.id}
+                    organizationId={o.id}
                 />),
             className: '',
         };
