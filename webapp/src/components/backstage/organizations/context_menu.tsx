@@ -1,19 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import styled from 'styled-components';
-
 import React from 'react';
+import styled from 'styled-components';
 
 import DotMenu, {TitleButton} from 'src/components/dot_menu';
 import {SemiBoldHeading} from 'src/styles/headings';
-
-import {Product} from 'src/types/product';
+import {Organization} from 'src/types/organization';
 
 import {CopyOrganizationLinkMenuItem} from './controls';
 
 interface Props {
-    organization: Product;
+    organization: Organization;
 }
 
 export const ContextMenu = ({organization}: Props) => {

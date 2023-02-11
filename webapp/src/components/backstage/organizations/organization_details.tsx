@@ -15,11 +15,12 @@ import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import {useForceDocumentTitle, useProduct} from 'src/hooks';
+import {useForceDocumentTitle, useOrganization} from 'src/hooks';
 import {pluginErrorUrl} from 'src/browser_routing';
 
-import {Product} from 'src/types/product';
-import {ErrorPageTypes, POLICIES_PATH, STORIES_PATH} from 'src/constants';
+import {Organization} from 'src/types/organization';
+import {ErrorPageTypes} from 'src/constants';
+import SectionList from 'src/components/backstage/sections/section_list';
 
 import {OrganizationHeader} from './header';
 
@@ -36,8 +37,8 @@ const OrganizationDetails = () => {
     const teamId = useSelector(getCurrentTeamId);
     const {url, path, params: {organizationId}} = useRouteMatch<{organizationId: string}>();
     const {hash: urlHash} = useLocation();
-    const maybeOrganization = useProduct(organizationId);
-    const organization = maybeOrganization as Product;
+    const maybeOrganization = useOrganization(organizationId);
+    const organization = maybeOrganization as Organization;
 
     useForceDocumentTitle(organization.name ? (organization.name + ' - Organization') : 'Organization');
 
@@ -74,36 +75,52 @@ const OrganizationDetails = () => {
                 <Main>
                     <Body>
                         <NavBar>
-                            <NavItem
-                                to={`${url}`}
-                                exact={true}
-                            >
-                                {formatMessage({defaultMessage: 'Incidents'})}
-                            </NavItem>
-                            <NavItem
-                                to={`${url}/${STORIES_PATH}`}
-                            >
-                                {formatMessage({defaultMessage: 'Stories'})}
-                            </NavItem>
-                            <NavItem
-                                to={`${url}/${POLICIES_PATH}`}
-                            >
-                                {formatMessage({defaultMessage: 'Policies'})}
-                            </NavItem>
+                            {organization.sections.map((section, index) => {
+                                if (index === 0) {
+                                    return (
+                                        <NavItem
+                                            key={`nav-item-${section.id}`}
+                                            to={`${url}`}
+                                            exact={true}
+                                        >
+                                            {section.name}
+                                        </NavItem>
+                                    );
+                                }
+                                return (
+                                    <NavItem
+                                        key={`nav-item-${section.id}`}
+                                        to={`${url}/${section.name}`}
+                                        exact={true}
+                                    >
+                                        {section.name}
+                                    </NavItem>
+                                );
+                            })}
                         </NavBar>
                         <Switch>
-                            <Route
-                                path={`${path}`}
-                                exact={true}
-                            >
-                                {formatMessage({defaultMessage: 'Incidents'})}
-                            </Route>
-                            <Route path={`${path}/${STORIES_PATH}`}>
-                                {formatMessage({defaultMessage: 'Stories'})}
-                            </Route>
-                            <Route path={`${path}/${POLICIES_PATH}`}>
-                                {formatMessage({defaultMessage: 'Policies'})}
-                            </Route>
+                            {organization.sections.map((section, index) => {
+                                if (index === 0) {
+                                    return (
+                                        <Route
+                                            key={`route-${section.id}`}
+                                            path={`${path}`}
+                                            exact={true}
+                                        >
+                                            <SectionList section={section}/>
+                                        </Route>
+                                    );
+                                }
+                                return (
+                                    <Route
+                                        key={`route-${section.id}`}
+                                        path={`${path}/${section.name}`}
+                                        exact={true}
+                                    >
+                                        <SectionList section={section}/>
+                                    </Route>
+                                );
+                            })}
                         </Switch>
                     </Body>
                 </Main>

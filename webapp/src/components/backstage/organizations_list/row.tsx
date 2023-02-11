@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Row = (props: Props) => {
-    function openProductDetails(organization: Organization) {
+    function openOrganizationDetails(organization: Organization) {
         navigateToPluginUrl(`/${ORGANIZATIONS_PATH}/${organization.id}?from=organizations_list`);
     }
 
@@ -23,7 +23,7 @@ const Row = (props: Props) => {
         <ProductItem
             className='row'
             key={props.organization.id}
-            onClick={() => openProductDetails(props.organization)}
+            onClick={() => openOrganizationDetails(props.organization)}
         >
             <div className='col-sm-4'>
                 <ProductName>{props.organization.name}</ProductName>

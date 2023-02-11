@@ -17,12 +17,12 @@ const defaultOrganizationsFetchParams = {
     sort: 'name',
 };
 
-const ProductsPage = () => {
+const OrganizationsPage = () => {
     const {formatMessage} = useIntl();
     const [organizations, totalCount, fetchParams, setFetchParams] = useOrganizationsList(defaultOrganizationsFetchParams);
 
     return (
-        <ProductListContainer>
+        <OrganizationListContainer>
             <Header
                 data-testid='titleOrganization'
                 level={2}
@@ -39,12 +39,12 @@ const ProductsPage = () => {
                 setFetchParams={setFetchParams}
                 filterPill={null}
             />
-        </ProductListContainer>
+        </OrganizationListContainer>
     );
 };
 
-const ProductListContainer = styled.div`
+const OrganizationListContainer = styled.div`
     flex: 1 1 auto;
 `;
 
-export default ProductsPage;
+export default OrganizationsPage;

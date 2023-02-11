@@ -10,9 +10,9 @@ import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
 import {Team} from 'mattermost-webapp/packages/types/src/teams';
 import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 
-import {useProduct} from 'src/hooks';
-import {Product} from 'src/types/product';
-import Table from 'src/components/backstage/organizations/table/table';
+// import Table from 'src/components/widgets/table/table';
+import {Organization} from 'src/types/organization';
+import {useOrganization} from 'src/hooks';
 
 export enum RhsSections {
     SectionTable = 'organization-table',
@@ -44,8 +44,8 @@ const RHSView = () => {
 
     // TODO: Make the productId dynamic using an API that gives back the id given the channel name
     // If the channel is not associated to a product, show a message that tells so
-    const maybeOrganization = useProduct('1');
-    const organization = maybeOrganization as Product;
+    const maybeOrganization = useOrganization('0');
+    const organization = maybeOrganization as Organization;
     const {hash: urlHash} = useLocation();
 
     const channelID = useSelector(getCurrentChannelId);
@@ -88,12 +88,12 @@ const RHSView = () => {
                 {`${status} - ${channel.display_name}`}
             </h1>
             <br/>
-            <Table
+            {/* <Table
                 id={RhsSections.SectionTable}
                 organization={organization}
                 urlHash={urlHash}
                 fullUrl={fullUrl}
-            />
+            /> */}
         </div>
     );
 };

@@ -12,13 +12,13 @@ import CopyLink from 'src/components/common/copy_link';
 import TextEdit from 'src/components/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
 
-import {Product} from 'src/types/product';
+import {Organization} from 'src/types/organization';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 
 import {ContextMenu} from './context_menu';
 
 interface Props {
-    organization: Product;
+    organization: Organization;
     organizationId: string;
 }
 
@@ -52,9 +52,9 @@ export const OrganizationHeader = ({organization, organizationId}: Props) => {
                         organization={organization}
                     />
                     <StyledCopyLink
-                        id='copy-product-link-tooltip'
+                        id='copy-organization-link-tooltip'
                         to={getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + organization?.id}
-                        tooltipMessage={formatMessage({defaultMessage: 'Copy link to product'})}
+                        tooltipMessage={formatMessage({defaultMessage: 'Copy link to organization'})}
                     />
                 </>
             </TextEdit>
