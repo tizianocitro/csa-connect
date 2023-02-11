@@ -1,18 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FormattedMessage, useIntl} from 'react-intl';
 
-import {Product} from 'src/types/product';
 import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
 
-import TableHeader from './table_header';
-import TableRow from './table_row';
+import TableHeader, {TableHeader as THeader} from './table_header';
+import TableRow, {TableRow as TRow} from './table_row';
+
+export interface TableData {
+    headers: THeader[],
+    rows: TRow[],
+}
 
 type Props = {
+    caption: string;
+    data: TableData;
     fullUrl?: string;
     id: string;
-    organization: Product;
+    pointer: boolean;
     urlHash: string;
+    onClick?: () => void;
 };
 
 // <TableRow
@@ -20,18 +26,16 @@ type Props = {
 //    product={product}
 //    urlHash={urlHash}
 // />
-const Table = ({fullUrl, id, organization, urlHash}: Props) => {
-    const {formatMessage} = useIntl();
-
-    const title = formatMessage({defaultMessage: 'Elements Info'});
+const Table = ({data, caption, fullUrl, id, pointer, urlHash}: Props) => {
+    const {headers, rows} = data;
     return (
         <Container
             id={id}
-            data-testid={'organization-table-section'}
+            data-testid={'table-widget'}
         >
             <Header>
                 <AnchorLinkTitle
-                    title={title}
+                    title={caption}
                     id={id}
                 />
             </Header>
@@ -39,23 +43,23 @@ const Table = ({fullUrl, id, organization, urlHash}: Props) => {
                 id='innerTable'
                 className='innerTable'
             >
-                <TableHeader/>
-                {organization.elements?.map((el, _) => {
+                <TableHeader
+                    headers={headers}
+                />
+
+                {rows.map((row) => {
                     return (
                         <TableRow
-                            key={el.id}
-                            element={el}
-                            urlHash={urlHash}
                             fullUrl={fullUrl}
+                            key={row.id}
+                            pointer={pointer}
+                            row={row}
+                            urlHash={urlHash}
                         />
                     );
                 })}
                 <Footer>
-                    <FooterText>
-                        <FormattedMessage
-                            defaultMessage='Organization elements info'
-                        />
-                    </FooterText>
+                    <FooterText>{caption}</FooterText>
                 </Footer>
             </InnertTable>
         </Container>
