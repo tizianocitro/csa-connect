@@ -28,7 +28,6 @@ export function ColHeader({name}: Props) {
 
 const Header = styled.div`
     display: flex;
-    cursor: pointer;
 `;
 
 const Name = styled.div`

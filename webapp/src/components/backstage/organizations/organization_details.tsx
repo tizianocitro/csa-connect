@@ -19,7 +19,7 @@ import {useForceDocumentTitle, useOrganization} from 'src/hooks';
 import {pluginErrorUrl} from 'src/browser_routing';
 
 import {Organization} from 'src/types/organization';
-import {ErrorPageTypes} from 'src/constants';
+import {ErrorPageTypes, SECTION_ID_PARAM} from 'src/constants';
 import SectionList from 'src/components/backstage/sections/section_list';
 
 import {OrganizationHeader} from './header';
@@ -76,21 +76,14 @@ const OrganizationDetails = () => {
                     <Body>
                         <NavBar>
                             {organization.sections.map((section, index) => {
+                                let toUrl = `${url}/${section.name.toLowerCase()}`;
                                 if (index === 0) {
-                                    return (
-                                        <NavItem
-                                            key={`nav-item-${section.id}`}
-                                            to={`${url}`}
-                                            exact={true}
-                                        >
-                                            {section.name}
-                                        </NavItem>
-                                    );
+                                    toUrl = url;
                                 }
                                 return (
                                     <NavItem
                                         key={`nav-item-${section.id}`}
-                                        to={`${url}/${section.name}`}
+                                        to={toUrl}
                                         exact={true}
                                     >
                                         {section.name}
@@ -100,25 +93,30 @@ const OrganizationDetails = () => {
                         </NavBar>
                         <Switch>
                             {organization.sections.map((section, index) => {
+                                let toPath = `${path}/${section.name.toLowerCase()}`;
                                 if (index === 0) {
-                                    return (
-                                        <Route
-                                            key={`route-${section.id}`}
-                                            path={`${path}`}
-                                            exact={true}
-                                        >
-                                            <SectionList section={section}/>
-                                        </Route>
-                                    );
+                                    toPath = path;
                                 }
                                 return (
-                                    <Route
-                                        key={`route-${section.id}`}
-                                        path={`${path}/${section.name}`}
-                                        exact={true}
-                                    >
-                                        <SectionList section={section}/>
-                                    </Route>
+                                    <>
+                                        <Route
+                                            key={`route-${section.id}`}
+                                            path={toPath}
+                                            exact={true}
+                                        >
+                                            <SectionList
+                                                organizationId={organization.id}
+                                                section={section}
+                                            />
+                                        </Route>
+                                        <Route
+                                            key={`route-single-${section.id}`}
+                                            path={`${path}/${section.name.toLowerCase()}/:${SECTION_ID_PARAM}`}
+                                            exact={true}
+                                        >
+                                            {`Section ${section.id} page`}
+                                        </Route>
+                                    </>
                                 );
                             })}
                         </Switch>

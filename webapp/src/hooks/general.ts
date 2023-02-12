@@ -16,7 +16,8 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProductChannels, fetchTableData} from 'src/client';
+import {fetchProductChannels} from 'src/client';
+import {fetchTableData} from 'src/external_client';
 
 import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
@@ -193,7 +194,7 @@ export const useSectionData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, [tableData]);
+    }, [url]);
     return tableData as TableData;
 };
 

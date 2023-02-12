@@ -3,16 +3,16 @@ import styled from 'styled-components';
 
 import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
 
-import TableHeader, {TableHeader as THeader} from './table_header';
-import TableRow, {TableRow as TRow} from './table_row';
+import TableHeader, {TableHeaderData} from './table_header';
+import TableRow, {TableRowData} from './table_row';
 
 export interface TableData {
-    headers: THeader[],
-    rows: TRow[],
+    headers: TableHeaderData[],
+    rows: TableRowData[],
+    caption: string;
 }
 
 type Props = {
-    caption: string;
     data: TableData;
     fullUrl?: string;
     id: string;
@@ -26,8 +26,8 @@ type Props = {
 //    product={product}
 //    urlHash={urlHash}
 // />
-const Table = ({data, caption, fullUrl, id, pointer, urlHash}: Props) => {
-    const {headers, rows} = data;
+const Table = ({data, fullUrl, id, onClick, pointer, urlHash}: Props) => {
+    const {caption, headers, rows} = data;
     return (
         <Container
             id={id}
@@ -47,17 +47,16 @@ const Table = ({data, caption, fullUrl, id, pointer, urlHash}: Props) => {
                     headers={headers}
                 />
 
-                {rows.map((row) => {
-                    return (
-                        <TableRow
-                            fullUrl={fullUrl}
-                            key={row.id}
-                            pointer={pointer}
-                            row={row}
-                            urlHash={urlHash}
-                        />
-                    );
-                })}
+                {rows?.map((row) => (
+                    <TableRow
+                        fullUrl={fullUrl}
+                        key={row.id}
+                        onClick={onClick}
+                        pointer={pointer}
+                        row={row}
+                        urlHash={urlHash}
+                    />
+                ))}
                 <Footer>
                     <FooterText>{caption}</FooterText>
                 </Footer>

@@ -3,30 +3,27 @@ import styled from 'styled-components';
 
 import {ColHeader} from 'src/components/col_header';
 
-export interface TableHeader {
+export interface TableHeaderData {
     dim: 2 | 4 | 6 | 8 | 12;
     name: string;
 }
 
 type Props = {
-    headers: TableHeader[];
+    headers: TableHeaderData[];
 };
 
 const TableHeader = ({headers}: Props) => {
     return (
         <InnerTableHeader>
             <div className='row'>
-                {headers.map((header) => {
-                    const className = `$col-sm-${header.dim}`;
-                    return (
-                        <div
-                            key={header.name}
-                            className={className}
-                        >
-                            <ColHeader name={header.name}/>
-                        </div>
-                    );
-                })}
+                {headers?.map(({dim, name}) => (
+                    <div
+                        key={name}
+                        className={`col-sm-${dim}`}
+                    >
+                        <ColHeader name={name}/>
+                    </div>
+                ))}
             </div>
         </InnerTableHeader>
     );

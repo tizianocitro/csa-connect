@@ -5,7 +5,7 @@ import {useRouteMatch} from 'react-router-dom';
 import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
 
-export interface TableRow {
+export interface TableRowData {
     id: string;
     name: string;
     values: TableValue[];
@@ -19,7 +19,7 @@ interface TableValue {
 type Props = {
     fullUrl?: string;
     pointer: boolean;
-    row: TableRow;
+    row: TableRowData;
     urlHash: string;
     onClick?: () => void;
 };
@@ -45,18 +45,14 @@ const TableRow = ({fullUrl, onClick, pointer, row, urlHash}: Props) => {
                 iconWidth={'1.45em'}
                 iconHeight={'1.45em'}
             />
-            {values.map((val) => {
-                const {dim, value} = val;
-                const className = `$col-sm-${dim}`;
-                return (
-                    <div
-                        key={itemId}
-                        className={className}
-                    >
-                        <RowText>{value}</RowText>
-                    </div>
-                );
-            })}
+            {values.map(({dim, value}, index) => (
+                <div
+                    key={`col-value-${value}-${index}`}
+                    className={`col-sm-${dim}`}
+                >
+                    <RowText>{value}</RowText>
+                </div>
+            ))}
         </RowItem>
     );
 };
@@ -70,7 +66,7 @@ const RowItem = styled.div<{isUrlHashed?: boolean, pointer?: boolean}>`
     margin: 0;
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-    background: ${(props) => (props.pointer ? 'pointer' : 'auto')};
+    cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
     ${CopyLink} {
         margin-left: -1.25em;
         opacity: 1;

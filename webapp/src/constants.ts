@@ -25,11 +25,9 @@ export const DEFAULT_PATH = 'cs-aware-connect';
 export const ORGANIZATIONS_PATH = 'organizations';
 export const ORGANIZATION_PATH = 'organization';
 
-export const STORIES_PATH = 'stories';
-export const POLICIES_PATH = 'policies';
-
-// In case you change this, pay attention to change the files
-// where it was not possible to use the constant
+// In case you change these, pay attention to change the files
+// where it was not possible to use the constants
 export const ORGANIZATION_ID_PARAM = 'organizationId';
+export const SECTION_ID_PARAM = 'sectionId';
 
 export const ECOSYSTEM = 'ecosystem';
