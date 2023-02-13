@@ -4,7 +4,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 
-import {SelectorWrapper} from 'src/components/widgets/channels/styles';
+import {SelectorWrapper} from 'src/components/backstage/widgets/channels/styles';
 
 interface Props {
     enabled: boolean;

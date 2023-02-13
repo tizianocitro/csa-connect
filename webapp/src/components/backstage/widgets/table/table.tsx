@@ -18,7 +18,7 @@ type Props = {
     id: string;
     pointer: boolean;
     urlHash: string;
-    onClick?: () => void;
+    open?: (resourceId: string) => void;
 };
 
 // <TableRow
@@ -26,7 +26,7 @@ type Props = {
 //    product={product}
 //    urlHash={urlHash}
 // />
-const Table = ({data, fullUrl, id, onClick, pointer, urlHash}: Props) => {
+const Table = ({data, fullUrl, id, open, pointer, urlHash}: Props) => {
     const {caption, headers, rows} = data;
     return (
         <Container
@@ -51,7 +51,7 @@ const Table = ({data, fullUrl, id, onClick, pointer, urlHash}: Props) => {
                     <TableRow
                         fullUrl={fullUrl}
                         key={row.id}
-                        onClick={onClick}
+                        onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
                         row={row}
                         urlHash={urlHash}

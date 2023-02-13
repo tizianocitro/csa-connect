@@ -6,8 +6,6 @@ import styled from 'styled-components';
 import {
     NavLink,
     Redirect,
-    Route,
-    Switch,
     useLocation,
     useRouteMatch,
 } from 'react-router-dom';
@@ -17,10 +15,10 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {useForceDocumentTitle, useOrganization} from 'src/hooks';
 import {pluginErrorUrl} from 'src/browser_routing';
-
+import Sections from 'src/components/backstage/sections//sections';
+import Widgets from 'src/components/backstage/widgets/widgets';
 import {Organization} from 'src/types/organization';
-import {ErrorPageTypes, SECTION_ID_PARAM} from 'src/constants';
-import SectionList from 'src/components/backstage/sections/section_list';
+import {ErrorPageTypes} from 'src/constants';
 
 import {OrganizationHeader} from './header';
 
@@ -74,52 +72,12 @@ const OrganizationDetails = () => {
                 </Header>
                 <Main>
                     <Body>
-                        <NavBar>
-                            {organization.sections.map((section, index) => {
-                                let toUrl = `${url}/${section.name.toLowerCase()}`;
-                                if (index === 0) {
-                                    toUrl = url;
-                                }
-                                return (
-                                    <NavItem
-                                        key={`nav-item-${section.id}`}
-                                        to={toUrl}
-                                        exact={true}
-                                    >
-                                        {section.name}
-                                    </NavItem>
-                                );
-                            })}
-                        </NavBar>
-                        <Switch>
-                            {organization.sections.map((section, index) => {
-                                let toPath = `${path}/${section.name.toLowerCase()}`;
-                                if (index === 0) {
-                                    toPath = path;
-                                }
-                                return (
-                                    <>
-                                        <Route
-                                            key={`route-${section.id}`}
-                                            path={toPath}
-                                            exact={true}
-                                        >
-                                            <SectionList
-                                                organizationId={organization.id}
-                                                section={section}
-                                            />
-                                        </Route>
-                                        <Route
-                                            key={`route-single-${section.id}`}
-                                            path={`${path}/${section.name.toLowerCase()}/:${SECTION_ID_PARAM}`}
-                                            exact={true}
-                                        >
-                                            {`Section ${section.id} page`}
-                                        </Route>
-                                    </>
-                                );
-                            })}
-                        </Switch>
+                        <Sections
+                            path={path}
+                            sections={organization.sections}
+                            url={url}
+                        />
+                        <Widgets widgets={organization.widgets}/>
                     </Body>
                 </Main>
             </MainWrapper>
