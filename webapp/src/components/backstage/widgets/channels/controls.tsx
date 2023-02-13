@@ -45,11 +45,11 @@ const addChannel = (
         channel_id: linkExistingChannel ? channelId : undefined,
         channel_name: createNewChannel ? channelNameTemplate : undefined,
         create_public_channel: createNewChannel ? createPublicChannel : false,
-    })
-        .then(() => {
+    }).
+        then(() => {
             // redirect to channel
-        })
-        .catch(() => {
+        }).
+        catch(() => {
             // show error
         });
 };

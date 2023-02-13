@@ -13,11 +13,16 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProductChannels, fetchTableData} from 'src/clients';
+import {fetchProductChannels, fetchSectionInfo, fetchTableData} from 'src/clients';
 import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
-import {FetchOrganizationsParams, Organization} from 'src/types/organization';
+import {
+    FetchOrganizationsParams,
+    Organization,
+    Section,
+    SectionInfo,
+} from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
 
@@ -44,13 +49,13 @@ export const useReservedCategoryTitleMapper = () => {
     };
 };
 
-export function useEcosystem(): Organization | {} {
+export const useEcosystem = (): Organization => {
     return data.organizations.filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
-}
+};
 
-export function useOrganization(id: string): Product | {} {
+export const useOrganization = (id: string): Organization => {
     return data.organizations.filter((o: Organization) => o.id === id)[0];
-}
+};
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
     return {
@@ -63,7 +68,7 @@ export const useConvertProductToChannelProduct = (product: Product): ChannelProd
     };
 };
 
-export function useOrganizationsNoPageList(): Organization[] {
+export const useOrganizationsNoPageList = (): Organization[] => {
     const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
     const currentTeamId = useSelector(getCurrentTeamId);
 
@@ -73,15 +78,15 @@ export function useOrganizationsNoPageList(): Organization[] {
     }, [currentTeamId]);
 
     return organizations;
-}
+};
 
 const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
 };
 
-export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParams, routed = true):
-[Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] {
+export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
+[Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
     const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
@@ -116,10 +121,10 @@ export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParam
     useUpdateFetchParams(routed, fetchParams, history, location);
 
     return [organizations, totalCount, fetchParams, setFetchParams];
-}
+};
 
-export function useProductChannelsList(defaultFetchParams: FetchChannelsParams, routed = true):
-[ProductChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] {
+export const useProductChannelsList = (defaultFetchParams: FetchChannelsParams, routed = true):
+[ProductChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] => {
     const [channels, setChannels] = useState<ProductChannel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
@@ -153,7 +158,7 @@ export function useProductChannelsList(defaultFetchParams: FetchChannelsParams, 
     useUpdateFetchParams(routed, fetchParams, history, location);
 
     return [channels, totalCount, fetchParams, setFetchParams];
-}
+};
 
 // Update the query string when the fetchParams change
 const useUpdateFetchParams = (
@@ -170,6 +175,34 @@ const useUpdateFetchParams = (
             history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
         }
     }, [fetchParams, history]);
+};
+
+export const useSection = (id: string): Section => {
+    return data.organizations.
+        map((o: Organization) => o.sections).
+        flat().
+        filter((s: Section) => s.id === id)[0];
+};
+
+export const useSectionInfo = (id: string, url: string): SectionInfo => {
+    const [info, setInfo] = useState<SectionInfo | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchSectionInfoAsync() {
+            const infoResult = await fetchSectionInfo(id, url);
+            if (!isCanceled) {
+                setInfo(infoResult);
+            }
+        }
+
+        fetchSectionInfoAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return info as SectionInfo;
 };
 
 export const useSectionData = (url: string): TableData => {

@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 
 import DotMenu from 'src/components/dot_menu';
+import {getSiteUrl} from 'src/clients';
+import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 
-import {CopyOrganizationLinkMenuItem} from './organizations/controls';
+import {CopyLinkMenuItem} from './header/controls';
 import {DotMenuButtonStyled} from './shared';
 
 interface Props {
@@ -27,8 +28,8 @@ export const LHSOrganizationDotMenu = ({organizationId}: Props) => {
                 )}
                 dotMenuButton={DotMenuButtonStyled}
             >
-                <CopyOrganizationLinkMenuItem
-                    organizationId={organizationId}
+                <CopyLinkMenuItem
+                    path={getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + organizationId}
                 />
             </DotMenu>
         </>

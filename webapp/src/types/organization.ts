@@ -20,6 +20,12 @@ export interface Widget {
     url?: string,
 }
 
+export interface SectionInfo {
+    description?: string;
+    id: string;
+    name: string;
+}
+
 export interface FetchOrganizationsParams {
     direction?: string;
     page: number;

@@ -2,6 +2,7 @@ import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
 import {TableData} from 'src/components/backstage/widgets/table/table';
+import {SectionInfo} from 'src/types/organization';
 
 export async function fetchTableData(url: string) {
     let data = await doGet(url);
@@ -9,6 +10,14 @@ export async function fetchTableData(url: string) {
         data = {caption: '', headers: [], rows: []} as TableData;
     }
     return data as TableData;
+}
+
+export async function fetchSectionInfo(id: string, url: string) {
+    let data = await doGet(`${url}/${id}`);
+    if (!data) {
+        data = {description: '', id: '', name: ''} as SectionInfo;
+    }
+    return data as SectionInfo;
 }
 
 const doGet = async <TData = any>(url: string) => {

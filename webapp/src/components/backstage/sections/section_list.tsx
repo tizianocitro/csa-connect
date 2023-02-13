@@ -6,6 +6,7 @@ import {Section} from 'src/types/organization';
 import {navigateToUrl} from 'src/browser_routing';
 import Table from 'src/components/backstage/widgets/table/table';
 import {useSectionData} from 'src/hooks';
+import {SECTION_ID_PARAM} from 'src/constants';
 
 type Props = {
     path: string;
@@ -14,10 +15,10 @@ type Props = {
 
 const SectionList = ({path, section}: Props) => {
     const {hash: urlHash} = useLocation();
-    const {name, url} = section;
+    const {id, name, url} = section;
     const data = useSectionData(url);
-    const openOrganizationDetails = (sectionId: string) => {
-        navigateToUrl(`${path}/${name.toLowerCase()}/${sectionId}`);
+    const openOrganizationDetails = (resourceId: string) => {
+        navigateToUrl(`${path}/${name.toLowerCase()}/${resourceId}?${SECTION_ID_PARAM}=${id}`);
     };
     return (
         <Body>

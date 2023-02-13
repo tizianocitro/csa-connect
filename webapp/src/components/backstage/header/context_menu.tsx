@@ -6,15 +6,15 @@ import styled from 'styled-components';
 
 import DotMenu, {TitleButton} from 'src/components/dot_menu';
 import {SemiBoldHeading} from 'src/styles/headings';
-import {Organization} from 'src/types/organization';
 
-import {CopyOrganizationLinkMenuItem} from './controls';
+import {CopyLinkMenuItem} from './controls';
 
 interface Props {
-    organization: Organization;
+    name: string;
+    path: string;
 }
 
-export const ContextMenu = ({organization}: Props) => {
+export const ContextMenu = ({path, name}: Props) => {
     return (
         <>
             <DotMenu
@@ -22,7 +22,7 @@ export const ContextMenu = ({organization}: Props) => {
                 placement='bottom-start'
                 icon={
                     <>
-                        <Title>{organization.name}</Title>
+                        <Title>{name}</Title>
                         <i
                             className={'icon icon-chevron-down'}
                             data-testid='runDropdown'
@@ -30,9 +30,7 @@ export const ContextMenu = ({organization}: Props) => {
                     </>
                 }
             >
-                <CopyOrganizationLinkMenuItem
-                    organizationId={organization.id}
-                />
+                <CopyLinkMenuItem path={path}/>
             </DotMenu>
         </>
     );

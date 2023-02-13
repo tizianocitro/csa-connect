@@ -13,6 +13,9 @@ type Props = {
     url: string;
 };
 
+export const SECTION_NAV_ITEM = 'section-nav-item';
+export const SECTION_NAV_ITEM_ACTIVE = 'active';
+
 const Sections = ({path, sections, url}: Props) => (
     <>
         <NavBar>
@@ -26,6 +29,7 @@ const Sections = ({path, sections, url}: Props) => (
                         key={`nav-item-${section.id}`}
                         to={toUrl}
                         exact={true}
+                        className={`${SECTION_NAV_ITEM}`}
                     >
                         {section.name}
                     </NavItem>

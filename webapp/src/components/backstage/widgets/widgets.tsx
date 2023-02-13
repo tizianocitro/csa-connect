@@ -9,7 +9,7 @@ type Props = {
 const Widgets = ({widgets}: Props) => {
     return (
         <div>
-            {JSON.stringify(widgets)}
+            {(widgets && widgets.length > 0) && JSON.stringify(widgets, null, 2)}
         </div>
     );
 };
