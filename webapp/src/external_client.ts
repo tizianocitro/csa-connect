@@ -1,7 +1,7 @@
 import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
-import {TableData} from 'src/components/widgets/table/table';
+import {TableData} from 'src/components/backstage/widgets/table/table';
 
 export async function fetchTableData(url: string) {
     let data = await doGet(url);

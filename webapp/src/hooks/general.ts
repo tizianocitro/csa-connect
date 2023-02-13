@@ -24,7 +24,7 @@ import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
 import {FetchOrganizationsNoPageParams, FetchOrganizationsParams, Organization} from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
-import {TableData} from 'src/components/widgets/table/table';
+import {TableData} from 'src/components/backstage/widgets/table/table';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
@@ -194,7 +194,7 @@ export const useSectionData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, [url]);
+    }, []);
     return tableData as TableData;
 };
 
