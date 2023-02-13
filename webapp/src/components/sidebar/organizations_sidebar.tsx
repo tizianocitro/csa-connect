@@ -19,15 +19,10 @@ import {Organization} from 'src/types/organization';
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
 
-const defaultOrganizationsFetchParams = {
-    sort: 'name',
-    direction: 'desc',
-};
-
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
     const ecosystem = useEcosystem() as Organization;
-    const organizations = useOrganizationsNoPageList(defaultOrganizationsFetchParams);
+    const organizations = useOrganizationsNoPageList();
     if (!organizations || !ecosystem) {
         return {groups: [], ready: false};
     }

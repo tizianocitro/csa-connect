@@ -4,12 +4,10 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
-
 import {LinkVariantIcon, StarIcon, StarOutlineIcon} from '@mattermost/compass-icons/components';
 
-import {getSiteUrl} from 'src/client';
+import {getSiteUrl} from 'src/clients';
 import {copyToClipboard} from 'src/utils';
-
 import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {SecondaryButton} from 'src/components/assets/buttons';
