@@ -8,15 +8,10 @@ import {
     useLocation,
     useRouteMatch,
 } from 'react-router-dom';
-
 import {useDispatch, useSelector} from 'react-redux';
-
 import {getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
-
 import {useEffectOnce, useLocalStorage, useUpdateEffect} from 'react-use';
-
 import {selectTeam} from 'mattermost-redux/actions/teams';
-
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {
@@ -27,9 +22,8 @@ import {
 } from 'src/constants';
 import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 import ErrorPage from 'src/components/error_page';
-import OrganizationsPage from 'src/components/backstage/organizations_page';
-
-import OrganizationDetails from './organizations/organization_details';
+import OrganizationsPage from 'src/components/backstage/organizations/organizations_page';
+import OrganizationDetails from 'src/components/backstage/organizations/organization_details';
 
 const useInitTeamRoutingLogic = () => {
     const dispatch = useDispatch();
