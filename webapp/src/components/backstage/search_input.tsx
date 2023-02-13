@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import {useIntl} from 'react-intl';
 
-import Tooltip from 'src/components/widgets/tooltip';
+import Tooltip from 'src/components/common/tooltip';
 
 interface Props {
     testId: string;

@@ -6,25 +6,15 @@ import React from 'react';
 import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 
 import DotMenu from 'src/components/dot_menu';
-import {Separator} from 'src/components/backstage/products/shared';
 
-import {useSetProductFavorite} from 'src/hooks';
-
-import {CopyProductLinkMenuItem, FavoriteProductMenuItem} from './products/controls';
+import {CopyOrganizationLinkMenuItem} from './organizations/controls';
 import {DotMenuButtonStyled} from './shared';
 
 interface Props {
-    productId: string;
-    isFavorite: boolean;
+    organizationId: string;
 }
 
-export const LHSProductDotMenu = ({productId, isFavorite}: Props) => {
-    const setProductFavorite = useSetProductFavorite(productId);
-
-    const toggleFavorite = () => {
-        setProductFavorite(!isFavorite);
-    };
-
+export const LHSOrganizationDotMenu = ({organizationId}: Props) => {
     return (
         <>
             <DotMenu
@@ -37,13 +27,8 @@ export const LHSProductDotMenu = ({productId, isFavorite}: Props) => {
                 )}
                 dotMenuButton={DotMenuButtonStyled}
             >
-                <FavoriteProductMenuItem
-                    isFavorite={isFavorite}
-                    toggleFavorite={toggleFavorite}
-                />
-                <Separator/>
-                <CopyProductLinkMenuItem
-                    productId={productId}
+                <CopyOrganizationLinkMenuItem
+                    organizationId={organizationId}
                 />
             </DotMenu>
         </>

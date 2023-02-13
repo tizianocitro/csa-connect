@@ -6,7 +6,7 @@ import styled, {css} from 'styled-components';
 
 import {useUpdateEffect} from 'react-use';
 
-import Tooltip from 'src/components/widgets/tooltip';
+import Tooltip from 'src/components/common/tooltip';
 import {useUniqueId} from 'src/utils';
 
 import Dropdown from './dropdown';

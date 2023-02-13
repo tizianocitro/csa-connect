@@ -1,7 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import ProductsSidebar from 'src/components/sidebar/products_sidebar';
+import OrganizationsSidebar from 'src/components/sidebar/organizations_sidebar';
+
+const LHSNavigation = () => {
+    return (
+        <LHSContainer data-testid='lhs-navigation'>
+            <OrganizationsSidebar/>
+        </LHSContainer>
+    );
+};
 
 const LHSContainer = styled.div`
     width: 240px;
@@ -10,13 +18,5 @@ const LHSContainer = styled.div`
     display: flex;
     flex-direction: column;
 `;
-
-const LHSNavigation = () => {
-    return (
-        <LHSContainer data-testid='lhs-navigation'>
-            <ProductsSidebar/>
-        </LHSContainer>
-    );
-};
 
 export default LHSNavigation;

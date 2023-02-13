@@ -12,36 +12,24 @@ import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {useForceDocumentTitle} from 'src/hooks';
 import {applyTheme} from 'src/components/backstage/css_utils';
-import {DEFAULT_PATH} from 'src/constants';
+import {
+    DEFAULT_PATH,
+    ORGANIZATIONS_PATH,
+    ORGANIZATION_ID_PARAM,
+    PRODUCT_NAME,
+} from 'src/constants';
 
 import {ToastProvider} from './toast_banner';
 import LHSNavigation from './lhs_navigation';
 import MainBody from './main_body';
 
-const BackstageContainer = styled.div`
-    background: var(--center-channel-bg);
-    overflow-y: auto;
-    height: 100%;
-`;
-
-const MainContainer = styled.div<{noContainerScroll: boolean}>`
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: max-content auto;
-    ${({noContainerScroll}) => (noContainerScroll ? css`
-        height: 100%;
-    ` : css`
-        min-height: 100%;
-    `)}
-`;
-
-export const BackstageID = 'product-backstageRoot';
+export const BackstageID = 'organization-backstageRoot';
 
 const Backstage = () => {
     const {pathname} = useLocation();
     const {url} = useRouteMatch();
-    const noContainerScroll = matchPath<{productId?: string;}>(pathname, {
-        path: [`${url}/products/:productId`, `${url}/${DEFAULT_PATH}`],
+    const noContainerScroll = matchPath<{organizationId?: string;}>(pathname, {
+        path: [`${url}/${ORGANIZATIONS_PATH}/:${ORGANIZATION_ID_PARAM}`, `${url}/${DEFAULT_PATH}`],
     });
 
     const currentTheme = useSelector<GlobalState, Theme>(getTheme);
@@ -60,7 +48,7 @@ const Backstage = () => {
         };
     }, [currentTheme]);
 
-    useForceDocumentTitle('Mattermost Product');
+    useForceDocumentTitle(PRODUCT_NAME);
 
     return (
         <BackstageContainer id={BackstageID}>
@@ -73,6 +61,23 @@ const Backstage = () => {
         </BackstageContainer>
     );
 };
+
+const BackstageContainer = styled.div`
+    background: var(--center-channel-bg);
+    overflow-y: auto;
+    height: 100%;
+`;
+
+const MainContainer = styled.div<{noContainerScroll: boolean}>`
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: max-content auto;
+    ${({noContainerScroll}) => (noContainerScroll ? css`
+        height: 100%;
+    ` : css`
+        min-height: 100%;
+    `)}
+`;
 
 export default Backstage;
 

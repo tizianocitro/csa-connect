@@ -16,101 +16,45 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {
-    fetchProduct,
-    fetchProductChannels,
-    fetchProducts,
-    fetchProductsNoPage,
-    isFavoriteItem,
-} from 'src/client';
+import {fetchProductChannels} from 'src/client';
+import {fetchTableData} from 'src/external_client';
 
-import {
-    ChannelProduct,
-    FetchProductsNoPageParams,
-    FetchProductsParams,
-    Product,
-} from 'src/types/product';
+import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
+import {FetchOrganizationsNoPageParams, FetchOrganizationsParams, Organization} from 'src/types/organization';
+import {ECOSYSTEM} from 'src/constants';
+import {TableData} from 'src/components/backstage/widgets/table/table';
 
-type FetchParams = FetchProductsParams | FetchChannelsParams;
+type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
 export enum ReservedCategory {
-    Favorite = 'Favorite',
-    Products = 'Products',
+    Ecosystem = 'Ecosystem',
+    Organizations = 'Organizations',
 }
+
+const data = require('../data/data.json');
 
 export const useReservedCategoryTitleMapper = () => {
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
-        case ReservedCategory.Favorite:
-            return formatMessage({defaultMessage: 'Favorites'});
-        case ReservedCategory.Products:
-            return formatMessage({defaultMessage: 'Products'});
+        case ReservedCategory.Ecosystem:
+            return formatMessage({defaultMessage: 'Ecosystem'});
+        case ReservedCategory.Organizations:
+            return formatMessage({defaultMessage: 'Organizations'});
         default:
             return categoryName;
         }
     };
 };
 
-export const useSetProductFavorite = (id: string | undefined) => {
-    // TODO: Here make API call and remove this fake interface and function
-    interface Variables {
-        variables: {
-            id: string | undefined;
-            fav: boolean;
-        }
-    }
+export function useEcosystem(): Organization | {} {
+    return data.organizations.filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
+}
 
-    const innerUpdateProduct = (variables: Variables) => {
-        return variables;
-    };
-
-    return useCallback((fav: boolean) => {
-        if (id === undefined) {
-            return;
-        }
-        innerUpdateProduct({variables: {id, fav}});
-    }, [id, innerUpdateProduct]);
-};
-
-export const useFavoriteProduct = (id: string): [boolean, () => void] => {
-    const [isFavoriteProduct, setIsFavoriteProduct] = useState(false);
-    const setProductFavorite = useSetProductFavorite(id);
-
-    useEffect(() => {
-        isFavoriteItem(id)
-            .then(setIsFavoriteProduct)
-            .catch(() => setIsFavoriteProduct(false));
-    }, [id]);
-
-    const toggleFavorite = () => {
-        setProductFavorite(!isFavoriteProduct);
-        setIsFavoriteProduct(!isFavoriteProduct);
-    };
-    return [isFavoriteProduct, toggleFavorite];
-};
-
-export function useProduct(id: string): Product | {} {
-    const [product, setProduct] = useState<Product | {}>({});
-    useEffect(() => {
-        let isCanceled = false;
-        async function fetchProductAsync() {
-            const productReturn = await fetchProduct(id);
-            if (!isCanceled) {
-                setProduct(productReturn);
-            }
-        }
-
-        fetchProductAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, [id]);
-
-    return product;
+export function useOrganization(id: string): Product | {} {
+    return data.organizations.filter((o: Organization) => o.id === id)[0];
 }
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
@@ -124,70 +68,59 @@ export const useConvertProductToChannelProduct = (product: Product): ChannelProd
     };
 };
 
-export function useProductsNoPageList(defaultFetchParams: FetchProductsNoPageParams): Product[] {
-    const [products, setProducts] = useState<Product[]>([]);
+export function useOrganizationsNoPageList(defaultFetchParams: FetchOrganizationsNoPageParams): Organization[] {
+    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
     const currentTeamId = useSelector(getCurrentTeamId);
 
-    // Fetch the queried runs
     useEffect(() => {
-        let isCanceled = false;
-        async function fetchProductsNoPageAsync() {
-            const productsReturn = await fetchProductsNoPage({...defaultFetchParams, team_id: currentTeamId});
-            if (!isCanceled) {
-                setProducts((existingProducts: Product[]) => [...existingProducts, ...productsReturn.items]);
-            }
-        }
-
-        fetchProductsNoPageAsync();
-
-        return () => {
-            isCanceled = true;
-        };
+        organizations.sort();
+        setOrganizations(organizations);
     }, [currentTeamId]);
 
-    return products;
+    return organizations;
 }
 
-const combineQueryParameters = (oldParams: FetchProductsParams, searchString: string) => {
+const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
 };
 
-export function useProductsList(defaultFetchParams: FetchProductsParams, routed = true):
-[Product[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchProductsParams>>] {
-    const [products, setProducts] = useState<Product[]>([]);
+export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParams, routed = true):
+[Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] {
+    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
-    const currentTeamId = useSelector(getCurrentTeamId);
     const [fetchParams, setFetchParams] = useState(combineQueryParameters(defaultFetchParams, location.search));
 
-    // Fetch the queried runs
+    // const currentTeamId = useSelector(getCurrentTeamId);
+    // check whether [fetchParams, currentTeamId] is a good set of dependencies
     useEffect(() => {
-        let isCanceled = false;
-        async function fetchProductsAsync() {
-            const productsReturn = await fetchProducts({...fetchParams, team_id: currentTeamId});
-            if (!isCanceled) {
-                setProducts((existingProducts: Product[]) => {
-                    if (fetchParams.page === 0) {
-                        return productsReturn.items;
-                    }
-                    return [...existingProducts, ...productsReturn.items];
-                });
-                setTotalCount(productsReturn.totalCount);
-            }
+        organizations.sort();
+        if (fetchParams.direction === 'desc') {
+            organizations.reverse();
         }
+        setOrganizations(organizations);
+        setTotalCount(organizations.length);
+    });
 
-        fetchProductsAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, [fetchParams, currentTeamId]);
+    useEffect(() => {
+        let orgs = data.organizations;
+        orgs.sort();
+        if (fetchParams.direction === 'desc') {
+            orgs.reverse();
+        }
+        const searchTerm = fetchParams.search_term;
+        if (searchTerm && searchTerm.trim().length !== 0) {
+            orgs = orgs.filter((o: Organization) => o.name.indexOf(searchTerm) !== -1);
+        }
+        setOrganizations(orgs);
+        setTotalCount(orgs.length);
+    }, [fetchParams.search_term]);
 
     useUpdateFetchParams(routed, fetchParams, history, location);
 
-    return [products, totalCount, fetchParams, setFetchParams];
+    return [organizations, totalCount, fetchParams, setFetchParams];
 }
 
 export function useProductChannelsList(defaultFetchParams: FetchChannelsParams, routed = true):
@@ -242,6 +175,27 @@ const useUpdateFetchParams = (
             history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
         }
     }, [fetchParams, history]);
+};
+
+export const useSectionData = (url: string): TableData => {
+    const [tableData, setTableData] = useState<TableData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTableDataAsync() {
+            const tableDataResult = await fetchTableData(url);
+            if (!isCanceled) {
+                setTableData(tableDataResult);
+            }
+        }
+
+        fetchTableDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return tableData as TableData;
 };
 
 /**

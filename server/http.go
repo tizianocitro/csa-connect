@@ -11,7 +11,7 @@ import (
 	"github.com/tizianocitro/csa-connect/server/user"
 )
 
-func (p *Plugin) handleGetProductURL(w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) handleGetOrganizationURL(w http.ResponseWriter, r *http.Request) {
 	serverConfig := p.API.GetConfig()
 	request, err := p.getDialogRequestFromBody(r)
 	if err != nil {
@@ -29,7 +29,7 @@ func (p *Plugin) handleGetProductURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := command.CreateGetProductURLPost(&command.ProductURLPostConfig{
+	if err := command.CreateGetOrganizationURLPost(&command.OrganizationURLPostConfig{
 		UserID: userID,
 		PluginConfig: command.PluginConfig{
 			PathPrefix: p.pluginURLPathPrefix,

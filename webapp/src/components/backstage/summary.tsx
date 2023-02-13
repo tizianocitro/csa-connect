@@ -7,7 +7,7 @@ import {useIntl} from 'react-intl';
 
 import MarkdownEdit from 'src/components/markdown_edit';
 import {Timestamp} from 'src/webapp_globals';
-import {AnchorLinkTitle} from 'src/components/backstage/products/shared';
+import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
 import {PAST_TIME_SPEC} from 'src/components/time_spec';
 import {Product} from 'src/types/product';
 
