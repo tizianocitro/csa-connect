@@ -11,13 +11,13 @@ export async function fetchTableData(url: string) {
     return data as TableData;
 }
 
-export const doGet = async <TData = any>(url: string) => {
+const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
 
     return data;
 };
 
-export const doPost = async <TData = any>(url: string, body = {}) => {
+const doPost = async <TData = any>(url: string, body = {}) => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'POST',
         body,
@@ -26,7 +26,7 @@ export const doPost = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-export const doDelete = async <TData = any>(url: string, body = {}) => {
+const doDelete = async <TData = any>(url: string, body = {}) => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'DELETE',
         body,
@@ -35,7 +35,7 @@ export const doDelete = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-export const doPut = async <TData = any>(url: string, body = {}) => {
+const doPut = async <TData = any>(url: string, body = {}) => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PUT',
         body,
@@ -44,7 +44,7 @@ export const doPut = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-export const doPatch = async <TData = any>(url: string, body = {}) => {
+const doPatch = async <TData = any>(url: string, body = {}) => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PATCH',
         body,
@@ -53,7 +53,7 @@ export const doPatch = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-export const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
+const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
     const response = await fetch(url, options);
     let data;
     if (response.ok) {

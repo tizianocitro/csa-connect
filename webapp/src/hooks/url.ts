@@ -1,4 +1,4 @@
-import {getSiteUrl} from 'src/client';
+import {getSiteUrl} from 'src/clients';
 
 export const isReferencedByUrlHash = (urlHash: string, id: string) => {
     return urlHash === `#${id}`;

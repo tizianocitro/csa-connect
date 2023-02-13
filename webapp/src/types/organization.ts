@@ -29,9 +29,3 @@ export interface FetchOrganizationsParams {
     sort?: string;
     team_id?: string;
 }
-
-export interface FetchOrganizationsNoPageParams {
-    direction?: string;
-    sort?: string;
-    team_id?: string;
-}

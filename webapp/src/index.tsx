@@ -9,11 +9,9 @@ import {Client4} from 'mattermost-redux/client';
 import {FormattedMessage} from 'react-intl';
 
 import {pluginId} from 'src/manifest';
-
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import Backstage from 'src/components/backstage/backstage';
-
-import {setSiteUrl} from 'src/client';
+import {setSiteUrl} from 'src/clients';
 import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
 import RHSView from 'src/components/rhs/right_hand_sidebar';
 import {DEFAULT_PATH} from 'src/constants';

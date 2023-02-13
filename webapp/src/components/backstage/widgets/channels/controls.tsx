@@ -7,7 +7,7 @@ import {PrimaryButton} from 'src/components/assets/buttons';
 
 // import {openChannelProductModal} from 'src/actions';
 import {ChannelProduct} from 'src/types/product';
-import {addChannelToProduct} from 'src/client';
+import {addChannelToProduct} from 'src/clients';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 
 type AddChannelProps = {

@@ -6,7 +6,7 @@ import {useIntl} from 'react-intl';
 
 import styled, {css} from 'styled-components';
 
-import {getSiteUrl} from 'src/client';
+import {getSiteUrl} from 'src/clients';
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
 import CopyLink from 'src/components/common/copy_link';
 import TextEdit from 'src/components/text_edit';

@@ -7,22 +7,17 @@ import {
 } from 'react';
 import {useUpdateEffect} from 'react-use';
 import {useIntl} from 'react-intl';
-
 import {useSelector} from 'react-redux';
-
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-
 import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProductChannels} from 'src/client';
-import {fetchTableData} from 'src/external_client';
-
+import {fetchProductChannels, fetchTableData} from 'src/clients';
 import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
-import {FetchOrganizationsNoPageParams, FetchOrganizationsParams, Organization} from 'src/types/organization';
+import {FetchOrganizationsParams, Organization} from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
 
@@ -68,7 +63,7 @@ export const useConvertProductToChannelProduct = (product: Product): ChannelProd
     };
 };
 
-export function useOrganizationsNoPageList(defaultFetchParams: FetchOrganizationsNoPageParams): Organization[] {
+export function useOrganizationsNoPageList(): Organization[] {
     const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
     const currentTeamId = useSelector(getCurrentTeamId);
 
