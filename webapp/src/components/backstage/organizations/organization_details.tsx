@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {useForceDocumentTitle, useOrganization} from 'src/hooks';
-import Sections from 'src/components/backstage/sections//sections';
+import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
 import {
     Body,

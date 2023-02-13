@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
+import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
 
 import TableHeader, {TableHeaderData} from './table_header';
 import TableRow, {TableRowData} from './table_row';

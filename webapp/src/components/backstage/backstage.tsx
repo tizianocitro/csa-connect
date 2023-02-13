@@ -4,9 +4,7 @@
 import React, {useEffect} from 'react';
 import {matchPath, useLocation, useRouteMatch} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-
 import styled, {css} from 'styled-components';
-
 import {GlobalState} from '@mattermost/types/store';
 import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -20,7 +18,7 @@ import {
 } from 'src/constants';
 
 import {ToastProvider} from './toast_banner';
-import LHSNavigation from './lhs_navigation';
+import LHSNavigation from './lhs/lhs_navigation';
 import MainBody from './main_body';
 
 export const BackstageID = 'organization-backstageRoot';

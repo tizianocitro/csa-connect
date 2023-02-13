@@ -7,9 +7,8 @@ import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 import DotMenu from 'src/components/dot_menu';
 import {getSiteUrl} from 'src/clients';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
-
-import {CopyLinkMenuItem} from './header/controls';
-import {DotMenuButtonStyled} from './shared';
+import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
+import {DotMenuButtonStyled} from 'src/components/backstage/shared';
 
 interface Props {
     organizationId: string;

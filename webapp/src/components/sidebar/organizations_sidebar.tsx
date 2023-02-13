@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useIntl} from 'react-intl';
 
-import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs_organization_dot_menu';
+import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs/lhs_organization_dot_menu';
 
 import {pluginUrl} from 'src/browser_routing';
 import {
