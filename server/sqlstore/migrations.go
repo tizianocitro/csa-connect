@@ -79,7 +79,7 @@ var migrations = []Migration{
 		toVersion:   semver.MustParse("0.3.0"),
 		migrationFunc: func(e sqlx.Ext, sqlStore *SQLStore) error {
 			if e.DriverName() == model.DatabaseDriverMysql {
-				if _, err := e.Exec(`ALTER TABLE MP_System CONVERT TO CHARACTER SET utf8mb4`); err != nil {
+				if _, err := e.Exec(`ALTER TABLE CSA_System CONVERT TO CHARACTER SET utf8mb4`); err != nil {
 					return errors.Wrapf(err, "failed to migrate character set")
 				}
 			}
