@@ -1,7 +1,6 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import {DateTime} from 'luxon';
+
+import {pluginId, pluginName} from 'src/manifest';
 
 export const OVERLAY_DELAY = 400;
 
@@ -18,10 +17,10 @@ export const DateTimeFormats = {
     DATE_MED_NO_YEAR: {...DateTime.DATE_MED, year: undefined},
 };
 
-export const PRODUCT_NAME = 'CS-AWARE CONNECT';
+export const PRODUCT_ICON = 'power-plug-outline';
+export const PRODUCT_NAME = pluginName;
 
-export const DEFAULT_PATH = 'cs-aware-connect';
-
+export const DEFAULT_PATH = pluginId;
 export const ORGANIZATIONS_PATH = 'organizations';
 export const ORGANIZATION_PATH = 'organization';
 

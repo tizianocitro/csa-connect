@@ -1,4 +1,4 @@
-import {id as pluginId} from './manifest';
+import {pluginId} from './manifest';
 
 const PLUGIN_PREFIX = 'plugins-';
 

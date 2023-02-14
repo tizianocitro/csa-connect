@@ -32,7 +32,9 @@ const manifest = JSON.parse(`
 }
 `);
 
-export default manifest;
 export const id = manifest.id;
 export const version = manifest.version;
 export const pluginId = manifest.id;
+export const pluginName = manifest.name;
+
+export default manifest;

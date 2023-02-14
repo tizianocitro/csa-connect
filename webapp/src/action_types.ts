@@ -1,4 +1,4 @@
-import {id as pluginId} from './manifest';
+import {pluginId} from './manifest';
 import {ChannelProduct} from './types/product';
 
 const createActionType = (suffix: string): string => {
