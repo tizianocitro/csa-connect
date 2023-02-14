@@ -1,5 +1,5 @@
 
-export interface Config {
+export interface PlatformConfig {
     organizations: Organization[];
 }
 

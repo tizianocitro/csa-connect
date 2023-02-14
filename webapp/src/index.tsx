@@ -10,10 +10,11 @@ import {Client4} from 'mattermost-redux/client';
 import {pluginId} from 'src/manifest';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import Backstage from 'src/components/backstage/backstage';
-import {setSiteUrl} from 'src/clients';
+import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
 import RHSView from 'src/components/rhs/right_hand_sidebar';
 import {DEFAULT_PATH, PRODUCT_ICON, PRODUCT_NAME} from 'src/constants';
+import {platformConfigPath, setPlatformConfig} from 'src/config/config';
 
 type WindowObject = {
     location: {
@@ -105,6 +106,8 @@ export default class Plugin {
         const siteUrl = getSiteURL();
         setSiteUrl(siteUrl);
         Client4.setUrl(siteUrl);
+
+        loadPlatformConfig(platformConfigPath, setPlatformConfig);
 
         this.doRegistrations(registry, store);
     }

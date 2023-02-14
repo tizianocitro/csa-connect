@@ -1,13 +1,19 @@
-import {Config, Organization} from 'src/types/organization';
+import {Organization, PlatformConfig} from 'src/types/organization';
 
-const config = require('../data/data.json');
+export const platformConfigPath = '/configs/platform';
 
-const getConfig = (): Config | {} => {
-    return config;
+let platformConfig: PlatformConfig = {
+    organizations: [],
 };
 
-const organizations = (getConfig() as Config).organizations;
+export const getPlatformConfig = (): PlatformConfig => {
+    return platformConfig;
+};
+
+export const setPlatformConfig = (config: PlatformConfig) => {
+    platformConfig = config;
+};
 
 export const getOrganizations = (): Organization[] => {
-    return organizations;
+    return getPlatformConfig().organizations;
 };
