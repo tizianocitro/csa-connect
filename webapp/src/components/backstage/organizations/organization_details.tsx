@@ -1,27 +1,12 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React, {useEffect} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
-import {useSelector} from 'react-redux';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {useForceDocumentTitle, useOrganization} from 'src/hooks';
-import Sections from 'src/components/backstage/sections/sections';
-import Widgets from 'src/components/backstage/widgets/widgets';
-import {
-    Body,
-    Container,
-    Header,
-    Main,
-    MainWrapper,
-} from 'src/components/backstage/shared';
 import {getSiteUrl} from 'src/clients';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
-import {NameHeader} from 'src/components/backstage/header/header';
+import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 const OrganizationDetails = () => {
-    const teamId = useSelector(getCurrentTeamId);
     const {url, path, params: {organizationId}} = useRouteMatch<{organizationId: string}>();
     const {hash: urlHash} = useLocation();
     const organization = useOrganization(organizationId);
@@ -45,26 +30,14 @@ const OrganizationDetails = () => {
     }
 
     return (
-        <Container>
-            <MainWrapper>
-                <Header>
-                    <NameHeader
-                        path={getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + organization?.id}
-                        name={organization.name}
-                    />
-                </Header>
-                <Main>
-                    <Body>
-                        <Sections
-                            path={path}
-                            sections={organization.sections}
-                            url={url}
-                        />
-                        <Widgets widgets={organization.widgets}/>
-                    </Body>
-                </Main>
-            </MainWrapper>
-        </Container>
+        <SectionsWidgetsContainer
+            headerPath={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${organization.id}`}
+            name={organization.name}
+            sectionPath={path}
+            sections={organization.sections}
+            url={url}
+            widgets={organization.widgets}
+        />
     );
 };
 

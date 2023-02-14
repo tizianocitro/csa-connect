@@ -3,19 +3,11 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {useForceDocumentTitle, useSection, useSectionInfo} from 'src/hooks';
-import {
-    Body,
-    Container,
-    Header,
-    Main,
-    MainWrapper,
-} from 'src/components/backstage/shared';
-import Widgets from 'src/components/backstage/widgets/widgets';
-import {NameHeader} from 'src/components/backstage/header/header';
 import {getSiteUrl} from 'src/clients';
 import {SECTION_ID_PARAM} from 'src/constants';
+import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
-import Sections, {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
+import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
 const SectionDetails = () => {
     const {url, path, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
@@ -62,26 +54,14 @@ const SectionDetails = () => {
     }
 
     return (
-        <Container>
-            <MainWrapper>
-                <Header>
-                    <NameHeader
-                        path={`${getSiteUrl()}${url}?${SECTION_ID_PARAM}=${section.id}`}
-                        name={sectionInfo.name}
-                    />
-                </Header>
-                <Main>
-                    <Body>
-                        <Sections
-                            path={path}
-                            sections={section.sections}
-                            url={url}
-                        />
-                        <Widgets widgets={section.widgets}/>
-                    </Body>
-                </Main>
-            </MainWrapper>
-        </Container>
+        <SectionsWidgetsContainer
+            headerPath={`${getSiteUrl()}${url}?${SECTION_ID_PARAM}=${section.id}`}
+            name={sectionInfo.name}
+            sectionPath={path}
+            sections={section.sections}
+            url={url}
+            widgets={section.widgets}
+        />
     );
 };
 
