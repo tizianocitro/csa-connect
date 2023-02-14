@@ -1,3 +1,8 @@
+
+export interface Config {
+    organizations: Organization[];
+}
+
 export interface Organization {
     description?: string,
     id: string,

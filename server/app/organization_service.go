@@ -4,19 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-
-	pluginapi "github.com/mattermost/mattermost-plugin-api"
 )
 
-type OrganizationService struct {
-	api *pluginapi.Client
-}
+type OrganizationService struct{}
 
 // OrganizationService returns a new organization service
-func NewOrganizationService(api *pluginapi.Client) *OrganizationService {
-	return &OrganizationService{
-		api: api,
-	}
+func NewOrganizationService() *OrganizationService {
+	return &OrganizationService{}
 }
 
 func (s *OrganizationService) Get(id string) (Organization, error) {

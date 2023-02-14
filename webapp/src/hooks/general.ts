@@ -25,6 +25,7 @@ import {
 } from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
+import {getOrganizations} from 'src/config/config';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
@@ -32,8 +33,6 @@ export enum ReservedCategory {
     Ecosystem = 'Ecosystem',
     Organizations = 'Organizations',
 }
-
-const data = require('../data/data.json');
 
 export const useReservedCategoryTitleMapper = () => {
     const {formatMessage} = useIntl();
@@ -50,11 +49,11 @@ export const useReservedCategoryTitleMapper = () => {
 };
 
 export const useEcosystem = (): Organization => {
-    return data.organizations.filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
+    return getOrganizations().filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
 };
 
 export const useOrganization = (id: string): Organization => {
-    return data.organizations.filter((o: Organization) => o.id === id)[0];
+    return getOrganizations().filter((o: Organization) => o.id === id)[0];
 };
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
@@ -69,7 +68,7 @@ export const useConvertProductToChannelProduct = (product: Product): ChannelProd
 };
 
 export const useOrganizationsNoPageList = (): Organization[] => {
-    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const currentTeamId = useSelector(getCurrentTeamId);
 
     useEffect(() => {
@@ -87,7 +86,7 @@ const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchStrin
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
 [Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
-    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
@@ -105,7 +104,7 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
     });
 
     useEffect(() => {
-        let orgs = data.organizations;
+        let orgs = getOrganizations();
         orgs.sort();
         if (fetchParams.direction === 'desc') {
             orgs.reverse();
@@ -178,7 +177,7 @@ const useUpdateFetchParams = (
 };
 
 export const useSection = (id: string): Section => {
-    return data.organizations.
+    return getOrganizations().
         map((o: Organization) => o.sections).
         flat().
         filter((s: Section) => s.id === id)[0];

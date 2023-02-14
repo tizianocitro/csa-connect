@@ -15,6 +15,7 @@ import (
 	"github.com/tizianocitro/csa-connect/server/api"
 	"github.com/tizianocitro/csa-connect/server/app"
 	"github.com/tizianocitro/csa-connect/server/command"
+	"github.com/tizianocitro/csa-connect/server/config"
 	"github.com/tizianocitro/csa-connect/server/sqlstore"
 )
 
@@ -27,6 +28,8 @@ type Plugin struct {
 
 	handler *api.Handler
 
+	plaformConfig *config.PlatformConfig
+
 	pluginAPI *pluginapi.Client
 
 	// Plugin's id read from the manifest file
@@ -36,6 +39,7 @@ type Plugin struct {
 	pluginURLPathPrefix string
 
 	organzationService *app.OrganizationService
+	platformService    *config.PlatformService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -59,7 +63,8 @@ func (p *Plugin) OnActivate() error {
 	}
 
 	p.handler = api.NewHandler(p.pluginAPI)
-	p.organzationService = app.NewOrganizationService(p.pluginAPI)
+	p.organzationService = app.NewOrganizationService()
+	p.platformService = config.NewPlatformService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
@@ -76,6 +81,11 @@ func (p *Plugin) OnActivate() error {
 		p.handler.APIRouter,
 		p.organzationService,
 		p.pluginAPI,
+	)
+
+	api.NewPlatformHandler(
+		p.handler.APIRouter,
+		p.platformService,
 	)
 
 	if err := p.registerCommands(); err != nil {

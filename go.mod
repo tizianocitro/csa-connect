@@ -6,7 +6,7 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/mattermost/mattermost-server/v6 v6.0.0-20221206174448-c3c81cb3d6a2
 	github.com/mattermost/morph v1.0.5-0.20221115094356-4c18a75b1f5e
-	golang.org/x/exp v0.0.0-20230206171751-46f607a40771
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -31,6 +31,7 @@ require (
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.4 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/go-hclog v1.3.1 // indirect
@@ -74,5 +75,4 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
