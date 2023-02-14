@@ -6,23 +6,15 @@ import {render} from 'react-dom';
 import {Store} from 'redux';
 import {GlobalState} from '@mattermost/types/store';
 import {Client4} from 'mattermost-redux/client';
-import {FormattedMessage} from 'react-intl';
 
 import {pluginId} from 'src/manifest';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import Backstage from 'src/components/backstage/backstage';
-import {setSiteUrl} from 'src/clients';
+import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
 import RHSView from 'src/components/rhs/right_hand_sidebar';
-import {DEFAULT_PATH} from 'src/constants';
-
-const GlobalHeaderCenter = () => {
-    return null;
-};
-
-const GlobalHeaderRight = () => {
-    return null;
-};
+import {DEFAULT_PATH, PRODUCT_ICON, PRODUCT_NAME} from 'src/constants';
+import {platformConfigPath, setPlatformConfig} from 'src/config/config';
 
 type WindowObject = {
     location: {
@@ -34,8 +26,16 @@ type WindowObject = {
     basename?: string;
 }
 
+const GlobalHeaderCenter = () => {
+    return null;
+};
+
+const GlobalHeaderRight = () => {
+    return null;
+};
+
 // From mattermost-webapp/utils
-function getSiteURLFromWindowObject(obj: WindowObject): string {
+const getSiteURLFromWindowObject = (obj: WindowObject): string => {
     let siteURL = '';
     if (obj.location.origin) {
         siteURL = obj.location.origin;
@@ -56,11 +56,11 @@ function getSiteURLFromWindowObject(obj: WindowObject): string {
     }
 
     return siteURL;
-}
+};
 
-function getSiteURL(): string {
+const getSiteURL = (): string => {
     return getSiteURLFromWindowObject(window);
-}
+};
 
 export default class Plugin {
     stylesContainer?: Element;
@@ -76,26 +76,23 @@ export default class Plugin {
 
         registry.registerProduct(
             `/${DEFAULT_PATH}`,
-            'power-plug-outline',
-            'CS AWARE CONNECT',
+            PRODUCT_ICON,
+            PRODUCT_NAME,
             `/${DEFAULT_PATH}`,
             BackstageWrapped,
             GlobalHeaderCenter,
             GlobalHeaderRight,
             enableTeamSidebar,
             enableAppBarComponent,
-            'product-playbooks',
+            PRODUCT_ICON,
         );
 
-        const {toggleRHSPlugin} = registry.registerRightHandSidebarComponent(
-            RHSView,
-            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
-        );
+        const {toggleRHSPlugin} = registry.registerRightHandSidebarComponent(RHSView, PRODUCT_NAME);
         registry.registerChannelHeaderButtonAction(
             <ChannelHeaderButtonIcon/>,
             () => store.dispatch(toggleRHSPlugin),
-            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
-            <FormattedMessage defaultMessage='CS AWARE CONNECT'/>,
+            PRODUCT_NAME,
+            PRODUCT_NAME,
         );
     }
 
@@ -109,6 +106,8 @@ export default class Plugin {
         const siteUrl = getSiteURL();
         setSiteUrl(siteUrl);
         Client4.setUrl(siteUrl);
+
+        loadPlatformConfig(platformConfigPath, setPlatformConfig);
 
         this.doRegistrations(registry, store);
     }

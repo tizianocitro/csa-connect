@@ -12,6 +12,7 @@ import {
     FetchChannelsParams,
     FetchChannelsReturn,
 } from 'src/types/channels';
+import {PlatformConfig} from 'src/types/organization';
 
 let siteURL = '';
 let basePath = '';
@@ -35,6 +36,12 @@ export const getSiteUrl = (): string => {
 
 export const getApiUrl = (): string => {
     return apiUrl;
+};
+
+export const loadPlatformConfig = async (path: string, setConfig: (config: PlatformConfig) => void) => {
+    doGet(`${apiUrl}${path}`).
+        then((config) => setConfig(config)).
+        catch(() => setConfig({organizations: []}));
 };
 
 /* data = {
