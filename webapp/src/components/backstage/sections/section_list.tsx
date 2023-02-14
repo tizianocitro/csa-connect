@@ -24,7 +24,7 @@ const SectionList = ({path, section}: Props) => {
         <Body>
             {data &&
                 <Table
-                    id={`${name}`}
+                    id={`${name.toLowerCase()}-section`}
                     data={data}
                     open={openOrganizationDetails}
                     pointer={true}
