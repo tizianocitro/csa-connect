@@ -42,6 +42,7 @@ const Summary = ({id, product}: Props) => {
         >
             <Header>
                 <AnchorLinkTitle
+                    text={title}
                     title={title}
                     id={id}
                 />

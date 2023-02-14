@@ -24,6 +24,7 @@ const ChannelsSection = ({id, product, teamId}: Props) => {
         >
             <Header>
                 <AnchorLinkTitle
+                    text={title}
                     title={title}
                     id={id}
                 />

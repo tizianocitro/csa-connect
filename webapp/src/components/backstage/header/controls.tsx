@@ -11,14 +11,23 @@ import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {SecondaryButton} from 'src/components/assets/buttons';
 
-export const CopyLinkMenuItem = (props: {path: string}) => {
+type Props = {
+    path: string;
+    text: string;
+};
+
+export const formatUrlAsMarkdown = (path: string, text: string) => {
+    return `[${text}](${path})`;
+};
+
+export const CopyLinkMenuItem = ({path, text}: Props) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
 
     return (
         <StyledDropdownMenuItem
             onClick={() => {
-                copyToClipboard(props.path);
+                copyToClipboard(formatUrlAsMarkdown(path, text));
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >

@@ -35,6 +35,7 @@ const Table = ({data, fullUrl, id, open, pointer, urlHash}: Props) => {
         >
             <Header>
                 <AnchorLinkTitle
+                    text={caption}
                     title={caption}
                     id={id}
                 />

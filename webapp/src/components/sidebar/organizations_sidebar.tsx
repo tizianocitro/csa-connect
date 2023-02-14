@@ -40,6 +40,7 @@ const useLHSData = () => {
             itemMenu: (
                 <LHSOrganizationDotMenu
                     organizationId={o.id}
+                    organizationName={o.name}
                 />),
             className: '',
         };

@@ -30,7 +30,10 @@ export const ContextMenu = ({path, name}: Props) => {
                     </>
                 }
             >
-                <CopyLinkMenuItem path={path}/>
+                <CopyLinkMenuItem
+                    path={path}
+                    text={name}
+                />
             </DotMenu>
         </>
     );

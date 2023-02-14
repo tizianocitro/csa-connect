@@ -12,9 +12,10 @@ import {DotMenuButtonStyled} from 'src/components/backstage/shared';
 
 interface Props {
     organizationId: string;
+    organizationName: string;
 }
 
-export const LHSOrganizationDotMenu = ({organizationId}: Props) => {
+export const LHSOrganizationDotMenu = ({organizationId, organizationName}: Props) => {
     return (
         <>
             <DotMenu
@@ -28,7 +29,8 @@ export const LHSOrganizationDotMenu = ({organizationId}: Props) => {
                 dotMenuButton={DotMenuButtonStyled}
             >
                 <CopyLinkMenuItem
-                    path={getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + organizationId}
+                    path={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${organizationId}`}
+                    text={organizationName}
                 />
             </DotMenu>
         </>

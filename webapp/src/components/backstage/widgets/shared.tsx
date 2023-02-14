@@ -12,8 +12,9 @@ import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 
 interface AnchorLinkTitleProps {
-    title: string;
     id: string;
+    text: string;
+    title: string;
 }
 
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
@@ -24,6 +25,7 @@ export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
         <LinkTitle>
             <CopyLink
                 id={itemId}
+                text={props.text}
                 to={buildToForCopy(`${url}#${props.id}`)}
                 name={props.title}
                 area-hidden={true}

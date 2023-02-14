@@ -39,6 +39,7 @@ const TableRow = ({fullUrl, onClick, pointer, row, urlHash}: Props) => {
         >
             <CopyLink
                 id={itemId}
+                text={name}
                 to={fullUrl ? buildToForCopy(`${url}${fullUrl}#${itemId}`) : buildToForCopy(`${url}#${itemId}`)}
                 name={name}
                 area-hidden={true}

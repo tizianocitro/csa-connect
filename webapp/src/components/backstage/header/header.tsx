@@ -49,6 +49,7 @@ export const NameHeader = ({name, path}: Props) => {
                     />
                     <StyledCopyLink
                         id='copy-name-link-tooltip'
+                        text={name}
                         to={path}
                         tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
                     />
