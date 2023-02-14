@@ -56,17 +56,6 @@ export const useOrganization = (id: string): Organization => {
     return getOrganizations().filter((o: Organization) => o.id === id)[0];
 };
 
-export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
-    return {
-        ...product,
-        teamId: '',
-        channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
-        channelNameTemplate: '',
-        createPublicChannel: true,
-    };
-};
-
 export const useOrganizationsNoPageList = (): Organization[] => {
     const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const currentTeamId = useSelector(getCurrentTeamId);
@@ -77,11 +66,6 @@ export const useOrganizationsNoPageList = (): Organization[] => {
     }, [currentTeamId]);
 
     return organizations;
-};
-
-const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
-    const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
-    return {...oldParams, ...queryParams};
 };
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
@@ -120,6 +104,66 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
     useUpdateFetchParams(routed, fetchParams, history, location);
 
     return [organizations, totalCount, fetchParams, setFetchParams];
+};
+
+export const useSection = (id: string): Section => {
+    return getOrganizations().
+        map((o: Organization) => o.sections).
+        flat().
+        filter((s: Section) => s.id === id)[0];
+};
+
+export const useSectionInfo = (id: string, url: string): SectionInfo => {
+    const [info, setInfo] = useState<SectionInfo | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchSectionInfoAsync() {
+            const infoResult = await fetchSectionInfo(id, url);
+            if (!isCanceled) {
+                setInfo(infoResult);
+            }
+        }
+
+        fetchSectionInfoAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return info as SectionInfo;
+};
+
+export const useSectionData = (url: string): TableData => {
+    const [tableData, setTableData] = useState<TableData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTableDataAsync() {
+            const tableDataResult = await fetchTableData(url);
+            if (!isCanceled) {
+                setTableData(tableDataResult);
+            }
+        }
+
+        fetchTableDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return tableData as TableData;
+};
+
+export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
+    return {
+        ...product,
+        teamId: '',
+        channelId: '',
+        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
+        channelNameTemplate: '',
+        createPublicChannel: true,
+    };
 };
 
 export const useProductChannelsList = (defaultFetchParams: FetchChannelsParams, routed = true):
@@ -176,53 +220,9 @@ const useUpdateFetchParams = (
     }, [fetchParams, history]);
 };
 
-export const useSection = (id: string): Section => {
-    return getOrganizations().
-        map((o: Organization) => o.sections).
-        flat().
-        filter((s: Section) => s.id === id)[0];
-};
-
-export const useSectionInfo = (id: string, url: string): SectionInfo => {
-    const [info, setInfo] = useState<SectionInfo | {}>({});
-
-    useEffect(() => {
-        let isCanceled = false;
-        async function fetchSectionInfoAsync() {
-            const infoResult = await fetchSectionInfo(id, url);
-            if (!isCanceled) {
-                setInfo(infoResult);
-            }
-        }
-
-        fetchSectionInfoAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, []);
-    return info as SectionInfo;
-};
-
-export const useSectionData = (url: string): TableData => {
-    const [tableData, setTableData] = useState<TableData | {}>({});
-
-    useEffect(() => {
-        let isCanceled = false;
-        async function fetchTableDataAsync() {
-            const tableDataResult = await fetchTableData(url);
-            if (!isCanceled) {
-                setTableData(tableDataResult);
-            }
-        }
-
-        fetchTableDataAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, []);
-    return tableData as TableData;
+const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
+    const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
+    return {...oldParams, ...queryParams};
 };
 
 /**
