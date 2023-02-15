@@ -1,10 +1,9 @@
 package app
 
 type Channel struct {
-	ChannelID      string `json:"channelId"`
-	OrganizationID string `json:"organizationId"`
-	SectionID      string `json:"sectionId"`
-	SectionName    string `json:"sectionName"`
+	ChannelID string `json:"channelId"`
+	ParentID  string `json:"parentId"`
+	SectionID string `json:"sectionId"`
 }
 
 // ProductChannelFilterOptions specifies the parameters when getting products.
@@ -19,21 +18,17 @@ type ChannelFilterOptions struct {
 }
 
 type GetChannelsResults struct {
-	TotalCount int       `json:"totalCount"`
-	PageCount  int       `json:"pageCount"`
-	HasMore    bool      `json:"hasMore"`
-	Items      []Channel `json:"items"`
+	Items []Channel `json:"items"`
 }
 
 type AddChannelParams struct {
-	ChannelID           string `json:"channelId"`
-	ChannelMode         string `json:"channelMode"`
-	ChannelNameTemplate string `json:"channelNameTemplate"`
-	CreatePublicChannel bool   `json:"createPublicChannel"`
-	OrganizationID      string `json:"organizationId"`
-	SectionID           string `json:"sectionId"`
-	SectionName         string `json:"sectionName"`
-	TeamID              string `json:"teamId"`
+	ChannelID           string `json:"channel_id"`
+	ChannelMode         string `json:"channel_mode"`
+	ChannelNameTemplate string `json:"channel_name_template"`
+	CreatePublicChannel bool   `json:"create_public_channel"`
+	ParentID            string `json:"parent_id"`
+	SectionID           string `json:"section_id"`
+	TeamID              string `json:"team_id"`
 }
 
 type AddChannelResult struct {

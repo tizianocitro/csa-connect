@@ -33,9 +33,7 @@ var migrations = []Migration{
 				if _, err := e.Exec(`
 					CREATE TABLE IF NOT EXISTS CSA_Channel (
 						ChannelID VARCHAR(26) PRIMARY KEY,
-						OrganizationID VARCHAR(26) NOT NULL,
-						SectionID VARCHAR(26) NOT NULL,
-						SectionName VARCHAR(1024) NOT NULL
+						SectionID VARCHAR(26) NOT NULL
 					)
 				` + MySQLCharset); err != nil {
 					return errors.Wrapf(err, "failed creating table CSA_Channel")
@@ -53,9 +51,7 @@ var migrations = []Migration{
 				if _, err := e.Exec(`
 					CREATE TABLE IF NOT EXISTS CSA_Channel (
 						ChannelID TEXT PRIMARY KEY,
-						OrganizationID TEXT NOT NULL,
-						SectionID TEXT NOT NULL,
-						SectionName TEXT NOT NULL
+						SectionID TEXT NOT NULL
 						
 					);
 				`); err != nil {
