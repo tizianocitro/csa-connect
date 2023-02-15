@@ -1,6 +1,6 @@
 import {Organization, PlatformConfig} from 'src/types/organization';
 
-export const platformConfigPath = '/configs/platform';
+export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
 
 let platformConfig: PlatformConfig = {
     organizations: [],
