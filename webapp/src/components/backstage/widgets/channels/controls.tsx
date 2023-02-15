@@ -4,31 +4,32 @@ import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import {PrimaryButton} from 'src/components/assets/buttons';
-
-// import {openChannelProductModal} from 'src/actions';
-import {ChannelProduct} from 'src/types/product';
-import {addChannelToProduct} from 'src/clients';
+import {addChannel} from 'src/clients';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
+import {ChannelCreation} from 'src/types/channels';
 
 type AddChannelProps = {
-    product: ChannelProduct,
-    productId: string;
+    channelCreation: ChannelCreation,
+    parentId: string;
+    sectionId: string;
     teamId: string,
     dispatchSelectErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
 };
 
-const addChannel = (
-    product: ChannelProduct,
+const createChannel = (
+    channelCreation: ChannelCreation,
+    parentId: string,
+    sectionId: string,
     teamId: string,
     dispatchSelectErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
 ) => {
-    if (!product) {
+    if (!channelCreation) {
         return;
     }
 
-    const {id, channelMode, channelId, channelNameTemplate, createPublicChannel} = product;
+    const {channelMode, channelId, channelNameTemplate, createPublicChannel} = channelCreation;
     const createNewChannel = channelMode === 'create_new_channel';
     const linkExistingChannel = channelMode === 'link_existing_channel';
     if (linkExistingChannel && channelId === '') {
@@ -39,12 +40,13 @@ const addChannel = (
         dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
         return;
     }
-    addChannelToProduct({
-        product_id: id,
-        team_id: teamId,
+    addChannel({
         channel_id: linkExistingChannel ? channelId : undefined,
         channel_name: createNewChannel ? channelNameTemplate : undefined,
         create_public_channel: createNewChannel ? createPublicChannel : false,
+        parent_id: parentId,
+        section_id: sectionId,
+        team_id: teamId,
     }).
         then(() => {
             // redirect to channel
@@ -54,28 +56,28 @@ const addChannel = (
         });
 };
 
-// onClick={() => {
-//    dispatch(openChannelProductModal({
-//        onChannelCreated: () => '',
-//        productId: product.id,
-//        teamId,
-//    }));
-// }}
-export const CreateProductChannel = ({
-    product,
-    productId,
+export const CreateChannel = ({
+    channelCreation,
+    parentId,
+    sectionId,
     teamId,
     dispatchSelectErrorMessage,
     dispatchNameErrorMessage,
 }: AddChannelProps) => {
     const {formatMessage} = useIntl();
     const title = formatMessage({defaultMessage: 'Add Channel'});
-    product.id = productId;
     return (
         <PrimaryButtonLarger
-            onClick={() => addChannel(product, teamId, dispatchSelectErrorMessage, dispatchNameErrorMessage)}
+            onClick={() => createChannel(
+                channelCreation,
+                parentId,
+                sectionId,
+                teamId,
+                dispatchSelectErrorMessage,
+                dispatchNameErrorMessage,
+            )}
             title={title}
-            data-testid='create-product-channel-button'
+            data-testid='create-channel-button'
         >
             <FormattedMessage defaultMessage='Add Channel'/>
         </PrimaryButtonLarger>

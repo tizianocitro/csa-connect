@@ -1,25 +1,25 @@
 import {pluginId} from './manifest';
-import {ChannelProduct} from './types/product';
+import {ChannelCreation} from './types/channels';
 
 const createActionType = (suffix: string): string => {
     return pluginId + suffix;
 };
 
-export const SET_PRODUCT_FOR_CREATE_CHANNEL: string = createActionType('_set_product_for_create_channel');
+export const CHANNEL_CREATION: string = createActionType('_channel_creation');
 export const SET_NAME_ERROR_MESSAGE: string = createActionType('_set_name_error_message');
 export const SET_SELECT_ERROR_MESSAGE: string = createActionType('_set_select_error_message');
 
-export interface setProductForCreateChannelAction {
+export interface SetChannelCreationAction {
     type: string;
-    productForCreateChannel: ChannelProduct;
+    channelCreation: ChannelCreation;
 }
 
-export interface setNameErrorMessageAction {
+export interface SetNameErrorMessageAction {
     type: string;
     nameErrorMessage: string;
 }
 
-export interface setSelectErrorMessageAction {
+export interface SetSelectErrorMessageAction {
     type: string;
     selectErrorMessage: string;
 }

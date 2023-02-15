@@ -4,18 +4,18 @@ import {useIntl} from 'react-intl';
 
 import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
-import {Product} from 'src/types/product';
-import {useConvertProductToChannelProduct, useProductChannelsList} from 'src/hooks';
-import {setNameErrorMessage, setProductForCreateChannel, setSelectErrorMessage} from 'src/reducer';
+import {useChannelsList} from 'src/hooks';
+import {setChannelCreation, setNameErrorMessage, setSelectErrorMessage} from 'src/reducer';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
-import ChannelsList from 'src/components/backstage/widgets/channels_list/channels_list';
+import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
 import Header from 'src/components/common/header';
 
-import {CreateProductChannel} from './controls';
+import {CreateChannel} from './controls';
 
 interface Props {
-    product: Product;
+    parentId: string;
+    sectionId: string;
     teamId: string;
 }
 
@@ -26,16 +26,21 @@ const defaultChannelsFetchParams = {
     direction: 'desc',
 };
 
-// const [productForCreateChannel, setProductForCreateChannel] = useState(channelProduct);
-const ChannelBox = ({product, teamId}: Props) => {
+const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const {formatMessage} = useIntl();
-    const [channels, totalCount, fetchParams, setFetchParams] = useProductChannelsList({...defaultChannelsFetchParams, product_id: product.id});
+    const [channels, totalCount, fetchParams, setFetchParams] = useChannelsList({...defaultChannelsFetchParams, section_id: sectionId, parent_id: parentId});
 
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
     const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
-    const channelProduct = useConvertProductToChannelProduct(product);
-    const [productForCreateChannel, dispatchProductForCreateChannel] = useReducer(setProductForCreateChannel, channelProduct);
+    const baseChannelCreation = {
+        teamId: '',
+        channelId: '',
+        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
+        channelNameTemplate: '',
+        createPublicChannel: true,
+    };
+    const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, baseChannelCreation);
 
     const cleanErrorMessages = () => {
         dispatchSelectErrorMessage(selectErrorMessageAction(''));
@@ -44,18 +49,19 @@ const ChannelBox = ({product, teamId}: Props) => {
     return (
         <>
             <StyledSection>
-                <Setting id={'product-channel-action'}>
+                <Setting id={'channel-action'}>
                     <CreateAChannel
-                        product={productForCreateChannel}
+                        channelCreation={channelCreation}
                         selectErrorMessage={selectErrorMessage}
                         nameErrorMessage={nameErrorMessage}
-                        dispatchProductForCreateChannel={dispatchProductForCreateChannel}
+                        dispatchChannelCreation={dispatchChannelCreation}
                         cleanErrorMessages={cleanErrorMessages}
                     />
                 </Setting>
-                <CreateProductChannel
-                    product={productForCreateChannel}
-                    productId={product.id}
+                <CreateChannel
+                    channelCreation={channelCreation}
+                    parentId={parentId}
+                    sectionId={sectionId}
                     teamId={teamId}
                     dispatchSelectErrorMessage={dispatchSelectErrorMessage}
                     dispatchNameErrorMessage={dispatchNameErrorMessage}
@@ -66,7 +72,7 @@ const ChannelBox = ({product, teamId}: Props) => {
                     data-testid='titleAddedChannels'
                     level={5}
                     heading={formatMessage({defaultMessage: 'Added Channels'})}
-                    subtitle={formatMessage({defaultMessage: 'All the channels added to the product will show here'})}
+                    subtitle={formatMessage({defaultMessage: 'All the added channels will show here'})}
                     css={`
                         border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                     `}

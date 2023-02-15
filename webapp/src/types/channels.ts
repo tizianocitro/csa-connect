@@ -1,35 +1,42 @@
-export interface ProductChannel {
-    id: string;
-    name: string
+export interface WidgetChannel {
+    channelId: string;
+    sectionId: string;
 }
 
 export interface FetchChannelsParams {
     channel_id?: string;
     direction?: string;
     page: number;
+    parent_id?: string;
     per_page: number;
-    product_id?: string;
     search_term?: string;
+    section_id?: string;
     sort?: string;
     team_id?: string;
 }
 
 export interface FetchChannelsReturn {
-    hasMore: boolean;
-    items: ProductChannel[];
-    pageCount: number;
-    totalCount: number;
+    items: WidgetChannel[];
+}
+
+export interface ChannelCreation {
+    channelId: string;
+    channelMode: string;
+    channelNameTemplate: string;
+    createPublicChannel: boolean;
+    teamId: string;
 }
 
 export interface AddChannelParams {
     channel_id?: string;
     channel_name?: string;
     create_public_channel?: boolean;
-    product_id: string;
+    section_id: string;
+    parent_id: string;
     team_id: string;
 }
 
 export interface AddChannelResult {
-    id?: string;
-    name?: string;
+    channel_id?: string;
+    section_id?: string;
 }

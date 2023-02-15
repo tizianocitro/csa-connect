@@ -1,29 +1,29 @@
 import {CombinedState, Reducer, combineReducers} from 'redux';
 
 import {
+    CHANNEL_CREATION,
     SET_NAME_ERROR_MESSAGE,
-    SET_PRODUCT_FOR_CREATE_CHANNEL,
     SET_SELECT_ERROR_MESSAGE,
-    setNameErrorMessageAction,
-    setProductForCreateChannelAction,
-    setSelectErrorMessageAction,
+    SetChannelCreationAction,
+    SetNameErrorMessageAction,
+    SetSelectErrorMessageAction,
 } from './action_types';
-import {ChannelProduct} from './types/product';
+import {ChannelCreation} from './types/channels';
 
 type AnyAction = any;
 type AnyState = any;
 export type CombinedReducer = Reducer<CombinedState<AnyState>, AnyAction> | any
 
-export const setProductForCreateChannel = (state: ChannelProduct, {type, productForCreateChannel}: setProductForCreateChannelAction) => {
+export const setChannelCreation = (state: ChannelCreation, {type, channelCreation}: SetChannelCreationAction) => {
     switch (type) {
-    case SET_PRODUCT_FOR_CREATE_CHANNEL:
-        return productForCreateChannel;
+    case CHANNEL_CREATION:
+        return channelCreation;
     default:
         return state;
     }
 };
 
-export const setNameErrorMessage = (state = '', {type, nameErrorMessage}: setNameErrorMessageAction) => {
+export const setNameErrorMessage = (state = '', {type, nameErrorMessage}: SetNameErrorMessageAction) => {
     switch (type) {
     case SET_NAME_ERROR_MESSAGE:
         return nameErrorMessage;
@@ -32,7 +32,7 @@ export const setNameErrorMessage = (state = '', {type, nameErrorMessage}: setNam
     }
 };
 
-export const setSelectErrorMessage = (state = '', {type, selectErrorMessage}: setSelectErrorMessageAction) => {
+export const setSelectErrorMessage = (state = '', {type, selectErrorMessage}: SetSelectErrorMessageAction) => {
     switch (type) {
     case SET_SELECT_ERROR_MESSAGE:
         return selectErrorMessage;
@@ -44,5 +44,5 @@ export const setSelectErrorMessage = (state = '', {type, selectErrorMessage}: se
 export default combineReducers({
     setNameErrorMessage,
     setSelectErrorMessage,
-    setProductForCreateChannel,
+    setChannelCreation,
 });

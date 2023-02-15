@@ -2,35 +2,36 @@ import React from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {Product} from 'src/types/product';
 import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
 
 import ChannelBox from './channel_box';
 
 interface Props {
-    id: string;
-    product: Product;
+    parentId: string;
+    sectionId: string;
     teamId: string;
 }
 
-const ChannelsSection = ({id, product, teamId}: Props) => {
+const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
     const {formatMessage} = useIntl();
-
+    const id = 'channels-widget';
     const title = formatMessage({defaultMessage: 'Channels'});
     return (
         <Container
             id={id}
-            data-testid={'product-channel-box-section'}
+            data-testid={id}
         >
             <Header>
                 <AnchorLinkTitle
+                    id={id}
+                    query={`sectionId=${parentId}`}
                     text={title}
                     title={title}
-                    id={id}
                 />
             </Header>
             <ChannelBox
-                product={product}
+                parentId={parentId}
+                sectionId={sectionId}
                 teamId={teamId}
             />
         </Container>

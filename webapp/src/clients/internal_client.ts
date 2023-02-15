@@ -44,47 +44,34 @@ export const loadPlatformConfig = async (path: string, setConfig: (config: Platf
         catch(() => setConfig({organizations: []}));
 };
 
-/* data = {
-    items: [
-        {
-            id: 'demo',
-            name: 'Demo',
-        },
-        {
-            id: 'my-first-product-channel',
-            name: 'My First Product Channel',
-        },
-    ],
-    totalCount: 2,
-    hasMore: false,
-    pageCount: 0,
-}; */
-export async function fetchProductChannels(params: FetchChannelsParams) {
+export const fetchChannels = async (params: FetchChannelsParams) => {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
-    let data = await doGet(`${apiUrl}/products/${params.product_id}/get_channels${queryParams}`);
+    let data = await doGet(`${apiUrl}/channels/${params.section_id}${queryParams}`);
     if (!data) {
-        data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchChannelsReturn;
+        data = {items: []} as FetchChannelsReturn;
     }
     return data as FetchChannelsReturn;
-}
+};
 
-export async function addChannelToProduct({
-    product_id,
-    team_id,
+export const addChannel = async ({
     channel_id,
     channel_name,
     create_public_channel,
-}: AddChannelParams) {
-    const data = await doPatch(`${apiUrl}/products/${product_id}/add_channel`, JSON.stringify({
-        team_id,
-        channel_name,
-        product_id,
+    parent_id,
+    section_id,
+    team_id,
+}: AddChannelParams) => {
+    const data = await doPatch(`${apiUrl}/channels/${section_id}`, JSON.stringify({
         channel_id,
+        channel_name,
         create_public_channel,
+        parent_id,
+        section_id,
+        team_id,
     }));
     return data as AddChannelResult;
-}
+};
 
 const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});

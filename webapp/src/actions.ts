@@ -1,10 +1,10 @@
-import {SET_NAME_ERROR_MESSAGE, SET_PRODUCT_FOR_CREATE_CHANNEL, SET_SELECT_ERROR_MESSAGE} from './action_types';
-import {ChannelProduct} from './types/product';
+import {CHANNEL_CREATION, SET_NAME_ERROR_MESSAGE, SET_SELECT_ERROR_MESSAGE} from './action_types';
+import {ChannelCreation} from './types/channels';
 
-export const productForCreateChannelAction = (productForCreateChannel: ChannelProduct) => {
+export const channelCreationAction = (channelCreation: ChannelCreation) => {
     return {
-        type: SET_PRODUCT_FOR_CREATE_CHANNEL,
-        productForCreateChannel,
+        type: CHANNEL_CREATION,
+        channelCreation,
     };
 };
 

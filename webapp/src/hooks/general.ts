@@ -14,14 +14,13 @@ import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
 import {
-    fetchProductChannels,
+    fetchChannels,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
 } from 'src/clients';
-import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
-import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
+import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
 import {
     FetchOrganizationsParams,
     Organization,
@@ -34,6 +33,7 @@ import {getOrganizations} from 'src/config/config';
 import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
+type FetchParamsWithSectionId = FetchParams & {section_id?: string};
 
 export enum ReservedCategory {
     Ecosystem = 'Ecosystem',
@@ -75,7 +75,7 @@ export const useOrganizationsNoPageList = (): Organization[] => {
 };
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
-[Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
+[Organization[], number, FetchOrganizationsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
     const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
@@ -203,20 +203,9 @@ export const useTableData = (url: string): TableData => {
     return tableData as TableData;
 };
 
-export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
-    return {
-        ...product,
-        teamId: '',
-        channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
-        channelNameTemplate: '',
-        createPublicChannel: true,
-    };
-};
-
-export const useProductChannelsList = (defaultFetchParams: FetchChannelsParams, routed = true):
-[ProductChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] => {
-    const [channels, setChannels] = useState<ProductChannel[]>([]);
+export const useChannelsList = (defaultFetchParams: FetchChannelsParams, routed = true):
+[WidgetChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] => {
+    const [channels, setChannels] = useState<WidgetChannel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
@@ -226,20 +215,15 @@ export const useProductChannelsList = (defaultFetchParams: FetchChannelsParams, 
     // Fetch the queried runs
     useEffect(() => {
         let isCanceled = false;
-        async function fetchProductChannelsAsync() {
-            const channelsReturn = await fetchProductChannels({...fetchParams, team_id: currentTeamId});
+        async function fetchChannelsAsync() {
+            const channelsReturn = await fetchChannels({...fetchParams, team_id: currentTeamId});
             if (!isCanceled) {
-                setChannels((existingChannels: ProductChannel[]) => {
-                    if (fetchParams.page === 0) {
-                        return channelsReturn.items;
-                    }
-                    return [...existingChannels, ...channelsReturn.items];
-                });
-                setTotalCount(channelsReturn.totalCount);
+                setChannels(channelsReturn.items);
+                setTotalCount(channelsReturn.items.length);
             }
         }
 
-        fetchProductChannelsAsync();
+        fetchChannelsAsync();
 
         return () => {
             isCanceled = true;
@@ -254,7 +238,7 @@ export const useProductChannelsList = (defaultFetchParams: FetchChannelsParams, 
 // Update the query string when the fetchParams change
 const useUpdateFetchParams = (
     routed: boolean,
-    fetchParams: FetchParams,
+    fetchParams: FetchParamsWithSectionId,
     history: any,
     location: any,
 ) => {

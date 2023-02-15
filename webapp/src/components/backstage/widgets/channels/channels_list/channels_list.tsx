@@ -10,14 +10,14 @@ import {FormattedMessage} from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import LoadingSpinner from 'src/components/assets/loading_spinner';
-import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
+import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
 
 import ChannelsListHeader from './channels_list_header';
 import Filters from './filters';
 import Row from './row';
 
 interface Props {
-    channels: ProductChannel[];
+    channels: WidgetChannel[];
     totalCount: number;
     fetchParams: FetchChannelsParams;
     setFetchParams: React.Dispatch<React.SetStateAction<FetchChannelsParams>>;
@@ -72,7 +72,7 @@ const ChannelsList = ({
             >
                 {channels?.map((channel) => (
                     <Row
-                        key={channel.id}
+                        key={channel.channelId}
                         channel={channel}
                     />
                 ))}
