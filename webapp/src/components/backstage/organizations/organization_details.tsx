@@ -33,6 +33,7 @@ const OrganizationDetails = () => {
         <SectionsWidgetsContainer
             headerPath={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${organization.id}`}
             name={organization.name}
+            parentId={organizationId}
             sectionPath={path}
             sections={organization.sections}
             url={url}

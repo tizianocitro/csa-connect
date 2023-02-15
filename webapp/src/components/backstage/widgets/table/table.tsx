@@ -16,32 +16,37 @@ type Props = {
     data: TableData;
     fullUrl?: string;
     id: string;
+    isSection?: boolean;
     pointer: boolean;
     urlHash: string;
     open?: (resourceId: string) => void;
 };
 
-// <TableRow
-//    key={product.id}
-//    product={product}
-//    urlHash={urlHash}
-// />
-const Table = ({data, fullUrl, id, open, pointer, urlHash}: Props) => {
+const Table = ({
+    data,
+    fullUrl,
+    id,
+    isSection = false,
+    open,
+    pointer,
+    urlHash,
+}: Props) => {
     const {caption, headers, rows} = data;
+    const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
     return (
         <Container
-            id={id}
-            data-testid={'table-widget'}
+            id={tableId}
+            data-testid={tableId}
         >
             <Header>
                 <AnchorLinkTitle
                     text={caption}
                     title={caption}
-                    id={id}
+                    id={tableId}
                 />
             </Header>
             <InnertTable
-                id='innerTable'
+                id={`${tableId}-inner-table`}
                 className='innerTable'
             >
                 <TableHeader

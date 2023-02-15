@@ -57,6 +57,7 @@ const SectionDetails = () => {
         <SectionsWidgetsContainer
             headerPath={`${getSiteUrl()}${url}?${SECTION_ID_PARAM}=${section.id}`}
             name={sectionInfo.name}
+            parentId={sectionId}
             sectionPath={path}
             sections={section.sections}
             url={url}

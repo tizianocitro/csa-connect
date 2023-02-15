@@ -4,26 +4,33 @@ import {useIntl} from 'react-intl';
 
 import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
+import {formatName} from 'src/hooks';
 
-interface Props {
-    name: string;
+export interface TextBoxData {
     text: string;
 }
 
-const TextBox = ({name, text}: Props) => {
+type Props = {
+    name: string;
+    parentId: string;
+    text: string;
+}
+
+const TextBox = ({name, parentId, text}: Props) => {
     const {formatMessage} = useIntl();
-    const id = 'text-box';
+    const id = `${formatName(name)}-text-box-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
     return (
         <Container
             id={id}
-            data-testid={'text-box-widget'}
+            data-testid={id}
         >
             <Header>
                 <AnchorLinkTitle
+                    id={id}
+                    query={`sectionId=${parentId}`}
                     text={name}
                     title={name}
-                    id={id}
                 />
             </Header>
             <MarkdownEdit

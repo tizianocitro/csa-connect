@@ -6,6 +6,7 @@ import {Section} from 'src/types/organization';
 import SectionList from 'src/components/backstage/sections/section_list';
 import SectionDetails from 'src/components/backstage/sections/section_details';
 import {SECTION_ID_PARAM} from 'src/constants';
+import {formatStringToLowerCase} from 'src/hooks';
 
 type Props = {
     path: string;
@@ -20,7 +21,7 @@ const Sections = ({path, sections, url}: Props) => (
     <>
         <NavBar>
             {sections.map((section, index) => {
-                let toUrl = `${url}/${section.name.toLowerCase()}`;
+                let toUrl = `${url}/${formatStringToLowerCase(section.name)}`;
                 if (index === 0) {
                     toUrl = url;
                 }
@@ -38,7 +39,7 @@ const Sections = ({path, sections, url}: Props) => (
         </NavBar>
         <Switch>
             {sections.map((section, index) => {
-                let toPath = `${path}/${section.name.toLowerCase()}`;
+                let toPath = `${path}/${formatStringToLowerCase(section.name)}`;
                 if (index === 0) {
                     toPath = path;
                 }
@@ -59,7 +60,7 @@ const Sections = ({path, sections, url}: Props) => (
                 return (
                     <Route
                         key={`route-single-${section.id}`}
-                        path={`${path}/${section.name.toLowerCase()}/:${SECTION_ID_PARAM}`}
+                        path={`${path}/${formatStringToLowerCase(section.name)}/:${SECTION_ID_PARAM}`}
                         exact={true}
                     >
                         <SectionDetails/>

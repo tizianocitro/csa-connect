@@ -2,15 +2,36 @@ import React from 'react';
 
 import {Widget} from 'src/types/organization';
 
+import TextBoxWrapper from './text-box/text-box-wrapper';
+
+export enum WidgetType {
+    Table = 'table',
+    TextBox = 'text-box',
+}
+
 type Props = {
+    parentId: string;
     widgets: Widget[];
 };
 
-const Widgets = ({widgets}: Props) => {
+const filterWidgetsByType = (widgets: Widget[], type: string) => {
+    return widgets.filter((widget) => widget.type === type);
+};
+
+// const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
+const Widgets = ({parentId, widgets}: Props) => {
+    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
     return (
-        <div>
-            {(widgets && widgets.length > 0) && JSON.stringify(widgets, null, 2)}
-        </div>
+        <>
+            {textBoxWidgets.map(({name, url}, index) => (
+                <TextBoxWrapper
+                    key={`${name}-${index}`}
+                    name={name}
+                    parentId={parentId}
+                    url={url}
+                />
+            ))}
+        </>
     );
 };
 

@@ -13,7 +13,12 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProductChannels, fetchSectionInfo, fetchTableData} from 'src/clients';
+import {
+    fetchProductChannels,
+    fetchSectionInfo,
+    fetchTableData,
+    fetchTextBoxData,
+} from 'src/clients';
 import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
 import {resolve} from 'src/utils';
 import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
@@ -26,6 +31,7 @@ import {
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
 import {getOrganizations} from 'src/config/config';
+import {TextBoxData} from 'src/components/backstage/widgets/text-box/text-box';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
@@ -153,6 +159,27 @@ export const useSectionData = (url: string): TableData => {
         };
     }, []);
     return tableData as TableData;
+};
+
+export const useTextBoxData = (url: string): TextBoxData => {
+    const [textBoxData, setTextBoxData] = useState<TextBoxData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTextBoxDataAsync() {
+            const textBoxDataResult = await fetchTextBoxData(url);
+            if (!isCanceled) {
+                setTextBoxData(textBoxDataResult);
+            }
+        }
+
+        fetchTextBoxDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return textBoxData as TextBoxData;
 };
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {

@@ -14,6 +14,7 @@ import Sections from 'src/components/backstage/sections/sections';
 
 type Props = {
     headerPath: string;
+    parentId: string;
     name: string;
     sectionPath: string;
     sections: Section[];
@@ -21,7 +22,15 @@ type Props = {
     widgets: Widget[];
 }
 
-const SectionsWidgetsContainer = ({headerPath, name, sectionPath, sections, url, widgets}: Props) => {
+const SectionsWidgetsContainer = ({
+    headerPath,
+    parentId,
+    name,
+    sectionPath,
+    sections,
+    url,
+    widgets,
+}: Props) => {
     return (
         <Container>
             <MainWrapper>
@@ -38,7 +47,10 @@ const SectionsWidgetsContainer = ({headerPath, name, sectionPath, sections, url,
                             sections={sections}
                             url={url}
                         />
-                        <Widgets widgets={widgets}/>
+                        <Widgets
+                            parentId={parentId}
+                            widgets={widgets}
+                        />
                     </Body>
                 </Main>
             </MainWrapper>
