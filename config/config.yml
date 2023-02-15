@@ -6,8 +6,7 @@ organizations:
     sections:
       - name: Incidents
         id: "0"
-        url: http://localhost:3000/incidents
-        sections: []
+        url: http://localhost:3000/incidents        
         widgets:
           - name: My Graph
             type: graph
@@ -22,7 +21,6 @@ organizations:
       - name: Stories
         id: "1"
         url: http://localhost:3000/stories
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -37,7 +35,6 @@ organizations:
       - name: Policies
         id: "2"
         url: http://localhost:3000/policies
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -57,7 +54,6 @@ organizations:
       - name: Incidents
         id: "3"
         url: http://localhost:3000/incidents
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -72,7 +68,6 @@ organizations:
       - name: Stories
         id: "4"
         url: http://localhost:3000/stories
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -87,7 +82,6 @@ organizations:
       - name: Policies
         id: "5"
         url: http://localhost:3000/policies
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -107,7 +101,6 @@ organizations:
       - name: Incidents
         id: "6"
         url: http://localhost:3000/incidents
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -122,7 +115,6 @@ organizations:
       - name: Stories
         id: "7"
         url: http://localhost:3000/stories
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -137,7 +129,6 @@ organizations:
       - name: Policies
         id: "8"
         url: http://localhost:3000/policies
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -157,7 +148,6 @@ organizations:
       - name: Incidents
         id: "9"
         url: http://localhost:3000/incidents
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -172,7 +162,6 @@ organizations:
       - name: Stories
         id: "10"
         url: http://localhost:3000/stories
-        sections: []
         widgets:
           - name: My Graph
             type: graph
@@ -187,7 +176,6 @@ organizations:
       - name: Policies
         id: "11"
         url: http://localhost:3000/policies
-        sections: []
         widgets:
           - name: My Graph
             type: graph
