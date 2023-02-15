@@ -14,7 +14,6 @@ import Sections from 'src/components/backstage/sections/sections';
 
 type Props = {
     headerPath: string;
-    parentId: string;
     name: string;
     sectionPath: string;
     sections: Section[];
@@ -24,7 +23,6 @@ type Props = {
 
 const SectionsWidgetsContainer = ({
     headerPath,
-    parentId,
     name,
     sectionPath,
     sections,
@@ -48,7 +46,6 @@ const SectionsWidgetsContainer = ({
                             url={url}
                         />
                         <Widgets
-                            parentId={parentId}
                             widgets={widgets}
                         />
                     </Body>

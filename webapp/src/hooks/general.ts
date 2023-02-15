@@ -31,7 +31,7 @@ import {
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
 import {getOrganizations} from 'src/config/config';
-import {TextBoxData} from 'src/components/backstage/widgets/text-box/text-box';
+import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
 
 type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
 
@@ -141,24 +141,24 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
 };
 
 export const useSectionData = (url: string): TableData => {
-    const [tableData, setTableData] = useState<TableData | {}>({});
+    const [sectionData, setSectionData] = useState<TableData | {}>({});
 
     useEffect(() => {
         let isCanceled = false;
-        async function fetchTableDataAsync() {
+        async function fetchSectionDataAsync() {
             const tableDataResult = await fetchTableData(url);
             if (!isCanceled) {
-                setTableData(tableDataResult);
+                setSectionData(tableDataResult);
             }
         }
 
-        fetchTableDataAsync();
+        fetchSectionDataAsync();
 
         return () => {
             isCanceled = true;
         };
     }, []);
-    return tableData as TableData;
+    return sectionData as TableData;
 };
 
 export const useTextBoxData = (url: string): TextBoxData => {
@@ -180,6 +180,27 @@ export const useTextBoxData = (url: string): TextBoxData => {
         };
     }, []);
     return textBoxData as TextBoxData;
+};
+
+export const useTableData = (url: string): TableData => {
+    const [tableData, setTableData] = useState<TableData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTableDataAsync() {
+            const tableDataResult = await fetchTableData(url);
+            if (!isCanceled) {
+                setTableData(tableDataResult);
+            }
+        }
+
+        fetchTableDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return tableData as TableData;
 };
 
 export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {

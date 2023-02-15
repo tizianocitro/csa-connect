@@ -22,15 +22,15 @@ const SectionList = ({path, section}: Props) => {
     };
     return (
         <Body>
-            {data &&
-                <Table
-                    id={formatName(name)}
-                    isSection={true}
-                    data={data}
-                    open={openOrganizationDetails}
-                    pointer={true}
-                    urlHash={urlHash}
-                />}
+            <Table
+                id={formatName(name)}
+                isSection={true}
+                data={data}
+                open={openOrganizationDetails}
+                parentId={section.id}
+                pointer={true}
+                urlHash={urlHash}
+            />
         </Body>
     );
 };

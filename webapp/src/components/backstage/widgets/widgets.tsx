@@ -2,7 +2,8 @@ import React from 'react';
 
 import {Widget} from 'src/types/organization';
 
-import TextBoxWrapper from './text-box/text-box-wrapper';
+import TableWrapper from './table/table_wrapper';
+import TextBoxWrapper from './text_box/text_box_wrapper';
 
 export enum WidgetType {
     Table = 'table',
@@ -10,7 +11,6 @@ export enum WidgetType {
 }
 
 type Props = {
-    parentId: string;
     widgets: Widget[];
 };
 
@@ -18,16 +18,22 @@ const filterWidgetsByType = (widgets: Widget[], type: string) => {
     return widgets.filter((widget) => widget.type === type);
 };
 
-// const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
-const Widgets = ({parentId, widgets}: Props) => {
+const Widgets = ({widgets}: Props) => {
     const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
+    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
     return (
         <>
             {textBoxWidgets.map(({name, url}, index) => (
                 <TextBoxWrapper
                     key={`${name}-${index}`}
                     name={name}
-                    parentId={parentId}
+                    url={url}
+                />
+            ))}
+            {tableWidgets.map(({name, url}, index) => (
+                <TableWrapper
+                    key={`${name}-${index}`}
+                    name={name}
                     url={url}
                 />
             ))}

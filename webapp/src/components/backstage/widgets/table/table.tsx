@@ -17,9 +17,10 @@ type Props = {
     fullUrl?: string;
     id: string;
     isSection?: boolean;
-    pointer: boolean;
-    urlHash: string;
     open?: (resourceId: string) => void;
+    parentId: string;
+    pointer?: boolean;
+    urlHash: string;
 };
 
 const Table = ({
@@ -28,7 +29,8 @@ const Table = ({
     id,
     isSection = false,
     open,
-    pointer,
+    parentId,
+    pointer = false,
     urlHash,
 }: Props) => {
     const {caption, headers, rows} = data;
@@ -40,9 +42,10 @@ const Table = ({
         >
             <Header>
                 <AnchorLinkTitle
+                    id={tableId}
+                    query={`sectionId=${parentId}`}
                     text={caption}
                     title={caption}
-                    id={tableId}
                 />
             </Header>
             <InnertTable
@@ -59,6 +62,7 @@ const Table = ({
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
+                        query={`sectionId=${parentId}`}
                         row={row}
                         urlHash={urlHash}
                     />

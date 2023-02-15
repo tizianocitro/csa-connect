@@ -14,8 +14,9 @@ const SectionDetails = () => {
     const {hash: urlHash} = useLocation();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
+    const sectionIdParam = queryParams.sectionId as string;
 
-    const section = useSection(queryParams.sectionId as string);
+    const section = useSection(sectionIdParam);
     const sectionInfo = useSectionInfo(sectionId, section.url);
 
     useForceDocumentTitle(sectionInfo.name ? (sectionInfo.name) : 'Section');
@@ -32,21 +33,21 @@ const SectionDetails = () => {
     }, [urlHash]);
 
     useEffect(() => {
-        const elements = document.getElementsByClassName(`${SECTION_NAV_ITEM}`);
+        const elements = document.getElementsByClassName(SECTION_NAV_ITEM);
         let htmlElement: HTMLElement;
         for (let i = 0; i < elements.length; i++) {
             htmlElement = elements[i] as HTMLElement;
             if (htmlElement.innerText === section.name) {
-                htmlElement.classList.add(`${SECTION_NAV_ITEM_ACTIVE}`);
+                htmlElement.classList.add(SECTION_NAV_ITEM_ACTIVE);
                 break;
             }
         }
         return () => {
             if (htmlElement) {
-                htmlElement.classList.remove(`${SECTION_NAV_ITEM_ACTIVE}`);
+                htmlElement.classList.remove(SECTION_NAV_ITEM_ACTIVE);
             }
         };
-    }, [section]);
+    }, [sectionIdParam]);
 
     // Loading state
     if (!section) {
@@ -57,7 +58,6 @@ const SectionDetails = () => {
         <SectionsWidgetsContainer
             headerPath={`${getSiteUrl()}${url}?${SECTION_ID_PARAM}=${section.id}`}
             name={sectionInfo.name}
-            parentId={sectionId}
             sectionPath={path}
             sections={section.sections}
             url={url}
