@@ -15,9 +15,9 @@ func NewChannelService(api plugin.API, store ChannelStore) *ChannelService {
 	}
 }
 
-func (s *ChannelService) GetChannels(sectionID string) (GetChannelsResults, error) {
-	s.api.LogInfo("Getting channels", "sectionId", sectionID)
-	return s.store.GetChannels(sectionID)
+func (s *ChannelService) GetChannels(sectionID string, parentID string) (GetChannelsResults, error) {
+	s.api.LogInfo("Getting channels", "sectionId", sectionID, "parentId", parentID)
+	return s.store.GetChannels(sectionID, parentID)
 }
 
 func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error) {

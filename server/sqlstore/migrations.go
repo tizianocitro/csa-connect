@@ -54,7 +54,6 @@ var migrations = []Migration{
 						ChannelID TEXT PRIMARY KEY,
 						ParentID TEXT NOT NULL,
 						SectionID TEXT NOT NULL
-						
 					);
 				`); err != nil {
 					return errors.Wrapf(err, "failed creating table CSA_Channel")

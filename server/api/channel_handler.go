@@ -32,7 +32,8 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 func (h *ChannelHandler) getChannels(c *Context, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	sectionID := vars["sectionId"]
-	channels, err := h.channelService.GetChannels(sectionID)
+	parentID := r.URL.Query().Get("parent_id")
+	channels, err := h.channelService.GetChannels(sectionID, parentID)
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return

@@ -45,8 +45,8 @@ func NewChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ChannelS
 }
 
 // GetChannels retrieves all channels for a product given a set of filters
-func (s *channelStore) GetChannels(sectionID string) (app.GetChannelsResults, error) {
-	queryForResults := s.channelsSelect.Where(sq.Eq{"SectionID": sectionID})
+func (s *channelStore) GetChannels(sectionID string, parentID string) (app.GetChannelsResults, error) {
+	queryForResults := s.channelsSelect.Where(sq.Eq{"SectionID": sectionID}).Where(sq.Eq{"ParentID": parentID})
 	var channelsEntities []ChannelEntity
 	err := s.store.selectBuilder(s.store.db, &channelsEntities, queryForResults)
 	if err == sql.ErrNoRows {
@@ -113,7 +113,7 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 		TeamId:      params.TeamID,
 		Type:        s.getChannelType(params),
 		DisplayName: params.ChannelName,
-		Name:        strings.ToLower(params.ChannelName),
+		Name:        strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")),
 	})
 	if err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not create channel to add to the product")
