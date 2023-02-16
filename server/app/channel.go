@@ -6,13 +6,12 @@ type Channel struct {
 	SectionID string `json:"sectionId"`
 }
 
-// ProductChannelFilterOptions specifies the parameters when getting products.
 type ChannelFilterOptions struct {
 	Sort       SortField
 	Direction  SortDirection
 	SearchTerm string
 
-	// Pagination options.
+	// Pagination options
 	Page    int
 	PerPage int
 }
@@ -22,18 +21,16 @@ type GetChannelsResults struct {
 }
 
 type AddChannelParams struct {
-	ChannelID           string `json:"channel_id"`
-	ChannelMode         string `json:"channel_mode"`
-	ChannelNameTemplate string `json:"channel_name_template"`
-	CreatePublicChannel bool   `json:"create_public_channel"`
-	ParentID            string `json:"parent_id"`
-	SectionID           string `json:"section_id"`
-	TeamID              string `json:"team_id"`
+	ChannelID           string `json:"channelId"`
+	ChannelName         string `json:"channelName"`
+	CreatePublicChannel bool   `json:"createPublicChannel"`
+	ParentID            string `json:"parentId"`
+	SectionID           string `json:"sectionId"`
+	TeamID              string `json:"teamId"`
 }
 
 type AddChannelResult struct {
-	ChannelID      string `json:"channelId"`
-	OrganizationID string `json:"organizationId"`
-	SectionID      string `json:"sectionId"`
-	SectionName    string `json:"sectionName"`
+	ChannelID string `json:"channelId"`
+	ParentID  string `json:"parentId"`
+	SectionID string `json:"sectionId"`
 }

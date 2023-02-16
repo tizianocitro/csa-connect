@@ -1,0 +1,26 @@
+package app
+
+import "github.com/mattermost/mattermost-server/v6/plugin"
+
+type ChannelService struct {
+	api   plugin.API
+	store ChannelStore
+}
+
+// NewChannelService returns a new channels service
+func NewChannelService(api plugin.API, store ChannelStore) *ChannelService {
+	return &ChannelService{
+		api:   api,
+		store: store,
+	}
+}
+
+func (s *ChannelService) GetChannels(sectionID string) (GetChannelsResults, error) {
+	s.api.LogInfo("Getting channels", "sectionId", sectionID)
+	return s.store.GetChannels(sectionID)
+}
+
+func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error) {
+	s.api.LogInfo("Adding channel", "sectionId", sectionID, "params", params)
+	return s.store.AddChannel(sectionID, params)
+}

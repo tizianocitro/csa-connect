@@ -38,8 +38,8 @@ type Plugin struct {
 	// How the plugin URLs starts
 	pluginURLPathPrefix string
 
-	organzationService *app.OrganizationService
-	platformService    *config.PlatformService
+	channelService  *app.ChannelService
+	platformService *config.PlatformService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -61,9 +61,9 @@ func (p *Plugin) OnActivate() error {
 	if err != nil {
 		return errors.Wrapf(err, "failed creating the SQL store")
 	}
+	channelStore := sqlstore.NewChannelStore(apiClient, sqlStore)
 
-	p.handler = api.NewHandler(p.pluginAPI)
-	p.organzationService = app.NewOrganizationService()
+	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.platformService = config.NewPlatformService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
@@ -77,12 +77,11 @@ func (p *Plugin) OnActivate() error {
 	}
 	mutex.Unlock()
 
-	api.NewOrganizationHandler(
+	p.handler = api.NewHandler(p.pluginAPI)
+	api.NewChannelHandler(
 		p.handler.APIRouter,
-		p.organzationService,
-		p.pluginAPI,
+		p.channelService,
 	)
-
 	api.NewPlatformHandler(
 		p.handler.APIRouter,
 		p.platformService,
