@@ -50,11 +50,11 @@ export const CreateAChannel = ({
         }));
         setChangesMade?.(true);
     };
-    const handleChannelNameTemplateChange = (channelNameTemplate: string) => {
+    const handleChannelNameTemplateChange = (channelName: string) => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
-            channelNameTemplate,
+            channelName,
         }));
         setChangesMade?.(true);
     };
@@ -159,10 +159,10 @@ export const CreateAChannel = ({
                     </VerticalSplit>
                     <PatternedInput
                         enabled={!archived && channelCreation.channelMode === 'create_new_channel'}
-                        input={channelCreation.channelNameTemplate}
+                        input={channelCreation.channelName}
                         onChange={handleChannelNameTemplateChange}
                         pattern={'[\\S][\\s\\S]*[\\S]'} // at least two non-whitespace characters
-                        placeholderText={formatMessage({defaultMessage: 'Channel name template'})}
+                        placeholderText={formatMessage({defaultMessage: 'Channel name'})}
                         type={'text'}
                         errorText={formatMessage({defaultMessage: 'Channel name is not valid.'})}
                     />

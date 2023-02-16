@@ -7,7 +7,6 @@ import {Section} from 'src/components/backstage/widgets/channels/styles';
 import {useChannelsList} from 'src/hooks';
 import {setChannelCreation, setNameErrorMessage, setSelectErrorMessage} from 'src/reducer';
 import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
-import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
 import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
 import Header from 'src/components/common/header';
 
@@ -19,16 +18,9 @@ interface Props {
     teamId: string;
 }
 
-const defaultChannelsFetchParams = {
-    page: 0,
-    per_page: BACKSTAGE_LIST_PER_PAGE,
-    sort: 'name',
-    direction: 'desc',
-};
-
 const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const {formatMessage} = useIntl();
-    const [channels, totalCount, fetchParams, setFetchParams] = useChannelsList({...defaultChannelsFetchParams, section_id: sectionId, parent_id: parentId});
+    const [channels, totalCount] = useChannelsList({section_id: sectionId, parent_id: parentId});
 
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
     const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
@@ -37,7 +29,7 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
         teamId: '',
         channelId: '',
         channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
-        channelNameTemplate: '',
+        channelName: '',
         createPublicChannel: true,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, baseChannelCreation);
@@ -80,9 +72,6 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                 <ChannelsList
                     channels={channels}
                     totalCount={totalCount}
-                    fetchParams={fetchParams}
-                    setFetchParams={setFetchParams}
-                    filterPill={null}
                 />
             </ChannelListContainer>
         </>

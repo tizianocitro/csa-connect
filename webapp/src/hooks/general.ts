@@ -32,8 +32,7 @@ import {TableData} from 'src/components/backstage/widgets/table/table';
 import {getOrganizations} from 'src/config/config';
 import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
 
-type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
-type FetchParamsWithSectionId = FetchParams & {section_id?: string};
+type FetchParams = FetchOrganizationsParams;
 
 export enum ReservedCategory {
     Ecosystem = 'Ecosystem',
@@ -203,20 +202,15 @@ export const useTableData = (url: string): TableData => {
     return tableData as TableData;
 };
 
-export const useChannelsList = (defaultFetchParams: FetchChannelsParams, routed = true):
-[WidgetChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] => {
+export const useChannelsList = (defaultFetchParams: FetchChannelsParams): [WidgetChannel[], number] => {
     const [channels, setChannels] = useState<WidgetChannel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
-    const history = useHistory();
-    const location = useLocation();
-    const currentTeamId = useSelector(getCurrentTeamId);
-    const [fetchParams, setFetchParams] = useState(combineQueryParameters(defaultFetchParams, location.search));
 
     // Fetch the queried runs
     useEffect(() => {
         let isCanceled = false;
         async function fetchChannelsAsync() {
-            const channelsReturn = await fetchChannels({...fetchParams, team_id: currentTeamId});
+            const channelsReturn = await fetchChannels(defaultFetchParams);
             if (!isCanceled) {
                 setChannels(channelsReturn.items);
                 setTotalCount(channelsReturn.items.length);
@@ -228,17 +222,15 @@ export const useChannelsList = (defaultFetchParams: FetchChannelsParams, routed 
         return () => {
             isCanceled = true;
         };
-    }, [fetchParams, currentTeamId]);
+    }, []);
 
-    useUpdateFetchParams(routed, fetchParams, history, location);
-
-    return [channels, totalCount, fetchParams, setFetchParams];
+    return [channels, totalCount];
 };
 
 // Update the query string when the fetchParams change
 const useUpdateFetchParams = (
     routed: boolean,
-    fetchParams: FetchParamsWithSectionId,
+    fetchParams: FetchParams,
     history: any,
     location: any,
 ) => {

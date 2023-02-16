@@ -55,20 +55,20 @@ export const fetchChannels = async (params: FetchChannelsParams) => {
 };
 
 export const addChannel = async ({
-    channel_id,
-    channel_name,
-    create_public_channel,
-    parent_id,
-    section_id,
-    team_id,
+    channelId,
+    channelName,
+    createPublicChannel,
+    parentId,
+    sectionId,
+    teamId,
 }: AddChannelParams) => {
-    const data = await doPatch(`${apiUrl}/channels/${section_id}`, JSON.stringify({
-        channel_id,
-        channel_name,
-        create_public_channel,
-        parent_id,
-        section_id,
-        team_id,
+    const data = await doPost(`${apiUrl}/channels/${sectionId}`, JSON.stringify({
+        channelId,
+        channelName,
+        createPublicChannel,
+        parentId,
+        sectionId,
+        teamId,
     }));
     return data as AddChannelResult;
 };

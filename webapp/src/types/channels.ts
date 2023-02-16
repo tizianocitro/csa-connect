@@ -1,18 +1,12 @@
 export interface WidgetChannel {
     channelId: string;
+    parentId: string;
     sectionId: string;
 }
 
 export interface FetchChannelsParams {
-    channel_id?: string;
-    direction?: string;
-    page: number;
-    parent_id?: string;
-    per_page: number;
-    search_term?: string;
-    section_id?: string;
-    sort?: string;
-    team_id?: string;
+    parent_id: string;
+    section_id: string;
 }
 
 export interface FetchChannelsReturn {
@@ -22,21 +16,22 @@ export interface FetchChannelsReturn {
 export interface ChannelCreation {
     channelId: string;
     channelMode: string;
-    channelNameTemplate: string;
+    channelName: string;
     createPublicChannel: boolean;
     teamId: string;
 }
 
 export interface AddChannelParams {
-    channel_id?: string;
-    channel_name?: string;
-    create_public_channel?: boolean;
-    section_id: string;
-    parent_id: string;
-    team_id: string;
+    channelId?: string;
+    channelName?: string;
+    createPublicChannel?: boolean;
+    sectionId: string;
+    parentId: string;
+    teamId: string;
 }
 
 export interface AddChannelResult {
-    channel_id?: string;
-    section_id?: string;
+    channelId: string;
+    parentId: string,
+    section_Id: string;
 }

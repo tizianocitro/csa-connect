@@ -10,65 +10,34 @@ import {FormattedMessage} from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import LoadingSpinner from 'src/components/assets/loading_spinner';
-import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
+import {WidgetChannel} from 'src/types/channels';
 
-import ChannelsListHeader from './channels_list_header';
-import Filters from './filters';
 import Row from './row';
 
 interface Props {
     channels: WidgetChannel[];
     totalCount: number;
-    fetchParams: FetchChannelsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchChannelsParams>>;
-    filterPill: React.ReactNode | null;
 }
 
-const ChannelsList = ({
-    channels,
-    totalCount,
-    fetchParams,
-    setFetchParams,
-    filterPill,
-}: Props) => {
-    const isFiltering = (
-        (fetchParams?.search_term?.length ?? 0) > 0
-    );
-
-    const nextPage = () => {
-        setFetchParams((oldParam: FetchChannelsParams) => ({...oldParam, page: oldParam.page + 1}));
-    };
+const ChannelsList = ({channels, totalCount}: Props) => {
+    const nextPage = () => null;
 
     return (
         <ChannelList
             id='channelsList'
             className='channelsList'
         >
-            <Filters
-                fetchParams={fetchParams}
-                setFetchParams={setFetchParams}
-            />
-            {filterPill}
-            <ChannelsListHeader
-                fetchParams={fetchParams}
-                setFetchParams={setFetchParams}
-            />
             {channels === null &&
                 <div className='text-center pt-8'>
-                    <FormattedMessage defaultMessage='There are no channels for this product.'/>
-                </div>
-            }
-            {channels?.length === 0 && isFiltering &&
-                <div className='text-center pt-8'>
-                    <FormattedMessage defaultMessage='There are no channels matching those filters.'/>
+                    <FormattedMessage defaultMessage='Channels have not been added yet.'/>
                 </div>
             }
             <InfiniteScroll
                 dataLength={channels?.length}
                 next={nextPage}
-                hasMore={channels?.length < totalCount}
+                hasMore={false}
                 loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
-                scrollableTarget={'product-channels-backstageRoot'}
+                scrollableTarget={'channels-backstageRoot'}
             >
                 {channels?.map((channel) => (
                     <Row

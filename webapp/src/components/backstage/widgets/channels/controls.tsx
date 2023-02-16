@@ -29,24 +29,24 @@ const createChannel = (
         return;
     }
 
-    const {channelMode, channelId, channelNameTemplate, createPublicChannel} = channelCreation;
+    const {channelMode, channelId, channelName, createPublicChannel} = channelCreation;
     const createNewChannel = channelMode === 'create_new_channel';
     const linkExistingChannel = channelMode === 'link_existing_channel';
     if (linkExistingChannel && channelId === '') {
         dispatchSelectErrorMessage(selectErrorMessageAction('A channel has to be selected.'));
         return;
     }
-    if (createNewChannel && channelNameTemplate === '') {
+    if (createNewChannel && channelName === '') {
         dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
         return;
     }
     addChannel({
-        channel_id: linkExistingChannel ? channelId : undefined,
-        channel_name: createNewChannel ? channelNameTemplate : undefined,
-        create_public_channel: createNewChannel ? createPublicChannel : false,
-        parent_id: parentId,
-        section_id: sectionId,
-        team_id: teamId,
+        channelId: linkExistingChannel ? channelId : undefined,
+        channelName: createNewChannel ? channelName : undefined,
+        createPublicChannel: createNewChannel ? createPublicChannel : false,
+        parentId,
+        sectionId,
+        teamId,
     }).
         then(() => {
             // redirect to channel
