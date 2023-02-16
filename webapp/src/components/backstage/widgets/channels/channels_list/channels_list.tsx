@@ -1,10 +1,5 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {FormattedMessage} from 'react-intl';
 
 import InfiniteScroll from 'react-infinite-scroll-component';

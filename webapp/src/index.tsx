@@ -1,6 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
 import {render} from 'react-dom';
 import {Store} from 'redux';
@@ -34,7 +31,6 @@ const GlobalHeaderRight = () => {
     return null;
 };
 
-// From mattermost-webapp/utils
 const getSiteURLFromWindowObject = (obj: WindowObject): string => {
     let siteURL = '';
     if (obj.location.origin) {

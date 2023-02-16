@@ -4,18 +4,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const RHSContainer = styled.div`
-    height: calc(100vh - 119px);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-`;
-
-export const RHSContent = styled.div`
-    flex: 1 1 auto;
-    position: relative;
-`;
-
 export function renderView(props: any): JSX.Element {
     return (
         <div
@@ -48,6 +36,18 @@ export function renderTrackHorizontal(props: any): JSX.Element {
             className='track-horizontal'
         />);
 }
+
+export const RHSContainer = styled.div`
+    height: calc(100vh - 119px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+`;
+
+export const RHSContent = styled.div`
+    flex: 1 1 auto;
+    position: relative;
+`;
 
 export const HoverMenu = styled.div`
     display: flex;
