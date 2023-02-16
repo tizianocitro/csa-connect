@@ -197,6 +197,7 @@ export const InfoLine = styled.div`
     line-height: 16px;
     color: rgba(var(--center-channel-color-rgb), 0.56);
 `;
+
 export const FilterButton = styled.button<{active?: boolean;}>`
     display: flex;
     align-items: center;
@@ -234,10 +235,4 @@ export const FilterButton = styled.button<{active?: boolean;}>`
         color: var(--button-bg);
     `}
 `;
-export const HorizontalSpacer = styled.div<{ size: number }>`
-    margin-left: ${(props) => props.size}px;
-`;
 
-export const VerticalSpacer = styled.div<{ size: number }>`
-    margin-top: ${(props) => props.size}px;
-`;

@@ -11,10 +11,9 @@ import Row from './row';
 
 interface Props {
     channels: WidgetChannel[];
-    totalCount: number;
 }
 
-const ChannelsList = ({channels, totalCount}: Props) => {
+const ChannelsList = ({channels}: Props) => {
     const nextPage = () => null;
 
     return (
@@ -41,14 +40,6 @@ const ChannelsList = ({channels, totalCount}: Props) => {
                     />
                 ))}
             </InfiniteScroll>
-            <Footer>
-                <Count>
-                    <FormattedMessage
-                        defaultMessage='{total, number} total'
-                        values={{total: totalCount}}
-                    />
-                </Count>
-            </Footer>
         </ChannelList>
     );
 };
@@ -56,18 +47,6 @@ const ChannelsList = ({channels, totalCount}: Props) => {
 const ChannelList = styled.div`
     font-family: 'Open Sans', sans-serif;
     color: rgba(var(--center-channel-color-rgb), 0.90);
-`;
-
-const Footer = styled.div`
-    margin: 10px 0 20px;
-    font-size: 14px;
-`;
-
-const Count = styled.div`
-    padding-top: 8px;
-    width: 100%;
-    text-align: center;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
 `;
 
 const SpinnerContainer = styled.div`

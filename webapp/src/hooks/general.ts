@@ -202,18 +202,15 @@ export const useTableData = (url: string): TableData => {
     return tableData as TableData;
 };
 
-export const useChannelsList = (defaultFetchParams: FetchChannelsParams): [WidgetChannel[], number] => {
+export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {
     const [channels, setChannels] = useState<WidgetChannel[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
 
-    // Fetch the queried runs
     useEffect(() => {
         let isCanceled = false;
         async function fetchChannelsAsync() {
             const channelsReturn = await fetchChannels(defaultFetchParams);
             if (!isCanceled) {
                 setChannels(channelsReturn.items);
-                setTotalCount(channelsReturn.items.length);
             }
         }
 
@@ -224,7 +221,7 @@ export const useChannelsList = (defaultFetchParams: FetchChannelsParams): [Widge
         };
     }, []);
 
-    return [channels, totalCount];
+    return channels;
 };
 
 // Update the query string when the fetchParams change

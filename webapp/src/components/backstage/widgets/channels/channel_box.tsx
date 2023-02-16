@@ -5,8 +5,13 @@ import {useIntl} from 'react-intl';
 import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
 import {useChannelsList} from 'src/hooks';
-import {setChannelCreation, setNameErrorMessage, setSelectErrorMessage} from 'src/reducer';
-import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
+import {
+    setAddChannelErrorMessage,
+    setChannelCreation,
+    setNameErrorMessage,
+    setSelectErrorMessage,
+} from 'src/reducer';
+import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
 import Header from 'src/components/common/header';
 
@@ -20,8 +25,9 @@ interface Props {
 
 const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const {formatMessage} = useIntl();
-    const [channels, totalCount] = useChannelsList({section_id: sectionId, parent_id: parentId});
+    const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
 
+    const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
     const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
@@ -35,9 +41,11 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, baseChannelCreation);
 
     const cleanErrorMessages = () => {
+        dispacthAddChannelErrorMessage(addChannelErrorMessageAction(''));
         dispatchSelectErrorMessage(selectErrorMessageAction(''));
         dispatchNameErrorMessage(nameErrorMessageAction(''));
     };
+
     return (
         <>
             <StyledSection>
@@ -55,6 +63,8 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                     parentId={parentId}
                     sectionId={sectionId}
                     teamId={teamId}
+                    addChannelErrorMessage={addChannelErrorMessage}
+                    dispacthAddChannelErrorMessage={dispacthAddChannelErrorMessage}
                     dispatchSelectErrorMessage={dispatchSelectErrorMessage}
                     dispatchNameErrorMessage={dispatchNameErrorMessage}
                 />
@@ -69,10 +79,7 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                         border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                     `}
                 />
-                <ChannelsList
-                    channels={channels}
-                    totalCount={totalCount}
-                />
+                <ChannelsList channels={channels}/>
             </ChannelListContainer>
         </>
     );

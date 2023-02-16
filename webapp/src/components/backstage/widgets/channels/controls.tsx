@@ -2,19 +2,29 @@
 import React, {Dispatch} from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
+import {Team} from 'mattermost-webapp/packages/types/src/teams';
 
 import {PrimaryButton} from 'src/components/assets/buttons';
 import {addChannel} from 'src/clients';
-import {nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
-import {ChannelCreation} from 'src/types/channels';
+import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
+import {AddChannelResult, ChannelCreation} from 'src/types/channels';
+import {navigateToUrl} from 'src/browser_routing';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
+import {ErrorMessage} from 'src/components/messages';
 
 type AddChannelProps = {
-    channelCreation: ChannelCreation,
+    channelCreation: ChannelCreation;
     parentId: string;
     sectionId: string;
-    teamId: string,
-    dispatchSelectErrorMessage: Dispatch<any>,
-    dispatchNameErrorMessage: Dispatch<any>,
+    teamId: string;
+    addChannelErrorMessage: string;
+    dispacthAddChannelErrorMessage: Dispatch<any>;
+    dispatchNameErrorMessage: Dispatch<any>;
+    dispatchSelectErrorMessage: Dispatch<any>;
 };
 
 const createChannel = (
@@ -22,8 +32,10 @@ const createChannel = (
     parentId: string,
     sectionId: string,
     teamId: string,
-    dispatchSelectErrorMessage: Dispatch<any>,
+    teamName: string,
+    dispacthAddChannelErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
+    dispatchSelectErrorMessage: Dispatch<any>,
 ) => {
     if (!channelCreation) {
         return;
@@ -48,39 +60,55 @@ const createChannel = (
         sectionId,
         teamId,
     }).
-        then(() => {
-            // redirect to channel
+        then((result: AddChannelResult) => {
+            navigateToUrl(`/${teamName}/channels/${result.channelId}?${SECTION_ID_PARAM}=${result.sectionId}&${PARENT_ID_PARAM}=${result.parentId}&from=channel_list`);
         }).
         catch(() => {
-            // show error
+            dispacthAddChannelErrorMessage(addChannelErrorMessageAction('Please ensure the channel has not been added to other sections.'));
         });
 };
+
+const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
 
 export const CreateChannel = ({
     channelCreation,
     parentId,
     sectionId,
     teamId,
-    dispatchSelectErrorMessage,
+    addChannelErrorMessage,
+    dispacthAddChannelErrorMessage,
     dispatchNameErrorMessage,
+    dispatchSelectErrorMessage,
 }: AddChannelProps) => {
     const {formatMessage} = useIntl();
+    let team = useSelector(teamNameSelector(teamId));
+    if (!teamId) {
+        team = {...team, display_name: 'All Teams', description: 'No team is selected'};
+    }
     const title = formatMessage({defaultMessage: 'Add Channel'});
     return (
-        <PrimaryButtonLarger
-            onClick={() => createChannel(
-                channelCreation,
-                parentId,
-                sectionId,
-                teamId,
-                dispatchSelectErrorMessage,
-                dispatchNameErrorMessage,
-            )}
-            title={title}
-            data-testid='create-channel-button'
-        >
-            <FormattedMessage defaultMessage='Add Channel'/>
-        </PrimaryButtonLarger>
+        <HorizontalSplit>
+            <PrimaryButtonLarger
+                onClick={() => createChannel(
+                    channelCreation,
+                    parentId,
+                    sectionId,
+                    teamId,
+                    team.name,
+                    dispacthAddChannelErrorMessage,
+                    dispatchNameErrorMessage,
+                    dispatchSelectErrorMessage,
+                )}
+                title={title}
+                data-testid='create-channel-button'
+            >
+                <FormattedMessage defaultMessage='Add Channel'/>
+            </PrimaryButtonLarger>
+            <HorizontalSpacer size={1}/>
+            <ErrorMessage display={addChannelErrorMessage !== ''}>
+                {addChannelErrorMessage}
+            </ErrorMessage>
+        </HorizontalSplit>
     );
 };
 

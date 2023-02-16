@@ -26,20 +26,23 @@ const Row = (props: Props) => {
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};
     }
 
-    function openChannel(channelToOpenId: string, channelToOpenParentId: string, channelToOpenSectionId: string) {
+    const openChannel = (channelToOpenId: string, channelToOpenParentId: string, channelToOpenSectionId: string) => {
         navigateToUrl(`/${team.name}/channels/${channelToOpenId}?${SECTION_ID_PARAM}=${channelToOpenSectionId}&${PARENT_ID_PARAM}=${channelToOpenParentId}&from=channel_list`);
-    }
-
+    };
     return (
-        <ChannelItem
-            className='row'
-            key={props.channel.channelId}
-            onClick={() => openChannel(channel.name, props.channel.parentId, props.channel.sectionId)}
-        >
-            <div className='col-sm-4'>
-                <ChannelName>{channel.display_name}</ChannelName>
-            </div>
-        </ChannelItem>
+        <>
+            {channel &&
+                <ChannelItem
+                    className='row'
+                    key={props.channel.channelId}
+                    onClick={() => openChannel(channel.name, props.channel.parentId, props.channel.sectionId)}
+                >
+                    <div className='col-sm-4'>
+                        <ChannelName>{channel.display_name}</ChannelName>
+                    </div>
+                </ChannelItem>
+            }
+        </>
     );
 };
 

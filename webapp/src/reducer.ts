@@ -2,8 +2,10 @@ import {CombinedState, Reducer, combineReducers} from 'redux';
 
 import {
     CHANNEL_CREATION,
+    SET_ADD_CHANNEL_ERROR_MESSAGE,
     SET_NAME_ERROR_MESSAGE,
     SET_SELECT_ERROR_MESSAGE,
+    SetAddChannelErrorMessageAction,
     SetChannelCreationAction,
     SetNameErrorMessageAction,
     SetSelectErrorMessageAction,
@@ -18,6 +20,15 @@ export const setChannelCreation = (state: ChannelCreation, {type, channelCreatio
     switch (type) {
     case CHANNEL_CREATION:
         return channelCreation;
+    default:
+        return state;
+    }
+};
+
+export const setAddChannelErrorMessage = (state = '', {type, addChannelErrorMessage}: SetAddChannelErrorMessageAction) => {
+    switch (type) {
+    case SET_ADD_CHANNEL_ERROR_MESSAGE:
+        return addChannelErrorMessage;
     default:
         return state;
     }

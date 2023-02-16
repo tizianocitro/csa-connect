@@ -33,5 +33,5 @@ export interface AddChannelParams {
 export interface AddChannelResult {
     channelId: string;
     parentId: string,
-    section_Id: string;
+    sectionId: string;
 }

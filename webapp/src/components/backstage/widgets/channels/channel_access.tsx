@@ -14,7 +14,9 @@ import {
     AutomationTitle,
     SelectorWrapper,
 } from 'src/components/backstage/widgets/channels/styles';
-import {HorizontalSpacer, RadioInput} from 'src/components/backstage/styles';
+import {RadioInput} from 'src/components/backstage/styles';
+import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
+import {ErrorMessage} from 'src/components/messages';
 import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/backstage/widgets/channels/clear_indicator';
 import MenuList from 'src/components/backstage/widgets/channels/menu_list';
@@ -181,15 +183,6 @@ const Container = styled.div`
     gap: 16px;
 `;
 
-export const VerticalSplit = styled.div`
-    display: flex;
-`;
-
-const HorizontalSplit = styled.div`
-    display: block;
-    text-align: left;
-`;
-
 export const ButtonLabel = styled.label<{disabled: boolean}>`
     padding: 10px 16px;
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
@@ -238,10 +231,4 @@ export const ChannelModeRadio = styled(RadioInput)`
     && {
         margin: 0 8px;
     }
-`;
-
-const ErrorMessage = styled.div<{display?: boolean}>`
-    color: var(--error-text);
-    margin-left: auto;
-    display: ${(props) => (props.display ? 'inline-block' : 'none')};
 `;
