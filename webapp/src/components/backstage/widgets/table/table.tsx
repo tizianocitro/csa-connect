@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {AnchorLinkTitle} from 'src/components/backstage/organizations/shared';
+import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
 
 import TableHeader, {TableHeaderData} from './table_header';
 import TableRow, {TableRowData} from './table_row';
@@ -16,31 +16,40 @@ type Props = {
     data: TableData;
     fullUrl?: string;
     id: string;
-    pointer: boolean;
-    urlHash: string;
+    isSection?: boolean;
     open?: (resourceId: string) => void;
+    parentId: string;
+    pointer?: boolean;
+    urlHash: string;
 };
 
-// <TableRow
-//    key={product.id}
-//    product={product}
-//    urlHash={urlHash}
-// />
-const Table = ({data, fullUrl, id, open, pointer, urlHash}: Props) => {
+const Table = ({
+    data,
+    fullUrl,
+    id,
+    isSection = false,
+    open,
+    parentId,
+    pointer = false,
+    urlHash,
+}: Props) => {
     const {caption, headers, rows} = data;
+    const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
     return (
         <Container
-            id={id}
-            data-testid={'table-widget'}
+            id={tableId}
+            data-testid={tableId}
         >
             <Header>
                 <AnchorLinkTitle
+                    id={tableId}
+                    query={`sectionId=${parentId}`}
+                    text={caption}
                     title={caption}
-                    id={id}
                 />
             </Header>
             <InnertTable
-                id='innerTable'
+                id={`${tableId}-inner-table`}
                 className='innerTable'
             >
                 <TableHeader
@@ -53,6 +62,7 @@ const Table = ({data, fullUrl, id, open, pointer, urlHash}: Props) => {
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
+                        query={`sectionId=${parentId}`}
                         row={row}
                         urlHash={urlHash}
                     />

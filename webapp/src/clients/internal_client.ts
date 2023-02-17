@@ -12,6 +12,7 @@ import {
     FetchChannelsParams,
     FetchChannelsReturn,
 } from 'src/types/channels';
+import {PlatformConfig} from 'src/types/organization';
 
 let siteURL = '';
 let basePath = '';
@@ -37,47 +38,40 @@ export const getApiUrl = (): string => {
     return apiUrl;
 };
 
-/* data = {
-    items: [
-        {
-            id: 'demo',
-            name: 'Demo',
-        },
-        {
-            id: 'my-first-product-channel',
-            name: 'My First Product Channel',
-        },
-    ],
-    totalCount: 2,
-    hasMore: false,
-    pageCount: 0,
-}; */
-export async function fetchProductChannels(params: FetchChannelsParams) {
+export const loadPlatformConfig = async (path: string, setConfig: (config: PlatformConfig) => void) => {
+    doGet(`${apiUrl}${path}`).
+        then((config) => setConfig(config)).
+        catch(() => setConfig({organizations: []}));
+};
+
+export const fetchChannels = async (params: FetchChannelsParams) => {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
 
-    let data = await doGet(`${apiUrl}/products/${params.product_id}/get_channels${queryParams}`);
+    let data = await doGet(`${apiUrl}/channels/${params.section_id}${queryParams}`);
     if (!data) {
-        data = {items: [], totalCount: 0, pageCount: 0, hasMore: false} as FetchChannelsReturn;
+        data = {items: []} as FetchChannelsReturn;
     }
     return data as FetchChannelsReturn;
-}
+};
 
-export async function addChannelToProduct({
-    product_id,
-    team_id,
-    channel_id,
-    channel_name,
-    create_public_channel,
-}: AddChannelParams) {
-    const data = await doPatch(`${apiUrl}/products/${product_id}/add_channel`, JSON.stringify({
-        team_id,
-        channel_name,
-        product_id,
-        channel_id,
-        create_public_channel,
+export const addChannel = async ({
+    channelId,
+    channelName,
+    createPublicChannel,
+    parentId,
+    sectionId,
+    teamId,
+}: AddChannelParams) => {
+    const data = await doPost(`${apiUrl}/channels/${sectionId}`, JSON.stringify({
+        channelId,
+        channelName,
+        createPublicChannel,
+        parentId,
+        sectionId,
+        teamId,
     }));
     return data as AddChannelResult;
-}
+};
 
 const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});

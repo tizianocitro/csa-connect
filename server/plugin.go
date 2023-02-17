@@ -15,6 +15,7 @@ import (
 	"github.com/tizianocitro/csa-connect/server/api"
 	"github.com/tizianocitro/csa-connect/server/app"
 	"github.com/tizianocitro/csa-connect/server/command"
+	"github.com/tizianocitro/csa-connect/server/config"
 	"github.com/tizianocitro/csa-connect/server/sqlstore"
 )
 
@@ -27,6 +28,8 @@ type Plugin struct {
 
 	handler *api.Handler
 
+	plaformConfig *config.PlatformConfig
+
 	pluginAPI *pluginapi.Client
 
 	// Plugin's id read from the manifest file
@@ -35,7 +38,8 @@ type Plugin struct {
 	// How the plugin URLs starts
 	pluginURLPathPrefix string
 
-	organzationService *app.OrganizationService
+	channelService  *app.ChannelService
+	platformService *config.PlatformService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -57,9 +61,10 @@ func (p *Plugin) OnActivate() error {
 	if err != nil {
 		return errors.Wrapf(err, "failed creating the SQL store")
 	}
+	channelStore := sqlstore.NewChannelStore(apiClient, sqlStore)
 
-	p.handler = api.NewHandler(p.pluginAPI)
-	p.organzationService = app.NewOrganizationService(p.pluginAPI)
+	p.channelService = app.NewChannelService(p.API, channelStore)
+	p.platformService = config.NewPlatformService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
@@ -72,10 +77,14 @@ func (p *Plugin) OnActivate() error {
 	}
 	mutex.Unlock()
 
-	api.NewOrganizationHandler(
+	p.handler = api.NewHandler(p.pluginAPI)
+	api.NewChannelHandler(
 		p.handler.APIRouter,
-		p.organzationService,
-		p.pluginAPI,
+		p.channelService,
+	)
+	api.NewPlatformHandler(
+		p.handler.APIRouter,
+		p.platformService,
 	)
 
 	if err := p.registerCommands(); err != nil {

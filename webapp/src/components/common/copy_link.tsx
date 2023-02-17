@@ -9,9 +9,11 @@ import {copyToClipboard} from 'src/utils';
 
 import {OVERLAY_DELAY} from 'src/constants';
 import Tooltip from 'src/components/common/tooltip';
+import {formatUrlAsMarkdown} from 'src/components/backstage/header/controls';
 
 type Props = {
     id: string;
+    text: string;
     to: string;
     iconWidth?: string;
     iconHeight?: string;
@@ -27,6 +29,7 @@ type Attrs = HTMLAttributes<HTMLElement>;
 
 const CopyLink = ({
     id,
+    text,
     to,
     name,
     tooltipMessage,
@@ -39,7 +42,7 @@ const CopyLink = ({
 
     const copyLink = (e: React.MouseEvent) => {
         e.stopPropagation();
-        copyToClipboard(to);
+        copyToClipboard(formatUrlAsMarkdown(to, text));
         setWasCopied(true);
     };
 

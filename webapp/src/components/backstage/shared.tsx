@@ -39,3 +39,44 @@ export const StyledDropdownMenuItemRed = styled(StyledDropdownMenuItem)`
         }
     }
 `;
+
+export const RowContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const Container = styled.div`
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(400px, 2fr) minmax(400px, 1fr);
+    overflow-y: hidden;
+
+    @media screen and (min-width: 1600px) {
+        grid-auto-columns: 2.5fr 500px;
+    }
+`;
+
+export const MainWrapper = styled.div`
+    display: grid;
+    grid-template-rows: 56px 1fr;
+    grid-auto-flow: row;
+    overflow-y: hidden;
+    grid-auto-columns: minmax(0, 1fr);
+`;
+
+export const Main = styled.main`
+    min-height: 0;
+    padding: 0 20px 60px;
+    display: grid;
+    overflow-y: auto;
+    place-content: start center;
+    grid-auto-columns: min(780px, 100%);
+`;
+
+export const Body = styled(RowContainer)``;
+
+export const Header = styled.header`
+    height: 56px;
+    min-height: 56px;
+    background-color: var(--center-channel-bg);
+`;

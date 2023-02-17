@@ -116,6 +116,9 @@ endif
 ifneq ($(HAS_PUBLIC),)
 	cp -r public dist/$(PLUGIN_ID)/
 endif
+ifneq ($(HAS_CONFIG),)
+	cp -r config dist/$(PLUGIN_ID)/
+endif
 ifneq ($(HAS_SERVER),)
 	mkdir -p dist/$(PLUGIN_ID)/server
 	cp -r server/dist dist/$(PLUGIN_ID)/server/

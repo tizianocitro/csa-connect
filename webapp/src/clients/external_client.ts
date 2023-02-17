@@ -2,11 +2,29 @@ import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
 import {TableData} from 'src/components/backstage/widgets/table/table';
+import {SectionInfo} from 'src/types/organization';
+import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
+
+export async function fetchSectionInfo(id: string, url: string) {
+    let data = await doGet(`${url}/${id}`);
+    if (!data) {
+        data = {description: '', id: '', name: ''} as SectionInfo;
+    }
+    return data as SectionInfo;
+}
 
 export async function fetchTableData(url: string) {
     let data = await doGet(url);
     if (!data) {
         data = {caption: '', headers: [], rows: []} as TableData;
+    }
+    return data as TableData;
+}
+
+export async function fetchTextBoxData(url: string) {
+    let data = await doGet(url);
+    if (!data) {
+        data = {text: ''} as TextBoxData;
     }
     return data as TableData;
 }

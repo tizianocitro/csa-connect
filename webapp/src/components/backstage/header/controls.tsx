@@ -4,41 +4,30 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {LinkVariantIcon, StarIcon, StarOutlineIcon} from '@mattermost/compass-icons/components';
+import {LinkVariantIcon} from '@mattermost/compass-icons/components';
 
-import {getSiteUrl} from 'src/clients';
 import {copyToClipboard} from 'src/utils';
 import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {SecondaryButton} from 'src/components/assets/buttons';
-import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 
-export const FavoriteOrganizationMenuItem = (props: {isFavorite: boolean, toggleFavorite: () => void}) => {
-    return (
-        <StyledDropdownMenuItem onClick={props.toggleFavorite}>
-            {props.isFavorite ? (
-                <>
-                    <StarOutlineIcon size={18}/>
-                    <FormattedMessage defaultMessage='Unfavorite'/>
-                </>
-            ) : (
-                <>
-                    <StarIcon size={18}/>
-                    <FormattedMessage defaultMessage='Favorite'/>
-                </>
-            )}
-        </StyledDropdownMenuItem>
-    );
+type Props = {
+    path: string;
+    text: string;
 };
 
-export const CopyOrganizationLinkMenuItem = (props: {organizationId: string}) => {
+export const formatUrlAsMarkdown = (path: string, text: string) => {
+    return `[${text}](${path})`;
+};
+
+export const CopyLinkMenuItem = ({path, text}: Props) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
 
     return (
         <StyledDropdownMenuItem
             onClick={() => {
-                copyToClipboard(getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + props.organizationId);
+                copyToClipboard(formatUrlAsMarkdown(path, text));
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >

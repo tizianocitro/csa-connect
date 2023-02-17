@@ -48,15 +48,15 @@ const RHSView = () => {
     const organization = maybeOrganization as Organization;
     const {hash: urlHash} = useLocation();
 
-    const channelID = useSelector(getCurrentChannelId);
+    const channelId = useSelector(getCurrentChannelId);
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
-    const channel = useSelector(channelNameSelector(channelID));
+    const channel = useSelector(channelNameSelector(channelId));
     const fullUrl = `${team.name}/channels/${channel.name}`;
 
     useEffect(() => {
         resetStatus();
-    }, [channelID]);
+    }, [channelId]);
 
     useEffect(() => {
         (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).addEventListener('click', updateStatus);

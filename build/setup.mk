@@ -31,6 +31,9 @@ HAS_WEBAPP ?= $(shell build/bin/manifest has_webapp)
 # Determine if a /public folder is in use
 HAS_PUBLIC ?= $(wildcard public/.)
 
+# Determine if a /config folder is in use
+HAS_CONFIG ?= $(wildcard config/.)
+
 # Determine if the mattermost-utilities repo is present
 HAS_MM_UTILITIES ?= $(wildcard $(MM_UTILITIES_DIR)/.)
 

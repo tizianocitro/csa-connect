@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useIntl} from 'react-intl';
 
-import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs_product_dot_menu';
+import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs/lhs_organization_dot_menu';
 
 import {pluginUrl} from 'src/browser_routing';
 import {
@@ -14,14 +14,13 @@ import {
     useReservedCategoryTitleMapper,
 } from 'src/hooks';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
-import {Organization} from 'src/types/organization';
 
 import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
 
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
-    const ecosystem = useEcosystem() as Organization;
+    const ecosystem = useEcosystem();
     const organizations = useOrganizationsNoPageList();
     if (!organizations || !ecosystem) {
         return {groups: [], ready: false};
@@ -41,6 +40,7 @@ const useLHSData = () => {
             itemMenu: (
                 <LHSOrganizationDotMenu
                     organizationId={o.id}
+                    organizationName={o.name}
                 />),
             className: '',
         };

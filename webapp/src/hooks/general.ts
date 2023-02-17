@@ -13,22 +13,31 @@ import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
-import {fetchProductChannels, fetchTableData} from 'src/clients';
-import {ChannelProduct, FetchProductsParams, Product} from 'src/types/product';
+import {
+    fetchChannels,
+    fetchSectionInfo,
+    fetchTableData,
+    fetchTextBoxData,
+} from 'src/clients';
 import {resolve} from 'src/utils';
-import {FetchChannelsParams, ProductChannel} from 'src/types/channels';
-import {FetchOrganizationsParams, Organization} from 'src/types/organization';
+import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
+import {
+    FetchOrganizationsParams,
+    Organization,
+    Section,
+    SectionInfo,
+} from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/components/backstage/widgets/table/table';
+import {getOrganizations} from 'src/config/config';
+import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
 
-type FetchParams = FetchOrganizationsParams | FetchChannelsParams;
+type FetchParams = FetchOrganizationsParams;
 
 export enum ReservedCategory {
     Ecosystem = 'Ecosystem',
     Organizations = 'Organizations',
 }
-
-const data = require('../data/data.json');
 
 export const useReservedCategoryTitleMapper = () => {
     const {formatMessage} = useIntl();
@@ -44,27 +53,16 @@ export const useReservedCategoryTitleMapper = () => {
     };
 };
 
-export function useEcosystem(): Organization | {} {
-    return data.organizations.filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
-}
-
-export function useOrganization(id: string): Product | {} {
-    return data.organizations.filter((o: Organization) => o.id === id)[0];
-}
-
-export const useConvertProductToChannelProduct = (product: Product): ChannelProduct => {
-    return {
-        ...product,
-        teamId: '',
-        channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
-        channelNameTemplate: '',
-        createPublicChannel: true,
-    };
+export const useEcosystem = (): Organization => {
+    return getOrganizations().filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
 };
 
-export function useOrganizationsNoPageList(): Organization[] {
-    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
+export const useOrganization = (id: string): Organization => {
+    return getOrganizations().filter((o: Organization) => o.id === id)[0];
+};
+
+export const useOrganizationsNoPageList = (): Organization[] => {
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const currentTeamId = useSelector(getCurrentTeamId);
 
     useEffect(() => {
@@ -73,16 +71,11 @@ export function useOrganizationsNoPageList(): Organization[] {
     }, [currentTeamId]);
 
     return organizations;
-}
-
-const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
-    const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
-    return {...oldParams, ...queryParams};
 };
 
-export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParams, routed = true):
-[Organization[], number, FetchProductsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] {
-    const [organizations, setOrganizations] = useState<Organization[]>(data.organizations);
+export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
+[Organization[], number, FetchOrganizationsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
@@ -100,7 +93,7 @@ export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParam
     });
 
     useEffect(() => {
-        let orgs = data.organizations;
+        let orgs = getOrganizations();
         orgs.sort();
         if (fetchParams.direction === 'desc') {
             orgs.reverse();
@@ -116,63 +109,79 @@ export function useOrganizationsList(defaultFetchParams: FetchOrganizationsParam
     useUpdateFetchParams(routed, fetchParams, history, location);
 
     return [organizations, totalCount, fetchParams, setFetchParams];
-}
+};
 
-export function useProductChannelsList(defaultFetchParams: FetchChannelsParams, routed = true):
-[ProductChannel[], number, FetchChannelsParams, React.Dispatch<React.SetStateAction<FetchChannelsParams>>] {
-    const [channels, setChannels] = useState<ProductChannel[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const history = useHistory();
-    const location = useLocation();
-    const currentTeamId = useSelector(getCurrentTeamId);
-    const [fetchParams, setFetchParams] = useState(combineQueryParameters(defaultFetchParams, location.search));
+export const useSection = (id: string): Section => {
+    return getOrganizations().
+        map((o: Organization) => o.sections).
+        flat().
+        filter((s: Section) => s.id === id)[0];
+};
 
-    // Fetch the queried runs
+export const useSectionInfo = (id: string, url: string): SectionInfo => {
+    const [info, setInfo] = useState<SectionInfo | {}>({});
+
     useEffect(() => {
         let isCanceled = false;
-        async function fetchProductChannelsAsync() {
-            const channelsReturn = await fetchProductChannels({...fetchParams, team_id: currentTeamId});
+        async function fetchSectionInfoAsync() {
+            const infoResult = await fetchSectionInfo(id, url);
             if (!isCanceled) {
-                setChannels((existingChannels: ProductChannel[]) => {
-                    if (fetchParams.page === 0) {
-                        return channelsReturn.items;
-                    }
-                    return [...existingChannels, ...channelsReturn.items];
-                });
-                setTotalCount(channelsReturn.totalCount);
+                setInfo(infoResult);
             }
         }
 
-        fetchProductChannelsAsync();
+        fetchSectionInfoAsync();
 
         return () => {
             isCanceled = true;
         };
-    }, [fetchParams, currentTeamId]);
-
-    useUpdateFetchParams(routed, fetchParams, history, location);
-
-    return [channels, totalCount, fetchParams, setFetchParams];
-}
-
-// Update the query string when the fetchParams change
-const useUpdateFetchParams = (
-    routed: boolean,
-    fetchParams: FetchParams,
-    history: any,
-    location: any,
-) => {
-    useEffect(() => {
-        if (routed) {
-            const newFetchParams: Record<string, unknown> = {...fetchParams};
-            delete newFetchParams.page;
-            delete newFetchParams.per_page;
-            history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
-        }
-    }, [fetchParams, history]);
+    }, []);
+    return info as SectionInfo;
 };
 
 export const useSectionData = (url: string): TableData => {
+    const [sectionData, setSectionData] = useState<TableData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchSectionDataAsync() {
+            const tableDataResult = await fetchTableData(url);
+            if (!isCanceled) {
+                setSectionData(tableDataResult);
+            }
+        }
+
+        fetchSectionDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return sectionData as TableData;
+};
+
+export const useTextBoxData = (url: string): TextBoxData => {
+    const [textBoxData, setTextBoxData] = useState<TextBoxData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTextBoxDataAsync() {
+            const textBoxDataResult = await fetchTextBoxData(url);
+            if (!isCanceled) {
+                setTextBoxData(textBoxDataResult);
+            }
+        }
+
+        fetchTextBoxDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return textBoxData as TextBoxData;
+};
+
+export const useTableData = (url: string): TableData => {
     const [tableData, setTableData] = useState<TableData | {}>({});
 
     useEffect(() => {
@@ -191,6 +200,50 @@ export const useSectionData = (url: string): TableData => {
         };
     }, []);
     return tableData as TableData;
+};
+
+export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {
+    const [channels, setChannels] = useState<WidgetChannel[]>([]);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchChannelsAsync() {
+            const channelsReturn = await fetchChannels(defaultFetchParams);
+            if (!isCanceled) {
+                setChannels(channelsReturn.items);
+            }
+        }
+
+        fetchChannelsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+
+    return channels;
+};
+
+// Update the query string when the fetchParams change
+const useUpdateFetchParams = (
+    routed: boolean,
+    fetchParams: FetchParams,
+    history: any,
+    location: any,
+) => {
+    useEffect(() => {
+        if (routed) {
+            const newFetchParams: Record<string, unknown> = {...fetchParams};
+            delete newFetchParams.page;
+            delete newFetchParams.per_page;
+            history.replace({...location, search: qs.stringify(newFetchParams, {addQueryPrefix: false, arrayFormat: 'brackets'})});
+        }
+    }, [fetchParams, history]);
+};
+
+const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
+    const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
+    return {...oldParams, ...queryParams};
 };
 
 /**

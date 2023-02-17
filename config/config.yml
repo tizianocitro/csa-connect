@@ -1,0 +1,190 @@
+---
+organizations:
+  - name: Ecosystem
+    id: "0"
+    description: This organization is for the whole ecosystem
+    sections:
+      - name: Incidents
+        id: "0"
+        url: http://localhost:3000/incidents        
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/incidents/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/incidents/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/incidents/:id/table
+          - type: channels
+      - name: Stories
+        id: "1"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - type: channels
+      - name: Policies
+        id: "2"
+        url: http://localhost:3000/policies
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/policies/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/policies/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/policies/:id/table
+          - type: channels
+    widgets: []
+  - name: Organization X
+    id: "1"
+    description: This is the X organization
+    sections:
+      - name: Incidents
+        id: "3"
+        url: http://localhost:3000/incidents
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/incidents/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/incidents/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/incidents/:id/table
+          - type: channels
+      - name: Stories
+        id: "4"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - type: channels
+      - name: Policies
+        id: "5"
+        url: http://localhost:3000/policies
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/policies/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/policies/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/policies/:id/table
+          - type: channels
+    widgets: []
+  - name: Organization Y
+    id: "2"
+    description: This is the Y organization
+    sections:
+      - name: Incidents
+        id: "6"
+        url: http://localhost:3000/incidents
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/incidents/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/incidents/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/incidents/:id/table
+          - type: channels
+      - name: Stories
+        id: "7"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - type: channels
+      - name: Policies
+        id: "8"
+        url: http://localhost:3000/policies
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/policies/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/policies/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/policies/:id/table
+          - type: channels
+    widgets: []
+  - name: Organization Z
+    id: "3"
+    description: This is the Z organization
+    sections:
+      - name: Incidents
+        id: "9"
+        url: http://localhost:3000/incidents
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/incidents/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/incidents/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/incidents/:id/table
+          - type: channels
+      - name: Stories
+        id: "10"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - type: channels
+      - name: Policies
+        id: "11"
+        url: http://localhost:3000/policies
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/policies/:id/graph
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/policies/:id/text_box
+          - name: My Table
+            type: table
+            url: http://localhost:3000/policies/:id/table
+          - type: channels
+    widgets: []

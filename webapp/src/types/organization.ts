@@ -1,3 +1,8 @@
+
+export interface PlatformConfig {
+    organizations: Organization[];
+}
+
 export interface Organization {
     description?: string,
     id: string,
@@ -18,6 +23,12 @@ export interface Widget {
     name?: string,
     type: string,
     url?: string,
+}
+
+export interface SectionInfo {
+    description?: string;
+    id: string;
+    name: string;
 }
 
 export interface FetchOrganizationsParams {

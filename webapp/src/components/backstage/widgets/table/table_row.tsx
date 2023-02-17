@@ -19,12 +19,24 @@ interface TableValue {
 type Props = {
     fullUrl?: string;
     pointer: boolean;
+    query?: string;
     row: TableRowData;
     urlHash: string;
     onClick?: () => void;
 };
 
-const TableRow = ({fullUrl, onClick, pointer, row, urlHash}: Props) => {
+const buildTo = (
+    fullUrl: string | undefined,
+    id: string,
+    query: string | undefined,
+    url: string
+) => {
+    let to = fullUrl ? `${url}${fullUrl}` : `${url}`;
+    to = query ? `${to}?${query}` : `${to}`;
+    return `${to}#${id}`;
+};
+
+const TableRow = ({fullUrl, onClick, pointer, query, row, urlHash}: Props) => {
     const {url} = useRouteMatch();
     const {id, name, values} = row;
     const itemId = buildIdForUrlHashReference('table-row', id);
@@ -39,7 +51,8 @@ const TableRow = ({fullUrl, onClick, pointer, row, urlHash}: Props) => {
         >
             <CopyLink
                 id={itemId}
-                to={fullUrl ? buildToForCopy(`${url}${fullUrl}#${itemId}`) : buildToForCopy(`${url}#${itemId}`)}
+                text={name}
+                to={buildToForCopy(buildTo(fullUrl, itemId, query, url))}
                 name={name}
                 area-hidden={true}
                 iconWidth={'1.45em'}

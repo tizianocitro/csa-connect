@@ -8,18 +8,9 @@ import {Toast, ToastProps} from './toast';
 const Ctx = React.createContext({} as ToastFuncs);
 
 const DEFAULT_DURATION = 3000;
+
 let toastCount = 0;
 const toastTimeoutMap: Record<number, number> = {};
-
-const ToastContainer = styled.div`
-    position: fixed;
-    left: 50%;
-    bottom: 36px;
-    transform: translate(-50%);
-    z-index: 1;
-    width: max-content;
-    max-width: 95%;
-`;
 
 interface Props {
     children: React.ReactNode;
@@ -126,5 +117,15 @@ export const ToastProvider = (props: Props) => {
         </Ctx.Provider>
     );
 };
+
+const ToastContainer = styled.div`
+    position: fixed;
+    left: 50%;
+    bottom: 36px;
+    transform: translate(-50%);
+    z-index: 1;
+    width: max-content;
+    max-width: 95%;
+`;
 
 export const useToaster = () => React.useContext(Ctx);

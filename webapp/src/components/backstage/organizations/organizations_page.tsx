@@ -1,6 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
@@ -9,7 +6,7 @@ import {useOrganizationsList} from 'src/hooks';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
 import Header from 'src/components/common/header';
 
-import OrganizationsList from './organizations_list/organizations_list';
+import OrganizationsList from './organizations_list';
 
 const defaultOrganizationsFetchParams = {
     page: 0,

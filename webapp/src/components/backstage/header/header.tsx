@@ -1,41 +1,29 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
 import {useIntl} from 'react-intl';
 
 import styled, {css} from 'styled-components';
 
-import {getSiteUrl} from 'src/clients';
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
 import CopyLink from 'src/components/common/copy_link';
 import TextEdit from 'src/components/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
 
-import {Organization} from 'src/types/organization';
-import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
-
 import {ContextMenu} from './context_menu';
 
 interface Props {
-    organization: Organization;
-    organizationId: string;
+    name: string;
+    path: string;
 }
 
-export const OrganizationHeader = ({organization, organizationId}: Props) => {
+export const NameHeader = ({name, path}: Props) => {
     const {formatMessage} = useIntl();
-    organization.id = organizationId;
 
-    // Put before ${PrimaryButton}, ${TertiaryButton}
-    // ${CancelSaveContainer} {
-    //    padding: 0;
-    // }
     return (
-        <Container data-testid={'organization-header-section'}>
+        <Container data-testid={'name-header-section'}>
             <TextEdit
                 disabled={false}
-                placeholder={formatMessage({defaultMessage: 'Organization name'})}
-                value={organization.name}
+                placeholder={formatMessage({defaultMessage: 'Name'})}
+                value={name}
                 editStyles={css`
                             input {
                                 ${titleCommon}
@@ -49,12 +37,14 @@ export const OrganizationHeader = ({organization, organizationId}: Props) => {
             >
                 <>
                     <ContextMenu
-                        organization={organization}
+                        name={name}
+                        path={path}
                     />
                     <StyledCopyLink
-                        id='copy-organization-link-tooltip'
-                        to={getSiteUrl() + '/' + DEFAULT_PATH + '/' + ORGANIZATIONS_PATH + '/' + organization?.id}
-                        tooltipMessage={formatMessage({defaultMessage: 'Copy link to organization'})}
+                        id='copy-name-link-tooltip'
+                        text={name}
+                        to={path}
+                        tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
                     />
                 </>
             </TextEdit>
