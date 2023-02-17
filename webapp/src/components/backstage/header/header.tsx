@@ -1,6 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
 import {useIntl} from 'react-intl';
 
@@ -21,10 +18,6 @@ interface Props {
 export const NameHeader = ({name, path}: Props) => {
     const {formatMessage} = useIntl();
 
-    // Put before ${PrimaryButton}, ${TertiaryButton}
-    // ${CancelSaveContainer} {
-    //    padding: 0;
-    // }
     return (
         <Container data-testid={'name-header-section'}>
             <TextEdit

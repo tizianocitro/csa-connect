@@ -21,7 +21,14 @@ type Props = {
     widgets: Widget[];
 }
 
-const SectionsWidgetsContainer = ({headerPath, name, sectionPath, sections, url, widgets}: Props) => {
+const SectionsWidgetsContainer = ({
+    headerPath,
+    name,
+    sectionPath,
+    sections,
+    url,
+    widgets,
+}: Props) => {
     return (
         <Container>
             <MainWrapper>
@@ -38,7 +45,9 @@ const SectionsWidgetsContainer = ({headerPath, name, sectionPath, sections, url,
                             sections={sections}
                             url={url}
                         />
-                        <Widgets widgets={widgets}/>
+                        <Widgets
+                            widgets={widgets}
+                        />
                     </Body>
                 </Main>
             </MainWrapper>

@@ -2,20 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
+import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
+import {formatName} from 'src/hooks';
 
-import ChannelBox from './channel_box';
-
-interface Props {
-    parentId: string;
-    sectionId: string;
-    teamId: string;
+export interface TextBoxData {
+    text: string;
 }
 
-const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
+type Props = {
+    name: string;
+    parentId: string;
+    text: string;
+}
+
+const TextBox = ({name, parentId, text}: Props) => {
     const {formatMessage} = useIntl();
-    const id = 'channels-widget';
-    const title = formatMessage({defaultMessage: 'Channels'});
+    const id = `${formatName(name)}-text-box-widget`;
+    const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
     return (
         <Container
             id={id}
@@ -25,18 +29,23 @@ const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
                 <AnchorLinkTitle
                     id={id}
                     query={`sectionId=${parentId}`}
-                    text={title}
-                    title={title}
+                    text={name}
+                    title={name}
                 />
             </Header>
-            <ChannelBox
-                parentId={parentId}
-                sectionId={sectionId}
-                teamId={teamId}
+            <MarkdownEdit
+                placeholder={placeholder}
+                value={text}
             />
         </Container>
     );
 };
+
+const Header = styled.div`
+    display: flex;
+    flex: 1;
+    margin-bottom: 8px;
+`;
 
 const Container = styled.div`
     width: 100%;
@@ -45,10 +54,4 @@ const Container = styled.div`
     margin-top: 24px;
 `;
 
-const Header = styled.div`
-    display: flex;
-    flex: 1;
-    margin-bottom: 8px;
-`;
-
-export default ChannelsSection;
+export default TextBox;

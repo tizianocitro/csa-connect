@@ -9,11 +9,11 @@ import styled from 'styled-components';
 
 import SearchInput from 'src/components/backstage/search_input';
 
-import {FetchProductsParams} from 'src/types/product';
+import {FetchOrganizationsParams} from 'src/types/organization';
 
 interface Props {
-    fetchParams: FetchProductsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchProductsParams>>;
+    fetchParams: FetchOrganizationsParams;
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
 }
 
 const searchDebounceDelayMilliseconds = 300;

@@ -5,8 +5,6 @@ import React, {Dispatch} from 'react';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-
-//import {SettingsOutlineIcon} from '@mattermost/compass-icons/components';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {PatternedInput} from 'src/components/backstage/widgets/channels/patterned_input';
@@ -16,27 +14,29 @@ import {
     AutomationTitle,
     SelectorWrapper,
 } from 'src/components/backstage/widgets/channels/styles';
-import {HorizontalSpacer, RadioInput} from 'src/components/backstage/styles';
+import {RadioInput} from 'src/components/backstage/styles';
+import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
+import {ErrorMessage} from 'src/components/messages';
 import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/backstage/widgets/channels/clear_indicator';
 import MenuList from 'src/components/backstage/widgets/channels/menu_list';
-import {ChannelProduct} from 'src/types/product';
-import {productForCreateChannelAction} from 'src/actions';
+import {ChannelCreation} from 'src/types/channels';
+import {channelCreationAction} from 'src/actions';
 
 interface Props {
-    product: ChannelProduct;
+    channelCreation: ChannelCreation;
     selectErrorMessage: string,
     nameErrorMessage: string,
-    dispatchProductForCreateChannel: Dispatch<any>;
+    dispatchChannelCreation: Dispatch<any>;
     cleanErrorMessages: () => void,
     setChangesMade?: (b: boolean) => void;
 }
 
 export const CreateAChannel = ({
-    product,
+    channelCreation,
     selectErrorMessage,
     nameErrorMessage,
-    dispatchProductForCreateChannel,
+    dispatchChannelCreation,
     cleanErrorMessages,
     setChangesMade,
 }: Props) => {
@@ -46,32 +46,32 @@ export const CreateAChannel = ({
 
     const handlePublicChange = (isPublic: boolean) => {
         cleanErrorMessages();
-        dispatchProductForCreateChannel(productForCreateChannelAction({
-            ...product,
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
             createPublicChannel: isPublic,
         }));
         setChangesMade?.(true);
     };
-    const handleChannelNameTemplateChange = (channelNameTemplate: string) => {
+    const handleChannelNameTemplateChange = (channelName: string) => {
         cleanErrorMessages();
-        dispatchProductForCreateChannel(productForCreateChannelAction({
-            ...product,
-            channelNameTemplate,
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
+            channelName,
         }));
         setChangesMade?.(true);
     };
     const handleChannelModeChange = (mode: 'create_new_channel' | 'link_existing_channel') => {
         cleanErrorMessages();
-        dispatchProductForCreateChannel(productForCreateChannelAction({
-            ...product,
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
             channelMode: mode,
         }));
         setChangesMade?.(true);
     };
     const handleChannelIdChange = (channel_id: string) => {
         cleanErrorMessages();
-        dispatchProductForCreateChannel(productForCreateChannelAction({
-            ...product,
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
             channelId: channel_id,
         }));
         setChangesMade?.(true);
@@ -91,7 +91,7 @@ export const CreateAChannel = ({
                         <ChannelModeRadio
                             type='radio'
                             disabled={archived}
-                            checked={product.channelMode === 'link_existing_channel'}
+                            checked={channelCreation.channelMode === 'link_existing_channel'}
                             onChange={() => handleChannelModeChange('link_existing_channel')}
                         />
                         <FormattedMessage defaultMessage='Link to an existing channel'/>
@@ -101,10 +101,10 @@ export const CreateAChannel = ({
                     <StyledChannelSelector
                         id={'link_existing_channel_selector'}
                         onChannelSelected={(channel_id: string) => handleChannelIdChange(channel_id)}
-                        channelIds={product.channelId === '' ? [] : [product.channelId]}
+                        channelIds={channelCreation.channelId === '' ? [] : [channelCreation.channelId]}
                         isClearable={true}
                         selectComponents={{ClearIndicator, DropdownIndicator: () => null, IndicatorSeparator: () => null, MenuList}}
-                        isDisabled={archived || product.channelMode === 'create_new_channel'}
+                        isDisabled={archived || channelCreation.channelMode === 'create_new_channel'}
                         captureMenuScroll={false}
                         shouldRenderValue={true}
                         teamId={teamId}
@@ -121,7 +121,7 @@ export const CreateAChannel = ({
                         <ChannelModeRadio
                             type='radio'
                             disabled={archived}
-                            checked={product.channelMode === 'create_new_channel'}
+                            checked={channelCreation.channelMode === 'create_new_channel'}
                             onChange={() => handleChannelModeChange('create_new_channel')}
                         />
                         <FormattedMessage defaultMessage='Create a channel'/>
@@ -129,42 +129,42 @@ export const CreateAChannel = ({
                 </AutomationTitle>
                 <HorizontalSplit>
                     <VerticalSplit>
-                        <ButtonLabel disabled={archived || product.channelMode === 'link_existing_channel'}>
+                        <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
                             <RadioInput
                                 type='radio'
-                                disabled={archived || product.channelMode === 'link_existing_channel'}
-                                checked={product.createPublicChannel}
+                                disabled={archived || channelCreation.channelMode === 'link_existing_channel'}
+                                checked={channelCreation.createPublicChannel}
                                 onChange={() => handlePublicChange(true)}
                             />
                             <Icon
-                                disabled={product.channelMode === 'link_existing_channel'}
-                                active={product.createPublicChannel}
+                                disabled={channelCreation.channelMode === 'link_existing_channel'}
+                                active={channelCreation.createPublicChannel}
                                 className={'icon-globe'}
                             />
                             <BigText>{formatMessage({defaultMessage: 'Public'})}</BigText>
                         </ButtonLabel>
                         <HorizontalSpacer size={8}/>
-                        <ButtonLabel disabled={archived || product.channelMode === 'link_existing_channel'}>
+                        <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
                             <RadioInput
                                 type='radio'
-                                disabled={archived || product.channelMode === 'link_existing_channel'}
-                                checked={!product.createPublicChannel}
+                                disabled={archived || channelCreation.channelMode === 'link_existing_channel'}
+                                checked={!channelCreation.createPublicChannel}
                                 onChange={() => handlePublicChange(false)}
                             />
                             <Icon
-                                disabled={product.channelMode === 'link_existing_channel'}
-                                active={!product.createPublicChannel}
+                                disabled={channelCreation.channelMode === 'link_existing_channel'}
+                                active={!channelCreation.createPublicChannel}
                                 className={'icon-lock-outline'}
                             />
                             <BigText>{formatMessage({defaultMessage: 'Private'})}</BigText>
                         </ButtonLabel>
                     </VerticalSplit>
                     <PatternedInput
-                        enabled={!archived && product.channelMode === 'create_new_channel'}
-                        input={product.channelNameTemplate}
+                        enabled={!archived && channelCreation.channelMode === 'create_new_channel'}
+                        input={channelCreation.channelName}
                         onChange={handleChannelNameTemplateChange}
                         pattern={'[\\S][\\s\\S]*[\\S]'} // at least two non-whitespace characters
-                        placeholderText={formatMessage({defaultMessage: 'Channel name template'})}
+                        placeholderText={formatMessage({defaultMessage: 'Channel name'})}
                         type={'text'}
                         errorText={formatMessage({defaultMessage: 'Channel name is not valid.'})}
                     />
@@ -181,15 +181,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
-`;
-
-export const VerticalSplit = styled.div`
-    display: flex;
-`;
-
-const HorizontalSplit = styled.div`
-    display: block;
-    text-align: left;
 `;
 
 export const ButtonLabel = styled.label<{disabled: boolean}>`
@@ -240,10 +231,4 @@ export const ChannelModeRadio = styled(RadioInput)`
     && {
         margin: 0 8px;
     }
-`;
-
-const ErrorMessage = styled.div<{display?: boolean}>`
-    color: var(--error-text);
-    margin-left: auto;
-    display: ${(props) => (props.display ? 'inline-block' : 'none')};
 `;

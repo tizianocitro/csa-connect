@@ -28,5 +28,6 @@ export const ORGANIZATION_PATH = 'organization';
 // where it was not possible to use the constants
 export const ORGANIZATION_ID_PARAM = 'organizationId';
 export const SECTION_ID_PARAM = 'sectionId';
+export const PARENT_ID_PARAM = 'parentId';
 
 export const ECOSYSTEM = 'ecosystem';

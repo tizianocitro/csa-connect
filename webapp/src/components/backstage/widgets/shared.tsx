@@ -13,20 +13,24 @@ import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 
 interface AnchorLinkTitleProps {
     id: string;
+    query?: string;
     text: string;
     title: string;
 }
 
+const buildTo = (id: string, query: string | undefined, url: string) => {
+    return query ? `${url}?${query}#${id}` : `${url}#${id}`;
+};
+
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
     const {url} = useRouteMatch();
     const itemId = buildIdForUrlHashReference('section-link', props.id);
-
     return (
         <LinkTitle>
             <CopyLink
                 id={itemId}
                 text={props.text}
-                to={buildToForCopy(`${url}#${props.id}`)}
+                to={buildToForCopy(buildTo(props.id, props.query, url))}
                 name={props.title}
                 area-hidden={true}
             />

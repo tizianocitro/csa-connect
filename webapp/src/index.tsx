@@ -1,6 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 import React from 'react';
 import {render} from 'react-dom';
 import {Store} from 'redux';
@@ -14,7 +11,7 @@ import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
 import RHSView from 'src/components/rhs/right_hand_sidebar';
 import {DEFAULT_PATH, PRODUCT_ICON, PRODUCT_NAME} from 'src/constants';
-import {platformConfigPath, setPlatformConfig} from 'src/config/config';
+import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
 
 type WindowObject = {
     location: {
@@ -34,7 +31,6 @@ const GlobalHeaderRight = () => {
     return null;
 };
 
-// From mattermost-webapp/utils
 const getSiteURLFromWindowObject = (obj: WindowObject): string => {
     let siteURL = '';
     if (obj.location.origin) {
@@ -107,7 +103,7 @@ export default class Plugin {
         setSiteUrl(siteUrl);
         Client4.setUrl(siteUrl);
 
-        loadPlatformConfig(platformConfigPath, setPlatformConfig);
+        loadPlatformConfig(DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig);
 
         this.doRegistrations(registry, store);
     }
