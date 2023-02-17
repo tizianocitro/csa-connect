@@ -4,6 +4,7 @@ import {Handle, Position} from 'reactflow';
 
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 
+// These can be alternatives to nodes color
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
 const GraphNode = ({id, data}: any) => {
