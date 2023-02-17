@@ -16,6 +16,7 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import {SECTION_ID_PARAM} from 'src/constants';
 import {getSiteUrl} from 'src/clients';
+import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 
 import GraphNode from './graph_node';
 
@@ -53,68 +54,39 @@ const initialEdges = [
     },
 ];
 
+type GraphStyle = {
+    containerDirection: string,
+    graphWidth: string;
+    textBoxStyle?: TextBoxStyle;
+};
+
 type Props = {
+    isRhs?: boolean;
     name: string;
     parentId: string;
 };
 
-const Graph = ({name, parentId}: Props) => {
-    const nodeTypes = useMemo(() => ({graphNode: GraphNode}), []);
+const defaultGraphStyle: GraphStyle = {
+    containerDirection: 'row',
+    graphWidth: '75%',
+    textBoxStyle: {
+        height: '5vh',
+        marginTop: '0px',
+        width: '25%',
+    },
+};
 
-    const {url} = useRouteMatch();
-    const location = useLocation();
-    const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-    const sectionIdParam = queryParams.sectionId as string;
-
-    const fillNodesUrl = useCallback((sectionUrl: string, sectionId: string) => {
-        initialNodes.forEach((n: any) => {
-            n.data.url = `${getSiteUrl()}${sectionUrl}?${SECTION_ID_PARAM}=${sectionId}`;
-        });
-    }, [url, sectionIdParam]);
-
-    fillNodesUrl(url, sectionIdParam);
-
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-    const id = `${formatName(name)}-graph-widget`;
-    return (
-        <Container
-            id={id}
-            data-testid={id}
-        >
-            <Header>
-                <AnchorLinkTitle
-                    id={id}
-                    query={`sectionId=${parentId}`}
-                    text={name}
-                    title={name}
-                />
-            </Header>
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                nodeTypes={nodeTypes}
-                fitView={true}
-                fitViewOptions={fitViewOptions}
-                proOptions={hideOptions}
-            >
-                <Background/>
-                <Controls/>
-                <MiniMap
-                    style={minimapStyle}
-                    zoomable={true}
-                    pannable={true}
-                />
-            </ReactFlow>
-        </Container>
-    );
+const rhsGraphStyle: GraphStyle = {
+    containerDirection: 'column',
+    graphWidth: '100%',
 };
 
 const fitViewOptions: FitViewOptions = {
     padding: 1,
+};
+
+const hideOptions = {
+    hideAttribution: true,
 };
 
 const minimapStyle = {
@@ -122,15 +94,97 @@ const minimapStyle = {
     width: 180,
 };
 
-const hideOptions = {
-    hideAttribution: true,
+const Graph = ({
+    isRhs = false,
+    name,
+    parentId,
+}: Props) => {
+    const nodeTypes = useMemo(() => ({graphNode: GraphNode}), []);
+
+    const {url} = useRouteMatch();
+    const {hash: urlHash, search} = useLocation();
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
+    const sectionIdParam = queryParams.sectionId as string;
+
+    const fillNodesUrlAndIsUrlHashed = useCallback((sectionUrl: string, sectionId: string) => {
+        initialNodes.forEach((n: any) => {
+            let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
+            if (sectionIdParam) {
+                nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
+            }
+            n.data.url = nodeUrl;
+            if (`#${n.id}` === urlHash) {
+                n.data.isUrlHashed = true;
+            } else {
+                n.data.isUrlHashed = false;
+            }
+        });
+    }, [url, urlHash, sectionIdParam]);
+
+    fillNodesUrlAndIsUrlHashed(url, sectionIdParam);
+
+    const graphStyle = isRhs ? rhsGraphStyle : defaultGraphStyle;
+
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+    const id = `${formatName(name)}-graph-widget`;
+    return (
+        <Container
+            containerDirection={graphStyle.containerDirection}
+        >
+            <GraphContainer
+                id={id}
+                data-testid={id}
+                width={graphStyle.graphWidth}
+            >
+                <Header>
+                    <AnchorLinkTitle
+                        id={id}
+                        query={`sectionId=${parentId}`}
+                        text={name}
+                        title={name}
+                    />
+                </Header>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    nodeTypes={nodeTypes}
+                    fitView={true}
+                    fitViewOptions={fitViewOptions}
+                    proOptions={hideOptions}
+                >
+                    <Background/>
+                    <Controls/>
+                    <MiniMap
+                        style={minimapStyle}
+                        zoomable={true}
+                        pannable={true}
+                    />
+                </ReactFlow>
+            </GraphContainer>
+            <TextBox
+                name={'My Graph Description'}
+                parentId={parentId}
+                text={'Graph Description'}
+                style={graphStyle.textBoxStyle}
+            />
+        </Container>
+    );
 };
 
-const Container = styled.div`
-    width: 100%;
+const GraphContainer = styled.div<{width: string}>`
+    width: ${(props) => props.width};
     height: 40vh;
+    margin-bottom: 24px;
+`;
+
+const Container = styled.div<{containerDirection: string}>`
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: ${(props) => props.containerDirection};
     margin-top: 24px;
 `;
 

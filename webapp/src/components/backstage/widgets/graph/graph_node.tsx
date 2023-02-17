@@ -13,7 +13,7 @@ const GraphNode = ({id, data}: any) => {
                 type={'target'}
                 position={Position.Top}
             />
-            <NodeContainer>
+            <NodeContainer isUrlHashed={data.isUrlHashed}>
                 <CopyLinkMenuItem
                     path={`${data.url}#${id}`}
                     placeholder={data.label}
@@ -29,9 +29,9 @@ const GraphNode = ({id, data}: any) => {
     );
 };
 
-const NodeContainer = styled.div`
-    background: rgb(var(--center-channel-color-rgb), 0.4);
-    border: 1px solid rgb(var(--center-channel-color-rgb), 0.2);
+const NodeContainer = styled.div<{isUrlHashed: boolean}>`
+    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
     borderRadius: 5;
 `;
 

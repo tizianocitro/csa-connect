@@ -10,13 +10,28 @@ export interface TextBoxData {
     text: string;
 }
 
+export type TextBoxStyle = {
+    height?: string;
+    marginTop?: string;
+    width?: string;
+}
+
 type Props = {
     name: string;
     parentId: string;
     text: string;
+    style?: TextBoxStyle;
 }
 
-const TextBox = ({name, parentId, text}: Props) => {
+const TextBox = ({
+    name,
+    parentId,
+    text,
+    style = {
+        marginTop: '24px',
+        width: '100%',
+    },
+}: Props) => {
     const {formatMessage} = useIntl();
     const id = `${formatName(name)}-text-box-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
@@ -24,6 +39,7 @@ const TextBox = ({name, parentId, text}: Props) => {
         <Container
             id={id}
             data-testid={id}
+            style={style}
         >
             <Header>
                 <AnchorLinkTitle
@@ -41,11 +57,12 @@ const TextBox = ({name, parentId, text}: Props) => {
     );
 };
 
-const Container = styled.div`
-    width: 100%;
+const Container = styled.div<{style: TextBoxStyle}>`
+    width: ${(props) => props.style.width};
+    height: ${(props) => (props.style.height ? props.style.height : 'auto')};
     display: flex;
     flex-direction: column;
-    margin-top: 24px;
+    margin-top: ${(props) => props.style.marginTop};
 `;
 
 export default TextBox;
