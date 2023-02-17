@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import MarkdownEdit from 'src/components/markdown_edit';
-import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
+import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 
 export interface TextBoxData {
@@ -40,12 +40,6 @@ const TextBox = ({name, parentId, text}: Props) => {
         </Container>
     );
 };
-
-const Header = styled.div`
-    display: flex;
-    flex: 1;
-    margin-bottom: 8px;
-`;
 
 const Container = styled.div`
     width: 100%;

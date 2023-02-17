@@ -120,3 +120,9 @@ export const StyledInput = styled(BaseInput)<{error?: boolean}>`
 
     scroll-margin-top: 36px;
 `;
+
+export const Header = styled.div`
+    display: flex;
+    flex: 1;
+    margin-bottom: 8px;
+`;

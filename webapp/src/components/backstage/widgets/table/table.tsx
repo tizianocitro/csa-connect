@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
+import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 
 import TableHeader, {TableHeaderData} from './table_header';
 import TableRow, {TableRowData} from './table_row';
@@ -90,12 +90,6 @@ const FooterText = styled.div`
     width: 100%;
     text-align: center;
     color: rgba(var(--center-channel-color-rgb), 0.56);
-`;
-
-const Header = styled.div`
-    display: flex;
-    flex: 1;
-    margin-bottom: 8px;
 `;
 
 const Container = styled.div`

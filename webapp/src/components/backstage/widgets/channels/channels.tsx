@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {AnchorLinkTitle} from 'src/components/backstage/widgets/shared';
+import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 
 import ChannelBox from './channel_box';
 
@@ -43,12 +43,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 24px;
-`;
-
-const Header = styled.div`
-    display: flex;
-    flex: 1;
-    margin-bottom: 8px;
 `;
 
 export default ChannelsSection;

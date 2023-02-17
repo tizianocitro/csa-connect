@@ -3,6 +3,7 @@ import React from 'react';
 import {Widget} from 'src/types/organization';
 
 import ChannelsWrapper from './channels/channels_wrapper';
+import GraphWrapper from './graph/graph_wrapper';
 import TableWrapper from './table/table_wrapper';
 import TextBoxWrapper from './text_box/text_box_wrapper';
 
@@ -26,6 +27,10 @@ const Widgets = ({widgets}: Props) => {
     const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
     return (
         <>
+            <GraphWrapper
+                name={'My Graph'}
+                url={''}
+            />
             {textBoxWidgets.map(({name, url}, index) => (
                 <TextBoxWrapper
                     key={`${name}-${index}`}
