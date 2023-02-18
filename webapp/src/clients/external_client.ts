@@ -4,6 +4,7 @@ import {ClientError} from '@mattermost/client';
 import {TableData} from 'src/types/table';
 import {SectionInfo} from 'src/types/organization';
 import {TextBoxData} from 'src/types/text_box';
+import {GraphData} from 'src/types/graph';
 
 export async function fetchSectionInfo(id: string, url: string) {
     let data = await doGet(`${url}/${id}`);
@@ -11,6 +12,14 @@ export async function fetchSectionInfo(id: string, url: string) {
         data = {description: '', id: '', name: ''} as SectionInfo;
     }
     return data as SectionInfo;
+}
+
+export async function fetchGraphData(url: string) {
+    let data = await doGet(url);
+    if (!data) {
+        data = {edges: [], nodes: []} as GraphData;
+    }
+    return data as GraphData;
 }
 
 export async function fetchTableData(url: string) {

@@ -1,6 +1,6 @@
 export interface TableData {
-    headers: TableHeaderData[],
-    rows: TableRowData[],
+    headers: TableHeaderData[];
+    rows: TableRowData[];
     caption: string;
 }
 

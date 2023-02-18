@@ -5,30 +5,26 @@ import {Handle, Position} from 'reactflow';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {SECTION_ID_PARAM} from 'src/constants';
-import {GraphEdge, GraphNode} from 'src/types/graph';
+import {GraphNode} from 'src/types/graph';
 
-export const setEdgeType = (edge: GraphEdge) => {
-    edge.type = 'step';
+export const buildEdgeType = () => {
+    return 'step';
 };
 
-export const setNodeType = (node: GraphNode) => {
-    node.type = 'graphNode';
+export const buildNodeType = () => {
+    return 'graphNodeType';
 };
 
-export const setNodeIsUrlHashed = (node: GraphNode, sectionUrlHash: string) => {
-    if (`#${node.id}` === sectionUrlHash) {
-        node.data.isUrlHashed = true;
-    } else {
-        node.data.isUrlHashed = false;
-    }
+export const buildNodeIsUrlHashed = (node: GraphNode, sectionUrlHash: string) => {
+    return `#${node.id}` === sectionUrlHash;
 };
 
-export const setNodeUrl = (node: GraphNode, sectionId: string, sectionUrl: string) => {
+export const buildNodeUrl = (sectionId: string, sectionUrl: string) => {
     let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
     if (sectionId) {
         nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
     }
-    node.data.url = nodeUrl;
+    return nodeUrl;
 };
 
 // These can be alternatives to nodes color

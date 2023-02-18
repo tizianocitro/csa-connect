@@ -9,12 +9,13 @@ import {useUpdateEffect} from 'react-use';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
 import {
     fetchChannels,
+    fetchGraphData,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -31,6 +32,13 @@ import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/types/table';
 import {getOrganizations} from 'src/config/config';
 import {TextBoxData} from 'src/types/text_box';
+import {GraphData, GraphEdge, GraphNode} from 'src/types/graph';
+import {
+    buildEdgeType,
+    buildNodeIsUrlHashed,
+    buildNodeType,
+    buildNodeUrl,
+} from 'src/components/backstage/widgets/graph/graph_node_type';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -160,25 +168,58 @@ export const useSectionData = (url: string): TableData => {
     return sectionData as TableData;
 };
 
-export const useTextBoxData = (url: string): TextBoxData => {
-    const [textBoxData, setTextBoxData] = useState<TextBoxData | {}>({});
+export const useGraphData = (url: string): GraphData => {
+    const [graphData, setGraphData] = useState<GraphData | {}>({});
+    const {url: routeUrl} = useRouteMatch();
+    const {hash: urlHash, search} = useLocation();
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
+    const sectionIdParam = queryParams.sectionId as string;
+
+    const fillNodes = (nodes: GraphNode[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
+        const filledNodes: GraphNode[] = [];
+        nodes.forEach((node) => {
+            filledNodes.push({
+                ...node,
+                data: {
+                    ...node.data,
+                    url: buildNodeUrl(sectionId, sectionUrl),
+                    isUrlHashed: buildNodeIsUrlHashed(node, sectionUrlHash),
+                },
+                type: buildNodeType(),
+            });
+        });
+        return filledNodes;
+    };
+
+    const fillEdges = (edges: GraphEdge[]) => {
+        const filledEdges: GraphEdge[] = [];
+        edges.forEach((edge) => {
+            filledEdges.push({
+                ...edge,
+                type: buildEdgeType(),
+            });
+        });
+        return filledEdges;
+    };
 
     useEffect(() => {
         let isCanceled = false;
-        async function fetchTextBoxDataAsync() {
-            const textBoxDataResult = await fetchTextBoxData(url);
+        async function fetchGraphDataAsync() {
+            const graphDataResult = await fetchGraphData(url);
             if (!isCanceled) {
-                setTextBoxData(textBoxDataResult);
+                const filledNodes = fillNodes(graphDataResult.nodes, sectionIdParam, routeUrl, urlHash);
+                const filledEdges = fillEdges(graphDataResult.edges);
+                setGraphData({edges: filledEdges, nodes: filledNodes});
             }
         }
 
-        fetchTextBoxDataAsync();
+        fetchGraphDataAsync();
 
         return () => {
             isCanceled = true;
         };
     }, []);
-    return textBoxData as TextBoxData;
+    return graphData as GraphData;
 };
 
 export const useTableData = (url: string): TableData => {
@@ -200,6 +241,27 @@ export const useTableData = (url: string): TableData => {
         };
     }, []);
     return tableData as TableData;
+};
+
+export const useTextBoxData = (url: string): TextBoxData => {
+    const [textBoxData, setTextBoxData] = useState<TextBoxData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTextBoxDataAsync() {
+            const textBoxDataResult = await fetchTextBoxData(url);
+            if (!isCanceled) {
+                setTextBoxData(textBoxDataResult);
+            }
+        }
+
+        fetchTextBoxDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return textBoxData as TextBoxData;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

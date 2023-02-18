@@ -2,6 +2,8 @@ import React from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
+import {formatUrlWithId, useGraphData} from 'src/hooks';
+
 import Graph from './graph';
 
 type Props = {
@@ -17,9 +19,11 @@ const GraphWrapper = ({
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
     const parentId = queryParams.sectionId as string;
+    const data = useGraphData(formatUrlWithId(url, sectionId));
     return (
         <Graph
             name={name}
+            data={data}
             parentId={parentId}
         />
     );
