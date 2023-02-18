@@ -12,6 +12,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
+import {Edge, Node} from 'reactflow';
 
 import {
     fetchChannels,
@@ -32,7 +33,7 @@ import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/types/table';
 import {getOrganizations} from 'src/config/config';
 import {TextBoxData} from 'src/types/text_box';
-import {GraphData, GraphEdge, GraphNode} from 'src/types/graph';
+import {GraphData} from 'src/types/graph';
 import {
     buildEdgeType,
     buildNodeIsUrlHashed,
@@ -175,8 +176,8 @@ export const useGraphData = (url: string): GraphData => {
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;
 
-    const fillNodes = (nodes: GraphNode[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
-        const filledNodes: GraphNode[] = [];
+    const fillNodes = (nodes: Node[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
+        const filledNodes: Node[] = [];
         nodes.forEach((node) => {
             filledNodes.push({
                 ...node,
@@ -191,8 +192,8 @@ export const useGraphData = (url: string): GraphData => {
         return filledNodes;
     };
 
-    const fillEdges = (edges: GraphEdge[]) => {
-        const filledEdges: GraphEdge[] = [];
+    const fillEdges = (edges: Edge[]) => {
+        const filledEdges: Edge[] = [];
         edges.forEach((edge) => {
             filledEdges.push({
                 ...edge,

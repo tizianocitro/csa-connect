@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Handle, Position} from 'reactflow';
+import {
+    Handle,
+    Node,
+    NodeProps,
+    Position,
+} from 'reactflow';
 
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {SECTION_ID_PARAM} from 'src/constants';
-import {GraphNode} from 'src/types/graph';
 
 export const buildEdgeType = () => {
     return 'step';
@@ -15,7 +19,7 @@ export const buildNodeType = () => {
     return 'graphNodeType';
 };
 
-export const buildNodeIsUrlHashed = (node: GraphNode, sectionUrlHash: string) => {
+export const buildNodeIsUrlHashed = (node: Node, sectionUrlHash: string) => {
     return `#${node.id}` === sectionUrlHash;
 };
 
@@ -30,7 +34,7 @@ export const buildNodeUrl = (sectionId: string, sectionUrl: string) => {
 // These can be alternatives to nodes color
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
-const GraphNodeType = ({id, data}: any) => {
+const GraphNodeType = ({id, data}: NodeProps) => {
     return (
         <>
             <Handle

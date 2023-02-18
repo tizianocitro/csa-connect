@@ -1,12 +1,21 @@
-import React, {useMemo} from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import styled from 'styled-components';
 import ReactFlow, {
     Background,
     Controls,
+    Edge,
+    EdgeChange,
     FitViewOptions,
     MiniMap,
-    useEdgesState,
-    useNodesState,
+    Node,
+    NodeChange,
+    applyEdgeChanges,
+    applyNodeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -67,63 +76,66 @@ const Graph = ({
     const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
     const graphStyle = isRhsClosed ? rhsGraphStyle : defaultGraphStyle;
 
-    const [nodes, setNodes, onNodesChange] = useNodesState(data.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(data.edges);
+    const [nodes, setNodes] = useState<Node[]>([]);
+    const [edges, setEdges] = useState<Edge[]>([]);
+    useEffect(() => {
+        setNodes(data.nodes || []);
+        setEdges(data.edges || []);
+    }, [data]);
+
+    const onNodesChange = useCallback(
+        (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
+        [setNodes]
+    );
+    const onEdgesChange = useCallback(
+        (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+        [setEdges]
+    );
 
     const id = `${formatName(name)}-graph-widget`;
     return (
-        <>
-            {JSON.stringify(data, null, 2)}
-            <br/>
-            <br/>
-            <br/>
-            {JSON.stringify({edges: initialEdges, nodes: initialNodes} as GraphData, null, 2)}
-            <br/>
-            <br/>
-            <br/>
-            <Container
-                containerDirection={graphStyle.containerDirection}
+        <Container
+            containerDirection={graphStyle.containerDirection}
+        >
+            <GraphContainer
+                id={id}
+                data-testid={id}
+                width={graphStyle.graphWidth}
             >
-                <GraphContainer
-                    id={id}
-                    data-testid={id}
-                    width={graphStyle.graphWidth}
+                <Header>
+                    <AnchorLinkTitle
+                        id={id}
+                        query={`sectionId=${parentId}`}
+                        text={name}
+                        title={name}
+                    />
+                </Header>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    nodeTypes={nodeTypes}
+                    fitView={true}
+                    fitViewOptions={fitViewOptions}
+                    proOptions={hideOptions}
                 >
-                    <Header>
-                        <AnchorLinkTitle
-                            id={id}
-                            query={`sectionId=${parentId}`}
-                            text={name}
-                            title={name}
-                        />
-                    </Header>
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        nodeTypes={nodeTypes}
-                        fitView={true}
-                        fitViewOptions={fitViewOptions}
-                        proOptions={hideOptions}
-                    >
-                        <Background/>
-                        <Controls/>
-                        <MiniMap
-                            style={minimapStyle}
-                            zoomable={true}
-                            pannable={true}
-                        />
-                    </ReactFlow>
-                </GraphContainer>
-                <TextBox
-                    name={'My Graph Description'}
-                    parentId={parentId}
-                    text={'Graph Description'}
-                    style={graphStyle.textBoxStyle}
-                />
-            </Container>
-        </>
+                    <Background/>
+                    <Controls/>
+                    <MiniMap
+                        style={minimapStyle}
+                        zoomable={true}
+                        pannable={true}
+                    />
+                </ReactFlow>
+            </GraphContainer>
+            <TextBox
+                name={'My Graph Description'}
+                parentId={parentId}
+                text={'Graph Description'}
+                style={graphStyle.textBoxStyle}
+            />
+        </Container>
     );
 };
 
@@ -141,37 +153,3 @@ const Container = styled.div<{containerDirection: string}>`
 `;
 
 export default Graph;
-
-const initialNodes = [
-    {
-        id: 'n1',
-        position: {
-            x: 0,
-            y: 0,
-        },
-        type: 'graphNodeType',
-        data: {
-            label: 'Node 1',
-        },
-    },
-    {
-        id: 'n2',
-        position: {
-            x: 100,
-            y: 100,
-        },
-        type: 'graphNodeType',
-        data: {
-            label: 'Node 2',
-        },
-    },
-];
-
-const initialEdges = [
-    {
-        id: 'n1-n2',
-        source: 'n1',
-        target: 'n2',
-        type: 'step',
-    },
-];
