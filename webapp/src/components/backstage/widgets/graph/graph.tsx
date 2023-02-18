@@ -15,10 +15,16 @@ import 'reactflow/dist/style.css';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
+import {GraphEdge, GraphNode} from 'src/types/graph';
 
-import GraphNode, {setIsUrlHashed, setType, setUrl} from './graph_node';
+import GraphNodeType, {
+    setEdgeType,
+    setNodeIsUrlHashed,
+    setNodeType,
+    setNodeUrl,
+} from './graph_node_type';
 
-const initialNodes = [
+const initialNodes: GraphNode[] = [
     {
         id: 'n1',
         position: {
@@ -41,12 +47,11 @@ const initialNodes = [
     },
 ];
 
-const initialEdges = [
+const initialEdges: GraphEdge[] = [
     {
         id: 'n1-n2',
         source: 'n1',
         target: 'n2',
-        type: 'step',
     },
 ];
 
@@ -95,7 +100,7 @@ const Graph = ({
     name,
     parentId,
 }: Props) => {
-    const nodeTypes = useMemo(() => ({graphNode: GraphNode}), []);
+    const nodeTypes = useMemo(() => ({graphNode: GraphNodeType}), []);
 
     const {url} = useRouteMatch();
     const {hash: urlHash, search} = useLocation();
@@ -104,13 +109,20 @@ const Graph = ({
 
     const fillNodes = useCallback((sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
         initialNodes.forEach((node: any) => {
-            setType(node);
-            setUrl(node, sectionId, sectionUrl);
-            setIsUrlHashed(node, sectionUrlHash);
+            setNodeType(node);
+            setNodeUrl(node, sectionId, sectionUrl);
+            setNodeIsUrlHashed(node, sectionUrlHash);
+        });
+    }, [url, urlHash, sectionIdParam]);
+
+    const fillEdges = useCallback(() => {
+        initialEdges.forEach((edge: any) => {
+            setEdgeType(edge);
         });
     }, [url, urlHash, sectionIdParam]);
 
     fillNodes(sectionIdParam, url, urlHash);
+    fillEdges();
 
     const graphStyle = isRhsClosed ? rhsGraphStyle : defaultGraphStyle;
 

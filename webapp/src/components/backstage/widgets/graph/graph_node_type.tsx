@@ -5,8 +5,17 @@ import {Handle, Position} from 'reactflow';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {SECTION_ID_PARAM} from 'src/constants';
+import {GraphEdge, GraphNode} from 'src/types/graph';
 
-export const setIsUrlHashed = (node: any, sectionUrlHash: string) => {
+export const setEdgeType = (edge: GraphEdge) => {
+    edge.type = 'step';
+};
+
+export const setNodeType = (node: GraphNode) => {
+    node.type = 'graphNode';
+};
+
+export const setNodeIsUrlHashed = (node: GraphNode, sectionUrlHash: string) => {
     if (`#${node.id}` === sectionUrlHash) {
         node.data.isUrlHashed = true;
     } else {
@@ -14,11 +23,7 @@ export const setIsUrlHashed = (node: any, sectionUrlHash: string) => {
     }
 };
 
-export const setType = (node: any) => {
-    node.type = 'graphNode';
-};
-
-export const setUrl = (node: any, sectionId: string, sectionUrl: string) => {
+export const setNodeUrl = (node: GraphNode, sectionId: string, sectionUrl: string) => {
     let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
     if (sectionId) {
         nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
@@ -29,7 +34,7 @@ export const setUrl = (node: any, sectionId: string, sectionUrl: string) => {
 // These can be alternatives to nodes color
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
-const GraphNode = ({id, data}: any) => {
+const GraphNodeType = ({id, data}: any) => {
     return (
         <>
             <Handle
@@ -58,4 +63,4 @@ const NodeContainer = styled.div<{isUrlHashed: boolean}>`
     borderRadius: 5;
 `;
 
-export default GraphNode;
+export default GraphNodeType;
