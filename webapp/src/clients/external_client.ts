@@ -1,9 +1,9 @@
 import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
-import {TableData} from 'src/components/backstage/widgets/table/table';
+import {TableData} from 'src/types/table';
 import {SectionInfo} from 'src/types/organization';
-import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
+import {TextBoxData} from 'src/types/text_box';
 
 export async function fetchSectionInfo(id: string, url: string) {
     let data = await doGet(`${url}/${id}`);

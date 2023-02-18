@@ -2,11 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {ColHeader} from 'src/components/col_header';
-
-export interface TableHeaderData {
-    dim: 2 | 4 | 6 | 8 | 12;
-    name: string;
-}
+import {TableHeaderData} from 'src/types/table';
 
 type Props = {
     headers: TableHeaderData[];

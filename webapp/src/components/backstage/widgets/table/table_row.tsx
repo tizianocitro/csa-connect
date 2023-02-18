@@ -4,17 +4,7 @@ import {useRouteMatch} from 'react-router-dom';
 
 import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
-
-export interface TableRowData {
-    id: string;
-    name: string;
-    values: TableValue[];
-}
-
-interface TableValue {
-    dim: 2 | 4 | 6 | 8 | 12;
-    value: string;
-}
+import {TableRowData} from 'src/types/table';
 
 type Props = {
     fullUrl?: string;

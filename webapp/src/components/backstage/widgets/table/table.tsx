@@ -2,15 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
+import {TableData} from 'src/types/table';
 
-import TableHeader, {TableHeaderData} from './table_header';
-import TableRow, {TableRowData} from './table_row';
-
-export interface TableData {
-    headers: TableHeaderData[],
-    rows: TableRowData[],
-    caption: string;
-}
+import TableHeader from './table_header';
+import TableRow from './table_row';
 
 type Props = {
     data: TableData;

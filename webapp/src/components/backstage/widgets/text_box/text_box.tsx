@@ -6,10 +6,6 @@ import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 
-export interface TextBoxData {
-    text: string;
-}
-
 export type TextBoxStyle = {
     height?: string;
     marginTop?: string;

@@ -28,9 +28,9 @@ import {
     SectionInfo,
 } from 'src/types/organization';
 import {ECOSYSTEM} from 'src/constants';
-import {TableData} from 'src/components/backstage/widgets/table/table';
+import {TableData} from 'src/types/table';
 import {getOrganizations} from 'src/config/config';
-import {TextBoxData} from 'src/components/backstage/widgets/text_box/text_box';
+import {TextBoxData} from 'src/types/text_box';
 
 type FetchParams = FetchOrganizationsParams;
 
