@@ -9,6 +9,7 @@ import TextBoxWrapper from './text_box/text_box_wrapper';
 
 export enum WidgetType {
     Channels = 'channels',
+    Graph = 'graph',
     Table = 'table',
     TextBox = 'text-box',
 }
@@ -22,15 +23,19 @@ const filterWidgetsByType = (widgets: Widget[], type: string) => {
 };
 
 const Widgets = ({widgets}: Props) => {
-    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
-    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
     const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const graphWidgets = filterWidgetsByType(widgets, WidgetType.Graph);
+    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
+    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
     return (
         <>
-            <GraphWrapper
-                name={'My Graph'}
-                url={''}
-            />
+            {graphWidgets.map(({name, url}, index) => (
+                <GraphWrapper
+                    key={`${name}-${index}`}
+                    name={name}
+                    url={url}
+                />
+            ))}
             {textBoxWidgets.map(({name, url}, index) => (
                 <TextBoxWrapper
                     key={`${name}-${index}`}

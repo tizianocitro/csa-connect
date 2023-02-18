@@ -14,11 +14,9 @@ import 'reactflow/dist/style.css';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
-import {SECTION_ID_PARAM} from 'src/constants';
-import {getSiteUrl} from 'src/clients';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 
-import GraphNode from './graph_node';
+import GraphNode, {setIsUrlHashed, setType, setUrl} from './graph_node';
 
 const initialNodes = [
     {
@@ -27,7 +25,6 @@ const initialNodes = [
             x: 0,
             y: 0,
         },
-        type: 'graphNode',
         data: {
             label: 'Node 1',
         },
@@ -38,7 +35,6 @@ const initialNodes = [
             x: 100,
             y: 100,
         },
-        type: 'graphNode',
         data: {
             label: 'Node 2',
         },
@@ -61,7 +57,7 @@ type GraphStyle = {
 };
 
 type Props = {
-    isRhs?: boolean;
+    isRhsClosed?: boolean;
     name: string;
     parentId: string;
 };
@@ -95,7 +91,7 @@ const minimapStyle = {
 };
 
 const Graph = ({
-    isRhs = false,
+    isRhsClosed = false,
     name,
     parentId,
 }: Props) => {
@@ -106,24 +102,17 @@ const Graph = ({
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;
 
-    const fillNodesUrlAndIsUrlHashed = useCallback((sectionUrl: string, sectionId: string) => {
-        initialNodes.forEach((n: any) => {
-            let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
-            if (sectionIdParam) {
-                nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
-            }
-            n.data.url = nodeUrl;
-            if (`#${n.id}` === urlHash) {
-                n.data.isUrlHashed = true;
-            } else {
-                n.data.isUrlHashed = false;
-            }
+    const fillNodes = useCallback((sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
+        initialNodes.forEach((node: any) => {
+            setType(node);
+            setUrl(node, sectionId, sectionUrl);
+            setIsUrlHashed(node, sectionUrlHash);
         });
     }, [url, urlHash, sectionIdParam]);
 
-    fillNodesUrlAndIsUrlHashed(url, sectionIdParam);
+    fillNodes(sectionIdParam, url, urlHash);
 
-    const graphStyle = isRhs ? rhsGraphStyle : defaultGraphStyle;
+    const graphStyle = isRhsClosed ? rhsGraphStyle : defaultGraphStyle;
 
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);

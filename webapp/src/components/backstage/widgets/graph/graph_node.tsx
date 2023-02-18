@@ -3,6 +3,28 @@ import styled from 'styled-components';
 import {Handle, Position} from 'reactflow';
 
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
+import {getSiteUrl} from 'src/clients';
+import {SECTION_ID_PARAM} from 'src/constants';
+
+export const setIsUrlHashed = (node: any, sectionUrlHash: string) => {
+    if (`#${node.id}` === sectionUrlHash) {
+        node.data.isUrlHashed = true;
+    } else {
+        node.data.isUrlHashed = false;
+    }
+};
+
+export const setType = (node: any) => {
+    node.type = 'graphNode';
+};
+
+export const setUrl = (node: any, sectionId: string, sectionUrl: string) => {
+    let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
+    if (sectionId) {
+        nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
+    }
+    node.data.url = nodeUrl;
+};
 
 // These can be alternatives to nodes color
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
