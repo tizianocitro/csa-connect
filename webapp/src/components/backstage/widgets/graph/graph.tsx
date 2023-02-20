@@ -1,5 +1,6 @@
 import React, {
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useState,
@@ -23,6 +24,8 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
+import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/right_hand_sidebar';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import GraphNodeType from './graph_node_type';
 
@@ -33,7 +36,6 @@ type GraphStyle = {
 };
 
 type Props = {
-    isRhsClosed?: boolean;
     name: string;
     data: GraphData;
     parentId: string;
@@ -72,13 +74,15 @@ const isDescriptionProvided = ({name, text}: GraphDescription) => {
 };
 
 const Graph = ({
-    isRhsClosed = false,
     name,
     data,
     parentId,
 }: Props) => {
-    const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
+    const fullUrl = useContext(FullUrlContext);
+    const isRhsClosed = useContext(IsRhsClosedContext);
+    const isRhs = useContext(IsRhsContext);
 
+    const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
@@ -97,7 +101,7 @@ const Graph = ({
         [setEdges]
     );
 
-    const graphStyle = isRhsClosed || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+    const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
     const id = `${formatName(name)}-graph-widget`;
     return (
         <Container
@@ -110,6 +114,7 @@ const Graph = ({
             >
                 <Header>
                     <AnchorLinkTitle
+                        fullUrl={fullUrl}
                         id={id}
                         query={`sectionId=${parentId}`}
                         text={name}

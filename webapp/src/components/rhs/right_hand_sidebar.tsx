@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
+import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-
-// import {FormattedMessage} from 'react-intl';
+import qs from 'qs';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -10,98 +10,89 @@ import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
 import {Team} from 'mattermost-webapp/packages/types/src/teams';
 import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 
-// import Table from 'src/components/widgets/table/table';
-import {Organization} from 'src/types/organization';
-import {useOrganization} from 'src/hooks';
+import {useSection, useSectionInfo} from 'src/hooks';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import SectionsWidgetsContainerWithRhs from 'src/components/backstage/sections_widgets/rhs_sections_widgets_container';
+import {getSiteUrl} from 'src/clients';
+import {ToastProvider} from 'src/components/backstage/toast_banner';
 
-export enum RhsSections {
-    SectionTable = 'organization-table',
-}
+type SectionContextOptions = {
+    parentId: string;
+    sectionId: string;
+};
+
+export const IsRhsClosedContext = createContext(true);
+export const FullUrlContext = createContext('');
+export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: ''});
 
 const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
 const channelNameSelector = (channelId: string) => (state: GlobalState): Channel => getChannel(state, channelId);
 
+// Test: http://localhost:8065/lab/channels/demo?sectionId=0&parentId=0
 const RHSView = () => {
-    const [status, setStatus] = useState('Closed');
-    const updateStatus = () => {
-        if (status === 'Closed') {
-            setStatus('Open');
-        } else {
-            setStatus('Closed');
-        }
+    const [closed, setClosed] = useState(true);
+    const updateClosed = () => {
+        setClosed((prevClosed) => !prevClosed);
     };
-    const resetStatus = () => {
-        setStatus('Closed');
+    const resetClosed = () => {
+        setClosed(true);
     };
 
-    // const [closed, setClosed] = useState(false);
-    // const updateClosed = () => {
-    //     setClosed(true);
-    // };
-    // const resetClosed = () => {
-    //     setClosed(false);
-    // };
-
-    // TODO: Make the productId dynamic using an API that gives back the id given the channel name
-    // If the channel is not associated to a product, show a message that tells so
-    const maybeOrganization = useOrganization('0');
-    const organization = maybeOrganization as Organization;
-    const {hash: urlHash} = useLocation();
+    const {search} = useLocation();
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
+    const sectionIdParam = queryParams.sectionId as string;
+    const parentIdParam = queryParams.parentId as string;
+    const sectionContextOptions: SectionContextOptions = {parentId: parentIdParam, sectionId: sectionIdParam};
+    const section = useSection(parentIdParam);
+    const sectionInfo = useSectionInfo(sectionIdParam, section.url);
 
     const channelId = useSelector(getCurrentChannelId);
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
     const channel = useSelector(channelNameSelector(channelId));
-    const fullUrl = `${team.name}/channels/${channel.name}`;
+
+    const fullUrl = `/${team.name}/channels/${channel.name}`;
 
     useEffect(() => {
-        resetStatus();
+        resetClosed();
     }, [channelId]);
 
     useEffect(() => {
-        (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).addEventListener('click', updateStatus);
+        (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).
+            addEventListener('click', updateClosed);
 
         return () => {
-            (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).removeEventListener('click', updateStatus);
+            (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).
+                removeEventListener('click', updateClosed);
         };
-    }, [status]);
-
-    // useEffect(() => {
-    //    if (closed) {
-    //    const parent = document.getElementById('open-product-rhs')?.parentElement;
-    //    parent?.click();
-    //        resetClosed();
-    //    }
-    // }, [channelID]);
-
-    // document.getElementsByClassName('icon icon-close')[0].click();
-    // useEffect(() => {
-    //    (document.getElementsByClassName('icon icon-close')[0] as HTMLElement)?.addEventListener('click', updateClosed);
-    //    return () => {
-    //        (document.getElementsByClassName('icon icon-close')[0] as HTMLElement)?.removeEventListener('click', updateStatus);
-    //    };
-    // }, [closed]);
+    }, [closed]);
 
     return (
-        <div style={style.rhs}>
+        <Container>
             <h1>
-                {`${status} - ${channel.display_name}`}
+                {`${closed} - ${channel.display_name}`}
             </h1>
             <br/>
-            {/* <Table
-                id={RhsSections.SectionTable}
-                organization={organization}
-                urlHash={urlHash}
-                fullUrl={fullUrl}
-            /> */}
-        </div>
+            <FullUrlContext.Provider value={fullUrl}>
+                <IsRhsClosedContext.Provider value={closed}>
+                    <SectionContext.Provider value={sectionContextOptions}>
+                        <ToastProvider>
+                            <SectionsWidgetsContainerWithRhs
+                                headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${section.id}&${PARENT_ID_PARAM}=${parentIdParam}`}
+                                name={sectionInfo.name}
+                                url={fullUrl}
+                                widgets={section.widgets}
+                            />
+                        </ToastProvider>
+                    </SectionContext.Provider>
+                </IsRhsClosedContext.Provider>
+            </FullUrlContext.Provider>
+        </Container>
     );
 };
 
-const style = {
-    rhs: {
-        padding: '10px',
-    },
-};
+const Container = styled.div`
+    padding: 10px;
+`;
 
 export default RHSView;

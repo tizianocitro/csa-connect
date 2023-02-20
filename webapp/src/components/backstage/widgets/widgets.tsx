@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {Widget} from 'src/types/organization';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import ChannelsWrapper from './channels/channels_wrapper';
 import GraphWrapper from './graph/graph_wrapper';
@@ -23,6 +24,7 @@ const filterWidgetsByType = (widgets: Widget[], type: string) => {
 };
 
 const Widgets = ({widgets}: Props) => {
+    const isRhs = useContext(IsRhsContext);
     const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
     const graphWidgets = filterWidgetsByType(widgets, WidgetType.Graph);
     const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
@@ -50,7 +52,7 @@ const Widgets = ({widgets}: Props) => {
                     url={url}
                 />
             ))}
-            {channelWidgets.length > 0 &&
+            {channelWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
             }
         </>

@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {TableData} from 'src/types/table';
+import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
 
 type Props = {
     data: TableData;
-    fullUrl?: string;
     id: string;
     isSection?: boolean;
     open?: (resourceId: string) => void;
@@ -20,7 +20,6 @@ type Props = {
 
 const Table = ({
     data,
-    fullUrl,
     id,
     isSection = false,
     open,
@@ -28,6 +27,7 @@ const Table = ({
     pointer = false,
     urlHash,
 }: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const {caption, headers, rows} = data;
     const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
     return (
@@ -37,6 +37,7 @@ const Table = ({
         >
             <Header>
                 <AnchorLinkTitle
+                    fullUrl={fullUrl}
                     id={tableId}
                     query={`sectionId=${parentId}`}
                     text={caption}
@@ -53,7 +54,6 @@ const Table = ({
 
                 {rows?.map((row) => (
                     <TableRow
-                        fullUrl={fullUrl}
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}

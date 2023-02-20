@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {formatUrlWithId, useGraphData} from 'src/hooks';
+import {FullUrlContext, SectionContext} from 'src/components/rhs/right_hand_sidebar';
 
 import Graph from './graph';
 
@@ -15,11 +16,20 @@ const GraphWrapper = ({
     name = 'default',
     url = '',
 }: Props) => {
-    const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
+    const fullUrl = useContext(FullUrlContext);
+    const sectionContextOptions = useContext(SectionContext);
+
+    const {url: sectionUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-    const parentId = queryParams.sectionId as string;
-    const data = useGraphData(formatUrlWithId(url, sectionId));
+    const parentIdParam = queryParams.sectionId as string;
+    const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
+    const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
+    const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
+
+    const isFullUrlProvided = fullUrl !== '';
+    const routeUrl = isFullUrlProvided ? fullUrl : sectionUrl;
+    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), routeUrl);
     return (
         <Graph
             name={name}

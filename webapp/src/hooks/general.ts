@@ -9,7 +9,7 @@ import {useUpdateEffect} from 'react-use';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
@@ -163,9 +163,8 @@ export const useSectionData = (url: string): TableData => {
     return sectionData as TableData;
 };
 
-export const useGraphData = (url: string): GraphData => {
+export const useGraphData = (url: string, routeUrl: string): GraphData => {
     const [graphData, setGraphData] = useState<GraphData | {}>({});
-    const {url: routeUrl} = useRouteMatch();
     const {hash: urlHash, search} = useLocation();
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;

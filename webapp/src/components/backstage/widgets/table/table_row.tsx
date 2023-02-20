@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
 import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
 import {TableRowData} from 'src/types/table';
+import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
 
 type Props = {
-    fullUrl?: string;
     pointer: boolean;
     query?: string;
     row: TableRowData;
@@ -16,17 +16,19 @@ type Props = {
 };
 
 const buildTo = (
-    fullUrl: string | undefined,
+    fullUrl: string,
     id: string,
     query: string | undefined,
     url: string
 ) => {
-    let to = fullUrl ? `${url}${fullUrl}` : `${url}`;
-    to = query ? `${to}?${query}` : `${to}`;
+    const isFullUrlProvided = fullUrl !== '';
+    let to = isFullUrlProvided ? fullUrl : url;
+    to = query ? `${to}?${query}` : to;
     return `${to}#${id}`;
 };
 
-const TableRow = ({fullUrl, onClick, pointer, query, row, urlHash}: Props) => {
+const TableRow = ({onClick, pointer, query, row, urlHash}: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
     const {id, name, values} = row;
     const itemId = buildIdForUrlHashReference('table-row', id);
