@@ -3,7 +3,7 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {formatName, formatUrlWithId, useTableData} from 'src/hooks';
-import {SectionContext} from 'src/components/rhs/right_hand_sidebar';
+import {SectionContext} from 'src/components/rhs/rhs';
 
 import Table from './table';
 

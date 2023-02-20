@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {TableData} from 'src/types/table';
-import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PARENT_ID_PARAM} from 'src/constants';
 
 import TableHeader from './table_header';

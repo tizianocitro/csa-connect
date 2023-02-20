@@ -24,7 +24,7 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
-import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {PARENT_ID_PARAM} from 'src/constants';
 

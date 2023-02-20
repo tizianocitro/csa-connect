@@ -5,7 +5,7 @@ import {useRouteMatch} from 'react-router-dom';
 import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
 import {TableRowData} from 'src/types/table';
-import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 
 type Props = {
     pointer: boolean;

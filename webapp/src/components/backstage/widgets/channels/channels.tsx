@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PARENT_ID_PARAM} from 'src/constants';
 
 import ChannelBox from './channel_box';

@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import qs from 'qs';
 
-import {SectionContext} from 'src/components/rhs/right_hand_sidebar';
+import {SectionContext} from 'src/components/rhs/rhs';
 
 import ChannelsSection from './channels';
 

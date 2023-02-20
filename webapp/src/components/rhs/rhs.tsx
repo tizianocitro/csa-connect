@@ -69,10 +69,6 @@ const RHSView = () => {
 
     return (
         <Container>
-            <h1>
-                {`${closed} - ${channel.display_name}`}
-            </h1>
-            <br/>
             <FullUrlContext.Provider value={fullUrl}>
                 <IsRhsClosedContext.Provider value={closed}>
                     <SectionContext.Provider value={sectionContextOptions}>

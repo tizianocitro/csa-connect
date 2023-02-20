@@ -3,7 +3,7 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {formatUrlWithId, useGraphData} from 'src/hooks';
-import {FullUrlContext, SectionContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 
 import Graph from './graph';
 

@@ -5,7 +5,7 @@ import {useIntl} from 'react-intl';
 import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
-import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PARENT_ID_PARAM} from 'src/constants';
 
 export type TextBoxStyle = {
