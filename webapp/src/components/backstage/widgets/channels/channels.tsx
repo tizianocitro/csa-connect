@@ -4,6 +4,7 @@ import {useIntl} from 'react-intl';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {PARENT_ID_PARAM} from 'src/constants';
 
 import ChannelBox from './channel_box';
 
@@ -27,7 +28,7 @@ const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
-                    query={`sectionId=${parentId}`}
+                    query={`${PARENT_ID_PARAM}=${parentId}`}
                     text={title}
                     title={title}
                 />

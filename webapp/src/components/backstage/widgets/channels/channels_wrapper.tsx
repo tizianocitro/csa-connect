@@ -13,7 +13,7 @@ const ChannelsWrapper = () => {
     const {params} = useRouteMatch<{sectionId: string}>();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-    const parentIdParam = queryParams.sectionId as string;
+    const parentIdParam = queryParams.parentId as string;
     const teamId = useSelector(getCurrentTeamId);
 
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';

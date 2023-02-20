@@ -26,6 +26,7 @@ import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/t
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/right_hand_sidebar';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {PARENT_ID_PARAM} from 'src/constants';
 
 import GraphNodeType from './graph_node_type';
 
@@ -116,7 +117,7 @@ const Graph = ({
                     <AnchorLinkTitle
                         fullUrl={fullUrl}
                         id={id}
-                        query={`sectionId=${parentId}`}
+                        query={`${PARENT_ID_PARAM}=${parentId}`}
                         text={name}
                         title={name}
                     />

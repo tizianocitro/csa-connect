@@ -21,7 +21,7 @@ const TableWrapper = ({
     const {hash: urlHash} = useLocation();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-    const parentIdParam = queryParams.sectionId as string;
+    const parentIdParam = queryParams.parentId as string;
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;

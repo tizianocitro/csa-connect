@@ -6,6 +6,7 @@ import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {PARENT_ID_PARAM} from 'src/constants';
 
 export type TextBoxStyle = {
     height?: string;
@@ -43,7 +44,7 @@ const TextBox = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
-                    query={`sectionId=${parentId}`}
+                    query={`${PARENT_ID_PARAM}=${parentId}`}
                     text={name}
                     title={name}
                 />

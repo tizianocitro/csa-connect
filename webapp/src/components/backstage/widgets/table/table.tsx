@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {TableData} from 'src/types/table';
 import {FullUrlContext} from 'src/components/rhs/right_hand_sidebar';
+import {PARENT_ID_PARAM} from 'src/constants';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
@@ -39,7 +40,7 @@ const Table = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={tableId}
-                    query={`sectionId=${parentId}`}
+                    query={`${PARENT_ID_PARAM}=${parentId}`}
                     text={caption}
                     title={caption}
                 />
@@ -57,7 +58,7 @@ const Table = ({
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
-                        query={`sectionId=${parentId}`}
+                        query={`${PARENT_ID_PARAM}=${parentId}`}
                         row={row}
                         urlHash={urlHash}
                     />
