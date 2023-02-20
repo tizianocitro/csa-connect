@@ -12,7 +12,6 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
-import {Edge, Node} from 'reactflow';
 
 import {
     fetchChannels,
@@ -34,12 +33,7 @@ import {TableData} from 'src/types/table';
 import {getOrganizations} from 'src/config/config';
 import {TextBoxData} from 'src/types/text_box';
 import {GraphData} from 'src/types/graph';
-import {
-    buildEdgeType,
-    buildNodeIsUrlHashed,
-    buildNodeType,
-    buildNodeUrl,
-} from 'src/components/backstage/widgets/graph/graph_node_type';
+import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -175,34 +169,6 @@ export const useGraphData = (url: string): GraphData => {
     const {hash: urlHash, search} = useLocation();
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;
-
-    const fillNodes = (nodes: Node[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
-        const filledNodes: Node[] = [];
-        nodes.forEach((node) => {
-            filledNodes.push({
-                ...node,
-                data: {
-                    ...node.data,
-                    url: buildNodeUrl(sectionId, sectionUrl),
-                    isUrlHashed: buildNodeIsUrlHashed(node, sectionUrlHash),
-                },
-                type: buildNodeType(),
-            });
-        });
-        return filledNodes;
-    };
-
-    const fillEdges = (edges: Edge[]) => {
-        const filledEdges: Edge[] = [];
-        edges.forEach((edge) => {
-            filledEdges.push({
-                ...edge,
-                type: buildEdgeType(),
-            });
-        });
-        return filledEdges;
-    };
-
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
@@ -210,7 +176,11 @@ export const useGraphData = (url: string): GraphData => {
             if (!isCanceled) {
                 const filledNodes = fillNodes(graphDataResult.nodes, sectionIdParam, routeUrl, urlHash);
                 const filledEdges = fillEdges(graphDataResult.edges);
-                setGraphData({edges: filledEdges, nodes: filledNodes});
+                setGraphData({
+                    description: graphDataResult.description,
+                    edges: filledEdges,
+                    nodes: filledNodes,
+                });
             }
         }
 

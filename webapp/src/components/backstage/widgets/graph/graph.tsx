@@ -22,7 +22,7 @@ import 'reactflow/dist/style.css';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
-import {GraphData} from 'src/types/graph';
+import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 
 import GraphNodeType from './graph_node_type';
 
@@ -67,6 +67,10 @@ const minimapStyle = {
     width: 180,
 };
 
+const isDescriptionProvided = ({name, text}: GraphDescription) => {
+    return name !== '' && text !== '';
+};
+
 const Graph = ({
     isRhsClosed = false,
     name,
@@ -74,11 +78,12 @@ const Graph = ({
     parentId,
 }: Props) => {
     const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
-    const graphStyle = isRhsClosed ? rhsGraphStyle : defaultGraphStyle;
 
+    const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     useEffect(() => {
+        setDescription(data.description || emptyDescription);
         setNodes(data.nodes || []);
         setEdges(data.edges || []);
     }, [data]);
@@ -92,6 +97,7 @@ const Graph = ({
         [setEdges]
     );
 
+    const graphStyle = isRhsClosed || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
     const id = `${formatName(name)}-graph-widget`;
     return (
         <Container
@@ -129,12 +135,14 @@ const Graph = ({
                     />
                 </ReactFlow>
             </GraphContainer>
-            <TextBox
-                name={'My Graph Description'}
-                parentId={parentId}
-                text={'Graph Description'}
-                style={graphStyle.textBoxStyle}
-            />
+            {isDescriptionProvided(description) &&
+                <TextBox
+                    name={description.name}
+                    parentId={parentId}
+                    text={description.text}
+                    style={graphStyle.textBoxStyle}
+                />
+            }
         </Container>
     );
 };

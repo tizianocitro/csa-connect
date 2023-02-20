@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
+    Edge,
     Handle,
     Node,
     NodeProps,
@@ -11,17 +12,8 @@ import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {SECTION_ID_PARAM} from 'src/constants';
 
-export const buildEdgeType = () => {
-    return 'step';
-};
-
-export const buildNodeType = () => {
-    return 'graphNodeType';
-};
-
-export const buildNodeIsUrlHashed = (node: Node, sectionUrlHash: string) => {
-    return `#${node.id}` === sectionUrlHash;
-};
+export const edgeType = 'step';
+export const nodeType = 'graphNodeType';
 
 export const buildNodeUrl = (sectionId: string, sectionUrl: string) => {
     let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
@@ -29,6 +21,33 @@ export const buildNodeUrl = (sectionId: string, sectionUrl: string) => {
         nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
     }
     return nodeUrl;
+};
+
+export const fillEdges = (edges: Edge[]) => {
+    const filledEdges: Edge[] = [];
+    edges.forEach((edge) => {
+        filledEdges.push({
+            ...edge,
+            type: edgeType,
+        });
+    });
+    return filledEdges;
+};
+
+export const fillNodes = (nodes: Node[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
+    const filledNodes: Node[] = [];
+    nodes.forEach((node) => {
+        filledNodes.push({
+            ...node,
+            data: {
+                ...node.data,
+                url: buildNodeUrl(sectionId, sectionUrl),
+                isUrlHashed: `#${node.id}` === sectionUrlHash,
+            },
+            type: nodeType,
+        });
+    });
+    return filledNodes;
 };
 
 // These can be alternatives to nodes color
