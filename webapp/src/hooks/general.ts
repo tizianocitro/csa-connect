@@ -29,9 +29,13 @@ import {
     Section,
     SectionInfo,
 } from 'src/types/organization';
-import {ECOSYSTEM} from 'src/constants';
 import {TableData} from 'src/types/table';
-import {getOrganizations} from 'src/config/config';
+import {
+    getEcosystem,
+    getOrganizationById,
+    getOrganizations,
+    getOrganizationsNoEcosystem,
+} from 'src/config/config';
 import {TextBoxData} from 'src/types/text_box';
 import {GraphData} from 'src/types/graph';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
@@ -58,11 +62,11 @@ export const useReservedCategoryTitleMapper = () => {
 };
 
 export const useEcosystem = (): Organization => {
-    return getOrganizations().filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
+    return getEcosystem();
 };
 
 export const useOrganization = (id: string): Organization => {
-    return getOrganizations().filter((o: Organization) => o.id === id)[0];
+    return getOrganizationById(id);
 };
 
 export const useOrganizationsNoPageList = (): Organization[] => {
@@ -79,7 +83,7 @@ export const useOrganizationsNoPageList = (): Organization[] => {
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
 [Organization[], number, FetchOrganizationsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
-    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizationsNoEcosystem());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
@@ -97,14 +101,14 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
     });
 
     useEffect(() => {
-        let orgs = getOrganizations();
+        let orgs = getOrganizationsNoEcosystem();
         orgs.sort();
         if (fetchParams.direction === 'desc') {
             orgs.reverse();
         }
         const searchTerm = fetchParams.search_term;
         if (searchTerm && searchTerm.trim().length !== 0) {
-            orgs = orgs.filter((o: Organization) => o.name.indexOf(searchTerm) !== -1);
+            orgs = orgs.filter((o) => o.name.indexOf(searchTerm) !== -1);
         }
         setOrganizations(orgs);
         setTotalCount(orgs.length);
@@ -117,7 +121,7 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
 
 export const useSection = (id: string): Section => {
     return getOrganizations().
-        map((o: Organization) => o.sections).
+        map((o) => o.sections).
         flat().
         filter((s: Section) => s.id === id)[0];
 };
