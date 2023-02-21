@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
+import {FormattedMessage} from 'react-intl';
 
 import {useSection, useSectionInfo} from 'src/hooks';
-
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import SectionsWidgetsContainerWithRhs from 'src/components/backstage/sections_widgets/rhs_sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
@@ -27,13 +27,13 @@ const RHSWidgets = (props: Props) => {
     const fullUrl = useContext(FullUrlContext);
     return (
         <Container>
-            {section && sectionInfo &&
+            {(section && sectionInfo) ?
                 <SectionsWidgetsContainerWithRhs
                     headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
                     name={sectionInfo.name}
                     url={fullUrl}
                     widgets={section?.widgets}
-                />}
+                /> : <FormattedMessage defaultMessage='The channel is not related to any section.'/>}
         </Container>
     );
 };
