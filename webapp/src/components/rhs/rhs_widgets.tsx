@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 import {FormattedMessage} from 'react-intl';
 
@@ -16,6 +17,19 @@ type Props = {
 
 // Test: http://localhost:8065/lab/channels/demo?sectionId=0&parentId=0
 const RHSWidgets = (props: Props) => {
+    const {hash: urlHash} = useLocation();
+
+    // When first loading the page, the element with the ID corresponding to the URL
+    // hash is not mounted, so the browser fails to automatically scroll to such section.
+    // To fix this, we need to manually scroll to the component
+    useEffect(() => {
+        if (urlHash !== '') {
+            setTimeout(() => {
+                document.querySelector(urlHash)?.scrollIntoView();
+            }, 300);
+        }
+    }, [urlHash]);
+
     const [parentId, setParentId] = useState('');
     const [sectionId, setSectionId] = useState('');
     useEffect(() => {
@@ -40,6 +54,7 @@ const RHSWidgets = (props: Props) => {
 
 const Container = styled.div`
     padding: 10px;
+    overflow-y: auto;
 `;
 
 export default RHSWidgets;
