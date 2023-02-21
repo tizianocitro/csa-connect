@@ -9,6 +9,7 @@ import {pluginId} from 'src/manifest';
 import {
     AddChannelParams,
     AddChannelResult,
+    FetchChannelByIDResult,
     FetchChannelsParams,
     FetchChannelsReturn,
 } from 'src/types/channels';
@@ -52,6 +53,14 @@ export const fetchChannels = async (params: FetchChannelsParams) => {
         data = {items: []} as FetchChannelsReturn;
     }
     return data as FetchChannelsReturn;
+};
+
+export const fetchChannelById = async (channelId: string) => {
+    let data = await doGet(`${apiUrl}/channel/${channelId}`);
+    if (!data) {
+        data = {channel: {}} as FetchChannelByIDResult;
+    }
+    return data as FetchChannelByIDResult;
 };
 
 export const addChannel = async ({

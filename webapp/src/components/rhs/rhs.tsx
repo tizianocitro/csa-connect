@@ -1,5 +1,4 @@
 import React, {createContext, useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import qs from 'qs';
@@ -10,11 +9,10 @@ import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
 import {Team} from 'mattermost-webapp/packages/types/src/teams';
 import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 
-import {useSection, useSectionInfo} from 'src/hooks';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
-import SectionsWidgetsContainerWithRhs from 'src/components/backstage/sections_widgets/rhs_sections_widgets_container';
-import {getSiteUrl} from 'src/clients';
+import {useChannelById} from 'src/hooks';
 import {ToastProvider} from 'src/components/backstage/toast_banner';
+
+import RHSWidgets from './rhs_widgets';
 
 type SectionContextOptions = {
     parentId: string;
@@ -28,7 +26,6 @@ export const SectionContext = createContext<SectionContextOptions>({parentId: ''
 const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
 const channelNameSelector = (channelId: string) => (state: GlobalState): Channel => getChannel(state, channelId);
 
-// Test: http://localhost:8065/lab/channels/demo?sectionId=0&parentId=0
 const RHSView = () => {
     const [closed, setClosed] = useState(true);
     const updateClosed = () => {
@@ -39,16 +36,19 @@ const RHSView = () => {
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;
     const parentIdParam = queryParams.parentId as string;
-    const sectionContextOptions: SectionContextOptions = {parentId: parentIdParam, sectionId: sectionIdParam};
-    const section = useSection(parentIdParam);
-    const sectionInfo = useSectionInfo(sectionIdParam, section.url);
 
     const channelId = useSelector(getCurrentChannelId);
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
     const channel = useSelector(channelNameSelector(channelId));
-
     const fullUrl = `/${team.name}/channels/${channel.name}`;
+
+    const channelByID = useChannelById(channelId);
+
+    const sectionContextOptions: SectionContextOptions = {
+        parentId: typeof parentIdParam === 'undefined' ? channelByID.parentId : parentIdParam,
+        sectionId: typeof sectionIdParam === 'undefined' ? channelByID.sectionId : sectionIdParam,
+    };
 
     useEffect(() => {
         // Select the node that will be observed for mutations
@@ -81,27 +81,19 @@ const RHSView = () => {
     });
 
     return (
-        <Container>
-            <FullUrlContext.Provider value={fullUrl}>
-                <IsRhsClosedContext.Provider value={closed}>
-                    <SectionContext.Provider value={sectionContextOptions}>
-                        <ToastProvider>
-                            <SectionsWidgetsContainerWithRhs
-                                headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${sectionIdParam}&${PARENT_ID_PARAM}=${parentIdParam}`}
-                                name={sectionInfo.name}
-                                url={fullUrl}
-                                widgets={section.widgets}
-                            />
-                        </ToastProvider>
-                    </SectionContext.Provider>
-                </IsRhsClosedContext.Provider>
-            </FullUrlContext.Provider>
-        </Container>
+        <FullUrlContext.Provider value={fullUrl}>
+            <IsRhsClosedContext.Provider value={closed}>
+                <SectionContext.Provider value={sectionContextOptions}>
+                    <ToastProvider>
+                        <RHSWidgets
+                            parentId={sectionContextOptions.parentId}
+                            sectionId={sectionContextOptions.sectionId}
+                        />
+                    </ToastProvider>
+                </SectionContext.Provider>
+            </IsRhsClosedContext.Provider>
+        </FullUrlContext.Provider>
     );
 };
-
-const Container = styled.div`
-    padding: 10px;
-`;
 
 export default RHSView;

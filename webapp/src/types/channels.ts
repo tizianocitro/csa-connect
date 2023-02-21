@@ -13,6 +13,10 @@ export interface FetchChannelsReturn {
     items: WidgetChannel[];
 }
 
+export interface FetchChannelByIDResult {
+    channel: WidgetChannel;
+}
+
 export interface ChannelCreation {
     channelId: string;
     channelMode: string;

@@ -14,6 +14,7 @@ import qs from 'qs';
 import {debounce, isEqual} from 'lodash';
 
 import {
+    fetchChannelById,
     fetchChannels,
     fetchGraphData,
     fetchSectionInfo,
@@ -138,7 +139,7 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [id]);
     return info as SectionInfo;
 };
 
@@ -189,7 +190,7 @@ export const useGraphData = (url: string, routeUrl: string): GraphData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url]);
     return graphData as GraphData;
 };
 
@@ -210,7 +211,7 @@ export const useTableData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url]);
     return tableData as TableData;
 };
 
@@ -231,7 +232,7 @@ export const useTextBoxData = (url: string): TextBoxData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url]);
     return textBoxData as TextBoxData;
 };
 
@@ -255,6 +256,28 @@ export const useChannelsList = (defaultFetchParams: FetchChannelsParams): Widget
     }, []);
 
     return channels;
+};
+
+export const useChannelById = (channelId: string): WidgetChannel => {
+    const [channel, setChannel] = useState<WidgetChannel | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchChannelsAsync() {
+            const channelReturn = await fetchChannelById(channelId);
+            if (!isCanceled) {
+                setChannel(channelReturn.channel);
+            }
+        }
+
+        fetchChannelsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [channelId]);
+
+    return channel as WidgetChannel;
 };
 
 // Update the query string when the fetchParams change
