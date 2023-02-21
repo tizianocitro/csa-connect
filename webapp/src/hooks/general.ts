@@ -168,12 +168,13 @@ export const useGraphData = (url: string, routeUrl: string): GraphData => {
     const {hash: urlHash, search} = useLocation();
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
+    const sectionIdParam = queryParams.sectionId as string;
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
             const graphDataResult = await fetchGraphData(url);
             if (!isCanceled) {
-                const filledNodes = fillNodes(graphDataResult.nodes, parentIdParam, routeUrl, urlHash);
+                const filledNodes = fillNodes(graphDataResult.nodes, parentIdParam, sectionIdParam, routeUrl, urlHash);
                 const filledEdges = fillEdges(graphDataResult.edges);
                 setGraphData({
                     description: graphDataResult.description,

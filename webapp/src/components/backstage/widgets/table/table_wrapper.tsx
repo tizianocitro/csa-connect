@@ -31,6 +31,7 @@ const TableWrapper = ({
         <Table
             id={formatName(name)}
             data={data}
+            sectionId={sectionIdForUrl}
             parentId={parentId}
             urlHash={urlHash}
         />

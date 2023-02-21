@@ -30,6 +30,7 @@ const TextBoxWrapper = ({
         <TextBox
             name={name}
             parentId={parentId}
+            sectionId={sectionIdForUrl}
             text={text}
         />
     );

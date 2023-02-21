@@ -32,8 +32,9 @@ const GraphWrapper = ({
     const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), routeUrl);
     return (
         <Graph
-            name={name}
             data={data}
+            name={name}
+            sectionId={sectionIdForUrl}
             parentId={parentId}
         />
     );

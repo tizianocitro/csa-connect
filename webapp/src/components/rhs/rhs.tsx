@@ -34,9 +34,6 @@ const RHSView = () => {
     const updateClosed = () => {
         setClosed((prevClosed) => !prevClosed);
     };
-    const resetClosed = () => {
-        setClosed(true);
-    };
 
     const {search} = useLocation();
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
@@ -54,18 +51,34 @@ const RHSView = () => {
     const fullUrl = `/${team.name}/channels/${channel.name}`;
 
     useEffect(() => {
-        resetClosed();
-    }, [channelId]);
+        // Select the node that will be observed for mutations
+        const targetNode = document.getElementById('sidebar-right') as HTMLElement;
 
-    useEffect(() => {
-        (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).
-            addEventListener('click', updateClosed);
+        // Options for the observer (which mutations to observe)
+        const config = {attributes: true};
+
+        // Callback function to execute when mutations are observed
+        const callback = (mutationList: any, observer: any) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'attributes') {
+                    if (mutation.attributeName === 'class') {
+                        updateClosed();
+                    }
+                }
+            }
+        };
+
+        // Create an observer instance linked to the callback function
+        const observer = new MutationObserver(callback);
+
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
 
         return () => {
-            (document.getElementsByClassName('sidebar--right__expand btn-icon')[0] as HTMLElement).
-                removeEventListener('click', updateClosed);
+            // Later, you can stop observing
+            observer.disconnect();
         };
-    }, [closed]);
+    });
 
     return (
         <Container>
@@ -74,7 +87,7 @@ const RHSView = () => {
                     <SectionContext.Provider value={sectionContextOptions}>
                         <ToastProvider>
                             <SectionsWidgetsContainerWithRhs
-                                headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${section.id}&${PARENT_ID_PARAM}=${parentIdParam}`}
+                                headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${sectionIdParam}&${PARENT_ID_PARAM}=${parentIdParam}`}
                                 name={sectionInfo.name}
                                 url={fullUrl}
                                 widgets={section.widgets}

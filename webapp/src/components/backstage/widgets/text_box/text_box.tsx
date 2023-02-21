@@ -6,7 +6,7 @@ import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {PARENT_ID_PARAM} from 'src/constants';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 export type TextBoxStyle = {
     height?: string;
@@ -17,13 +17,15 @@ export type TextBoxStyle = {
 type Props = {
     name: string;
     parentId: string;
-    text: string;
+    sectionId: string;
     style?: TextBoxStyle;
+    text: string;
 }
 
 const TextBox = ({
     name,
     parentId,
+    sectionId,
     text,
     style = {
         marginTop: '24px',
@@ -44,7 +46,7 @@ const TextBox = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
-                    query={`${PARENT_ID_PARAM}=${parentId}`}
+                    query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
                     text={name}
                     title={name}
                 />

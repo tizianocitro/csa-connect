@@ -26,7 +26,7 @@ import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/t
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
-import {PARENT_ID_PARAM} from 'src/constants';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 import GraphNodeType from './graph_node_type';
 
@@ -37,8 +37,9 @@ type GraphStyle = {
 };
 
 type Props = {
-    name: string;
     data: GraphData;
+    name: string;
+    sectionId: string;
     parentId: string;
 };
 
@@ -75,8 +76,9 @@ const isDescriptionProvided = ({name, text}: GraphDescription) => {
 };
 
 const Graph = ({
-    name,
     data,
+    name,
+    sectionId,
     parentId,
 }: Props) => {
     const fullUrl = useContext(FullUrlContext);
@@ -117,7 +119,7 @@ const Graph = ({
                     <AnchorLinkTitle
                         fullUrl={fullUrl}
                         id={id}
-                        query={`${PARENT_ID_PARAM}=${parentId}`}
+                        query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
                         text={name}
                         title={name}
                     />
@@ -144,9 +146,10 @@ const Graph = ({
             {isDescriptionProvided(description) &&
                 <TextBox
                     name={description.name}
+                    sectionId={sectionId}
+                    style={graphStyle.textBoxStyle}
                     parentId={parentId}
                     text={description.text}
-                    style={graphStyle.textBoxStyle}
                 />
             }
         </Container>
