@@ -168,12 +168,14 @@ export const useSectionData = (url: string): TableData => {
     return sectionData as TableData;
 };
 
-export const useGraphData = (url: string, routeUrl: string): GraphData => {
+export const useGraphData = (url: string, hash: string, routeUrl: string): GraphData => {
     const [graphData, setGraphData] = useState<GraphData | {}>({});
     const {hash: urlHash, search} = useLocation();
+
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
     const sectionIdParam = queryParams.sectionId as string;
+
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
@@ -194,7 +196,7 @@ export const useGraphData = (url: string, routeUrl: string): GraphData => {
         return () => {
             isCanceled = true;
         };
-    }, [url]);
+    }, [url, hash]);
     return graphData as GraphData;
 };
 

@@ -20,16 +20,19 @@ const GraphWrapper = ({
     const sectionContextOptions = useContext(SectionContext);
 
     const {url: sectionUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
-    const location = useLocation();
-    const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
+    const {hash: urlHash, search} = useLocation();
+
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
+
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
-
     const isFullUrlProvided = fullUrl !== '';
     const routeUrl = isFullUrlProvided ? fullUrl : sectionUrl;
-    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), routeUrl);
+
+    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), urlHash, routeUrl);
+
     return (
         <Graph
             data={data}
