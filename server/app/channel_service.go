@@ -20,6 +20,11 @@ func (s *ChannelService) GetChannels(sectionID string, parentID string) (GetChan
 	return s.store.GetChannels(sectionID, parentID)
 }
 
+func (s *ChannelService) GetChannelByID(channelID string) (GetChannelByIDResult, error) {
+	s.api.LogInfo("Getting channel", "channelId", channelID)
+	return s.store.GetChannelByID(channelID)
+}
+
 func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error) {
 	s.api.LogInfo("Adding channel", "sectionId", sectionID, "params", params)
 	return s.store.AddChannel(sectionID, params)

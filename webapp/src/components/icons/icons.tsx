@@ -1,12 +1,11 @@
 import React, {useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
-
-import qs from 'qs';
 import {useLocation} from 'react-router-dom';
+import qs from 'qs';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 
 export const ChannelHeaderButtonIcon = () => {
-    const channelID = useSelector(getCurrentChannelId);
+    const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
 
     const location = useLocation();
@@ -23,7 +22,7 @@ export const ChannelHeaderButtonIcon = () => {
                 parent?.click();
             }
         };
-    }, [channelID]);
+    }, [channelId]);
 
     useEffect(() => {
         const parent = icon.current?.parentElement;
@@ -36,7 +35,7 @@ export const ChannelHeaderButtonIcon = () => {
                 clearTimeout(timer);
             }
         };
-    }, [channelID]);
+    }, [channelId]);
 
     return (
         <i

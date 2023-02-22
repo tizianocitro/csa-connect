@@ -9,8 +9,12 @@ export interface FetchChannelsParams {
     section_id: string;
 }
 
-export interface FetchChannelsReturn {
+export interface FetchChannelsResult {
     items: WidgetChannel[];
+}
+
+export interface FetchChannelByIDResult {
+    channel: WidgetChannel;
 }
 
 export interface ChannelCreation {

@@ -1,5 +1,6 @@
 import React, {
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useState,
@@ -23,6 +24,9 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
+import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 import GraphNodeType from './graph_node_type';
 
@@ -33,9 +37,9 @@ type GraphStyle = {
 };
 
 type Props = {
-    isRhsClosed?: boolean;
-    name: string;
     data: GraphData;
+    name: string;
+    sectionId: string;
     parentId: string;
 };
 
@@ -72,13 +76,16 @@ const isDescriptionProvided = ({name, text}: GraphDescription) => {
 };
 
 const Graph = ({
-    isRhsClosed = false,
-    name,
     data,
+    name,
+    sectionId,
     parentId,
 }: Props) => {
-    const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
+    const fullUrl = useContext(FullUrlContext);
+    const isRhsClosed = useContext(IsRhsClosedContext);
+    const isRhs = useContext(IsRhsContext);
 
+    const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
@@ -97,7 +104,7 @@ const Graph = ({
         [setEdges]
     );
 
-    const graphStyle = isRhsClosed || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+    const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
     const id = `${formatName(name)}-graph-widget`;
     return (
         <Container
@@ -110,8 +117,9 @@ const Graph = ({
             >
                 <Header>
                     <AnchorLinkTitle
+                        fullUrl={fullUrl}
                         id={id}
-                        query={`sectionId=${parentId}`}
+                        query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
                         text={name}
                         title={name}
                     />
@@ -138,9 +146,10 @@ const Graph = ({
             {isDescriptionProvided(description) &&
                 <TextBox
                     name={description.name}
+                    sectionId={sectionId}
+                    style={graphStyle.textBoxStyle}
                     parentId={parentId}
                     text={description.text}
-                    style={graphStyle.textBoxStyle}
                 />
             }
         </Container>

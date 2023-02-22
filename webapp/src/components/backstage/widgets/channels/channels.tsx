@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {PARENT_ID_PARAM} from 'src/constants';
 
 import ChannelBox from './channel_box';
 
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
     const id = 'channels-widget';
     const title = formatMessage({defaultMessage: 'Channels'});
@@ -23,8 +26,9 @@ const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
         >
             <Header>
                 <AnchorLinkTitle
+                    fullUrl={fullUrl}
                     id={id}
-                    query={`sectionId=${parentId}`}
+                    query={`${PARENT_ID_PARAM}=${parentId}`}
                     text={title}
                     title={title}
                 />

@@ -10,15 +10,18 @@ import {
 
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
-import {SECTION_ID_PARAM} from 'src/constants';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';
 
-export const buildNodeUrl = (sectionId: string, sectionUrl: string) => {
+export const buildNodeUrl = (parentId: string, sectionId: string, sectionUrl: string) => {
     let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
+    if (parentId) {
+        nodeUrl = `${nodeUrl}?${PARENT_ID_PARAM}=${parentId}`;
+    }
     if (sectionId) {
-        nodeUrl = `${nodeUrl}?${SECTION_ID_PARAM}=${sectionId}`;
+        nodeUrl = `${nodeUrl}&${SECTION_ID_PARAM}=${sectionId}`;
     }
     return nodeUrl;
 };
@@ -34,14 +37,20 @@ export const fillEdges = (edges: Edge[]) => {
     return filledEdges;
 };
 
-export const fillNodes = (nodes: Node[], sectionId: string, sectionUrl: string, sectionUrlHash: string) => {
+export const fillNodes = (
+    nodes: Node[],
+    parentId: string,
+    sectionId: string,
+    sectionUrl: string,
+    sectionUrlHash: string,
+) => {
     const filledNodes: Node[] = [];
     nodes.forEach((node) => {
         filledNodes.push({
             ...node,
             data: {
                 ...node.data,
-                url: buildNodeUrl(sectionId, sectionUrl),
+                url: buildNodeUrl(parentId, sectionId, sectionUrl),
                 isUrlHashed: `#${node.id}` === sectionUrlHash,
             },
             type: nodeType,
@@ -79,7 +88,7 @@ const GraphNodeType = ({id, data}: NodeProps) => {
 const NodeContainer = styled.div<{isUrlHashed: boolean}>`
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
-    borderRadius: 5;
+    border-radius: 5;
 `;
 
 export default GraphNodeType;

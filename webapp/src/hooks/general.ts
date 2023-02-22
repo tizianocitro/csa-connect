@@ -1,3 +1,4 @@
+import {debounce, isEqual} from 'lodash';
 import {
     useCallback,
     useEffect,
@@ -5,22 +6,13 @@ import {
     useRef,
     useState,
 } from 'react';
-import {useUpdateEffect} from 'react-use';
+import {useHistory, useLocation} from 'react-router-dom';
+import qs from 'qs';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
-import qs from 'qs';
-import {debounce, isEqual} from 'lodash';
+import {useUpdateEffect} from 'react-use';
 
-import {
-    fetchChannels,
-    fetchGraphData,
-    fetchSectionInfo,
-    fetchTableData,
-    fetchTextBoxData,
-} from 'src/clients';
-import {resolve} from 'src/utils';
 import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
 import {
     FetchOrganizationsParams,
@@ -28,12 +20,25 @@ import {
     Section,
     SectionInfo,
 } from 'src/types/organization';
-import {ECOSYSTEM} from 'src/constants';
-import {TableData} from 'src/types/table';
-import {getOrganizations} from 'src/config/config';
-import {TextBoxData} from 'src/types/text_box';
-import {GraphData} from 'src/types/graph';
+import {
+    fetchChannelById,
+    fetchChannels,
+    fetchGraphData,
+    fetchSectionInfo,
+    fetchTableData,
+    fetchTextBoxData,
+} from 'src/clients';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
+import {
+    getEcosystem,
+    getOrganizationById,
+    getOrganizations,
+    getOrganizationsNoEcosystem,
+} from 'src/config/config';
+import {GraphData} from 'src/types/graph';
+import {TableData} from 'src/types/table';
+import {TextBoxData} from 'src/types/text_box';
+import {resolve} from 'src/utils';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -42,7 +47,7 @@ export enum ReservedCategory {
     Organizations = 'Organizations',
 }
 
-export const useReservedCategoryTitleMapper = () => {
+export const useReservedCategoryTitleMapper = (): (categoryName: ReservedCategory | string) => string => {
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
@@ -57,11 +62,11 @@ export const useReservedCategoryTitleMapper = () => {
 };
 
 export const useEcosystem = (): Organization => {
-    return getOrganizations().filter((o: Organization) => o.name.toLowerCase() === ECOSYSTEM)[0];
+    return getEcosystem();
 };
 
 export const useOrganization = (id: string): Organization => {
-    return getOrganizations().filter((o: Organization) => o.id === id)[0];
+    return getOrganizationById(id);
 };
 
 export const useOrganizationsNoPageList = (): Organization[] => {
@@ -76,9 +81,13 @@ export const useOrganizationsNoPageList = (): Organization[] => {
     return organizations;
 };
 
-export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
-[Organization[], number, FetchOrganizationsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
-    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
+export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true): [
+    Organization[],
+    number,
+    FetchOrganizationsParams,
+    React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>,
+] => {
+    const [organizations, setOrganizations] = useState<Organization[]>(getOrganizationsNoEcosystem());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
     const location = useLocation();
@@ -96,14 +105,14 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
     });
 
     useEffect(() => {
-        let orgs = getOrganizations();
+        let orgs = getOrganizationsNoEcosystem();
         orgs.sort();
         if (fetchParams.direction === 'desc') {
             orgs.reverse();
         }
         const searchTerm = fetchParams.search_term;
         if (searchTerm && searchTerm.trim().length !== 0) {
-            orgs = orgs.filter((o: Organization) => o.name.indexOf(searchTerm) !== -1);
+            orgs = orgs.filter((o) => o.name.indexOf(searchTerm) !== -1);
         }
         setOrganizations(orgs);
         setTotalCount(orgs.length);
@@ -116,7 +125,7 @@ export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParam
 
 export const useSection = (id: string): Section => {
     return getOrganizations().
-        map((o: Organization) => o.sections).
+        map((o) => o.sections).
         flat().
         filter((s: Section) => s.id === id)[0];
 };
@@ -138,7 +147,7 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [id]);
     return info as SectionInfo;
 };
 
@@ -163,18 +172,20 @@ export const useSectionData = (url: string): TableData => {
     return sectionData as TableData;
 };
 
-export const useGraphData = (url: string): GraphData => {
+export const useGraphData = (url: string, hash: string, routeUrl: string): GraphData => {
     const [graphData, setGraphData] = useState<GraphData | {}>({});
-    const {url: routeUrl} = useRouteMatch();
     const {hash: urlHash, search} = useLocation();
+
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
+    const parentIdParam = queryParams.parentId as string;
     const sectionIdParam = queryParams.sectionId as string;
+
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
             const graphDataResult = await fetchGraphData(url);
             if (!isCanceled) {
-                const filledNodes = fillNodes(graphDataResult.nodes, sectionIdParam, routeUrl, urlHash);
+                const filledNodes = fillNodes(graphDataResult.nodes, parentIdParam, sectionIdParam, routeUrl, urlHash);
                 const filledEdges = fillEdges(graphDataResult.edges);
                 setGraphData({
                     description: graphDataResult.description,
@@ -189,7 +200,7 @@ export const useGraphData = (url: string): GraphData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url, hash]);
     return graphData as GraphData;
 };
 
@@ -210,7 +221,7 @@ export const useTableData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url]);
     return tableData as TableData;
 };
 
@@ -231,7 +242,7 @@ export const useTextBoxData = (url: string): TextBoxData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
+    }, [url]);
     return textBoxData as TextBoxData;
 };
 
@@ -257,13 +268,35 @@ export const useChannelsList = (defaultFetchParams: FetchChannelsParams): Widget
     return channels;
 };
 
+export const useChannelById = (channelId: string): WidgetChannel => {
+    const [channel, setChannel] = useState<WidgetChannel | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchChannelsAsync() {
+            const channelReturn = await fetchChannelById(channelId);
+            if (!isCanceled) {
+                setChannel(channelReturn.channel);
+            }
+        }
+
+        fetchChannelsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [channelId]);
+
+    return channel as WidgetChannel;
+};
+
 // Update the query string when the fetchParams change
 const useUpdateFetchParams = (
     routed: boolean,
     fetchParams: FetchParams,
     history: any,
     location: any,
-) => {
+): void => {
     useEffect(() => {
         if (routed) {
             const newFetchParams: Record<string, unknown> = {...fetchParams};
@@ -274,7 +307,10 @@ const useUpdateFetchParams = (
     }, [fetchParams, history]);
 };
 
-const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
+const combineQueryParameters = (
+    oldParams: FetchOrganizationsParams,
+    searchString: string,
+): FetchOrganizationsParams => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
 };

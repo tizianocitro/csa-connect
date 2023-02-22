@@ -1,33 +1,44 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {TableData} from 'src/types/table';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
 
 type Props = {
     data: TableData;
-    fullUrl?: string;
     id: string;
     isSection?: boolean;
     open?: (resourceId: string) => void;
     parentId: string;
     pointer?: boolean;
+    sectionId?: string;
     urlHash: string;
+};
+
+const buildQuery = (parentId: string, sectionId: string | undefined) => {
+    let query = `${PARENT_ID_PARAM}=${parentId}`;
+    if (sectionId) {
+        query = `${query}&${SECTION_ID_PARAM}=${sectionId}`;
+    }
+    return query;
 };
 
 const Table = ({
     data,
-    fullUrl,
     id,
     isSection = false,
     open,
     parentId,
     pointer = false,
+    sectionId,
     urlHash,
 }: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const {caption, headers, rows} = data;
     const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
     return (
@@ -37,8 +48,9 @@ const Table = ({
         >
             <Header>
                 <AnchorLinkTitle
+                    fullUrl={fullUrl}
                     id={tableId}
-                    query={`sectionId=${parentId}`}
+                    query={buildQuery(parentId, sectionId)}
                     text={caption}
                     title={caption}
                 />
@@ -53,11 +65,10 @@ const Table = ({
 
                 {rows?.map((row) => (
                     <TableRow
-                        fullUrl={fullUrl}
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
-                        query={`sectionId=${parentId}`}
+                        query={buildQuery(parentId, sectionId)}
                         row={row}
                         urlHash={urlHash}
                     />

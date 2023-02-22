@@ -20,6 +20,10 @@ type GetChannelsResults struct {
 	Items []Channel `json:"items"`
 }
 
+type GetChannelByIDResult struct {
+	Channel Channel `json:"channel"`
+}
+
 type AddChannelParams struct {
 	ChannelID           string `json:"channelId"`
 	ChannelName         string `json:"channelName"`

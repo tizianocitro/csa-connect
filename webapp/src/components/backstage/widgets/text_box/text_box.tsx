@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 export type TextBoxStyle = {
     height?: string;
@@ -15,19 +17,22 @@ export type TextBoxStyle = {
 type Props = {
     name: string;
     parentId: string;
-    text: string;
+    sectionId: string;
     style?: TextBoxStyle;
+    text: string;
 }
 
 const TextBox = ({
     name,
     parentId,
+    sectionId,
     text,
     style = {
         marginTop: '24px',
         width: '100%',
     },
 }: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
     const id = `${formatName(name)}-text-box-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
@@ -39,8 +44,9 @@ const TextBox = ({
         >
             <Header>
                 <AnchorLinkTitle
+                    fullUrl={fullUrl}
                     id={id}
-                    query={`sectionId=${parentId}`}
+                    query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
                     text={name}
                     title={name}
                 />

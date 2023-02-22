@@ -4,7 +4,7 @@ import qs from 'qs';
 
 import {useForceDocumentTitle, useSection, useSectionInfo} from 'src/hooks';
 import {getSiteUrl} from 'src/clients';
-import {SECTION_ID_PARAM} from 'src/constants';
+import {PARENT_ID_PARAM} from 'src/constants';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
@@ -14,9 +14,9 @@ const SectionDetails = () => {
     const {hash: urlHash} = useLocation();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-    const sectionIdParam = queryParams.sectionId as string;
+    const parentIdParam = queryParams.parentId as string;
 
-    const section = useSection(sectionIdParam);
+    const section = useSection(parentIdParam);
     const sectionInfo = useSectionInfo(sectionId, section.url);
 
     useForceDocumentTitle(sectionInfo.name ? (sectionInfo.name) : 'Section');
@@ -47,7 +47,7 @@ const SectionDetails = () => {
                 htmlElement.classList.remove(SECTION_NAV_ITEM_ACTIVE);
             }
         };
-    }, [sectionIdParam]);
+    }, [parentIdParam]);
 
     // Loading state
     if (!section) {
@@ -56,7 +56,7 @@ const SectionDetails = () => {
 
     return (
         <SectionsWidgetsContainer
-            headerPath={`${getSiteUrl()}${url}?${SECTION_ID_PARAM}=${section.id}`}
+            headerPath={`${getSiteUrl()}${url}?${PARENT_ID_PARAM}=${section.id}`}
             name={sectionInfo.name}
             sectionPath={path}
             sections={section.sections}
