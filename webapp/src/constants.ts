@@ -27,7 +27,7 @@ export const ORGANIZATION_PATH = 'organization';
 // In case you change these, pay attention to change the files
 // where it was not possible to use the constants
 export const ORGANIZATION_ID_PARAM = 'organizationId';
-export const SECTION_ID_PARAM = 'sectionId';
 export const PARENT_ID_PARAM = 'parentId';
+export const SECTION_ID_PARAM = 'sectionId';
 
 export const ECOSYSTEM = 'ecosystem';

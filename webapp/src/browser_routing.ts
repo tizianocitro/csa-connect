@@ -18,7 +18,7 @@ export const navigateToUrl = (urlPath: string | PathLike) => {
 };
 
 export const pluginUrl = (urlPath: string) => {
-    return '/' + DEFAULT_PATH + urlPath;
+    return `/${DEFAULT_PATH}${urlPath}`;
 };
 
 export const navigateToPluginUrl = (urlPath: string) => {

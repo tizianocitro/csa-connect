@@ -1,3 +1,4 @@
+import {debounce, isEqual} from 'lodash';
 import {
     useCallback,
     useEffect,
@@ -5,14 +6,20 @@ import {
     useRef,
     useState,
 } from 'react';
-import {useUpdateEffect} from 'react-use';
-import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useHistory, useLocation} from 'react-router-dom';
 import qs from 'qs';
-import {debounce, isEqual} from 'lodash';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {useUpdateEffect} from 'react-use';
 
+import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
+import {
+    FetchOrganizationsParams,
+    Organization,
+    Section,
+    SectionInfo,
+} from 'src/types/organization';
 import {
     fetchChannelById,
     fetchChannels,
@@ -21,24 +28,17 @@ import {
     fetchTableData,
     fetchTextBoxData,
 } from 'src/clients';
-import {resolve} from 'src/utils';
-import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
-import {
-    FetchOrganizationsParams,
-    Organization,
-    Section,
-    SectionInfo,
-} from 'src/types/organization';
-import {TableData} from 'src/types/table';
+import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
 import {
     getEcosystem,
     getOrganizationById,
     getOrganizations,
     getOrganizationsNoEcosystem,
 } from 'src/config/config';
-import {TextBoxData} from 'src/types/text_box';
 import {GraphData} from 'src/types/graph';
-import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
+import {TableData} from 'src/types/table';
+import {TextBoxData} from 'src/types/text_box';
+import {resolve} from 'src/utils';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -47,7 +47,7 @@ export enum ReservedCategory {
     Organizations = 'Organizations',
 }
 
-export const useReservedCategoryTitleMapper = () => {
+export const useReservedCategoryTitleMapper = (): (categoryName: ReservedCategory | string) => string => {
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
@@ -81,8 +81,12 @@ export const useOrganizationsNoPageList = (): Organization[] => {
     return organizations;
 };
 
-export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true):
-[Organization[], number, FetchOrganizationsParams, React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>] => {
+export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true): [
+    Organization[],
+    number,
+    FetchOrganizationsParams,
+    React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>,
+] => {
     const [organizations, setOrganizations] = useState<Organization[]>(getOrganizationsNoEcosystem());
     const [totalCount, setTotalCount] = useState(0);
     const history = useHistory();
@@ -292,7 +296,7 @@ const useUpdateFetchParams = (
     fetchParams: FetchParams,
     history: any,
     location: any,
-) => {
+): void => {
     useEffect(() => {
         if (routed) {
             const newFetchParams: Record<string, unknown> = {...fetchParams};
@@ -303,7 +307,10 @@ const useUpdateFetchParams = (
     }, [fetchParams, history]);
 };
 
-const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
+const combineQueryParameters = (
+    oldParams: FetchOrganizationsParams,
+    searchString: string,
+): FetchOrganizationsParams => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
 };

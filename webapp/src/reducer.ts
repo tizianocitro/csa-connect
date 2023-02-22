@@ -16,7 +16,10 @@ type AnyAction = any;
 type AnyState = any;
 export type CombinedReducer = Reducer<CombinedState<AnyState>, AnyAction> | any
 
-export const setChannelCreation = (state: ChannelCreation, {type, channelCreation}: SetChannelCreationAction) => {
+export const setChannelCreation = (
+    state: ChannelCreation,
+    {type, channelCreation}: SetChannelCreationAction,
+): ChannelCreation => {
     switch (type) {
     case CHANNEL_CREATION:
         return channelCreation;
@@ -25,7 +28,10 @@ export const setChannelCreation = (state: ChannelCreation, {type, channelCreatio
     }
 };
 
-export const setAddChannelErrorMessage = (state = '', {type, addChannelErrorMessage}: SetAddChannelErrorMessageAction) => {
+export const setAddChannelErrorMessage = (
+    state = '',
+    {type, addChannelErrorMessage}: SetAddChannelErrorMessageAction,
+): string => {
     switch (type) {
     case SET_ADD_CHANNEL_ERROR_MESSAGE:
         return addChannelErrorMessage;
@@ -34,7 +40,10 @@ export const setAddChannelErrorMessage = (state = '', {type, addChannelErrorMess
     }
 };
 
-export const setNameErrorMessage = (state = '', {type, nameErrorMessage}: SetNameErrorMessageAction) => {
+export const setNameErrorMessage = (
+    state = '',
+    {type, nameErrorMessage}: SetNameErrorMessageAction,
+): string => {
     switch (type) {
     case SET_NAME_ERROR_MESSAGE:
         return nameErrorMessage;
@@ -43,7 +52,10 @@ export const setNameErrorMessage = (state = '', {type, nameErrorMessage}: SetNam
     }
 };
 
-export const setSelectErrorMessage = (state = '', {type, selectErrorMessage}: SetSelectErrorMessageAction) => {
+export const setSelectErrorMessage = (
+    state = '',
+    {type, selectErrorMessage}: SetSelectErrorMessageAction,
+): string => {
     switch (type) {
     case SET_SELECT_ERROR_MESSAGE:
         return selectErrorMessage;
