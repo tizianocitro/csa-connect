@@ -6,7 +6,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 const selectSiteName = (state: GlobalState) => getConfig(state).SiteName;
 
-export function useForceDocumentTitle(title: string) {
+export const useForceDocumentTitle = (title: string) => {
     const siteName = useSelector(selectSiteName);
 
     // Restore original title
@@ -21,4 +21,4 @@ export function useForceDocumentTitle(title: string) {
     useEffect(() => {
         document.title = title + ' - ' + siteName;
     }, [title, siteName]);
-}
+};
