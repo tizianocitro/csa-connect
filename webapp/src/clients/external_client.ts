@@ -1,46 +1,45 @@
 import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
-import {TableData} from 'src/types/table';
-import {SectionInfo} from 'src/types/organization';
-import {TextBoxData} from 'src/types/text_box';
 import {GraphData} from 'src/types/graph';
+import {SectionInfo} from 'src/types/organization';
+import {TableData} from 'src/types/table';
+import {TextBoxData} from 'src/types/text_box';
 
-export async function fetchSectionInfo(id: string, url: string) {
+export const fetchSectionInfo = async (id: string, url: string) => {
     let data = await doGet(`${url}/${id}`);
     if (!data) {
         data = {description: '', id: '', name: ''} as SectionInfo;
     }
     return data as SectionInfo;
-}
+};
 
-export async function fetchGraphData(url: string) {
+export const fetchGraphData = async (url: string) => {
     let data = await doGet(url);
     if (!data) {
         data = {edges: [], nodes: []} as GraphData;
     }
     return data as GraphData;
-}
+};
 
-export async function fetchTableData(url: string) {
+export const fetchTableData = async (url: string) => {
     let data = await doGet(url);
     if (!data) {
         data = {caption: '', headers: [], rows: []} as TableData;
     }
     return data as TableData;
-}
+};
 
-export async function fetchTextBoxData(url: string) {
+export const fetchTextBoxData = async (url: string) => {
     let data = await doGet(url);
     if (!data) {
         data = {text: ''} as TextBoxData;
     }
     return data as TableData;
-}
+};
 
 const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
-
     return data;
 };
 
@@ -49,7 +48,6 @@ const doPost = async <TData = any>(url: string, body = {}) => {
         method: 'POST',
         body,
     });
-
     return data;
 };
 
@@ -58,7 +56,6 @@ const doDelete = async <TData = any>(url: string, body = {}) => {
         method: 'DELETE',
         body,
     });
-
     return data;
 };
 
@@ -76,7 +73,6 @@ const doPatch = async <TData = any>(url: string, body = {}) => {
         method: 'PATCH',
         body,
     });
-
     return data;
 };
 
@@ -88,7 +84,6 @@ const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
         if (contentType === 'application/json') {
             data = await response.json() as TData;
         }
-
         return {
             response,
             data,

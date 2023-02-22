@@ -5,7 +5,6 @@ import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 import qs from 'qs';
 
-import {pluginId} from 'src/manifest';
 import {
     AddChannelParams,
     AddChannelResult,
@@ -14,12 +13,13 @@ import {
     FetchChannelsReturn,
 } from 'src/types/channels';
 import {PlatformConfig} from 'src/types/organization';
+import {pluginId} from 'src/manifest';
 
 let siteURL = '';
 let basePath = '';
 let apiUrl = `${basePath}/plugins/${pluginId}/api/v0`;
 
-export const setSiteUrl = (url?: string): void => {
+export const setSiteUrl = (url?: string) => {
     if (url) {
         basePath = new URL(url).pathname.replace(/\/+$/, '');
         siteURL = url;
@@ -27,19 +27,21 @@ export const setSiteUrl = (url?: string): void => {
         basePath = '';
         siteURL = '';
     }
-
     apiUrl = `${basePath}/plugins/${pluginId}/api/v0`;
 };
 
-export const getSiteUrl = (): string => {
+export const getSiteUrl = () => {
     return siteURL;
 };
 
-export const getApiUrl = (): string => {
+export const getApiUrl = () => {
     return apiUrl;
 };
 
-export const loadPlatformConfig = async (path: string, setConfig: (config: PlatformConfig) => void) => {
+export const loadPlatformConfig = async (
+    path: string,
+    setConfig: (config: PlatformConfig) => void,
+) => {
     doGet(`${apiUrl}${path}`).
         then((config) => setConfig(config)).
         catch(() => setConfig({organizations: []}));
@@ -47,7 +49,6 @@ export const loadPlatformConfig = async (path: string, setConfig: (config: Platf
 
 export const fetchChannels = async (params: FetchChannelsParams) => {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
-
     let data = await doGet(`${apiUrl}/channels/${params.section_id}${queryParams}`);
     if (!data) {
         data = {items: []} as FetchChannelsReturn;
@@ -84,7 +85,6 @@ export const addChannel = async ({
 
 const doGet = async <TData = any>(url: string) => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
-
     return data;
 };
 
@@ -93,7 +93,6 @@ const doPost = async <TData = any>(url: string, body = {}) => {
         method: 'POST',
         body,
     });
-
     return data;
 };
 
@@ -102,7 +101,6 @@ const doDelete = async <TData = any>(url: string, body = {}) => {
         method: 'DELETE',
         body,
     });
-
     return data;
 };
 
@@ -111,7 +109,6 @@ const doPut = async <TData = any>(url: string, body = {}) => {
         method: 'PUT',
         body,
     });
-
     return data;
 };
 
@@ -120,7 +117,6 @@ const doPatch = async <TData = any>(url: string, body = {}) => {
         method: 'PATCH',
         body,
     });
-
     return data;
 };
 
@@ -132,7 +128,6 @@ const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
         if (contentType === 'application/json') {
             data = await response.json() as TData;
         }
-
         return {
             response,
             data,
@@ -150,7 +145,6 @@ const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
 
 const doFetchWithTextResponse = async <TData extends string>(url: string, options = {}) => {
     const response = await fetch(url, Client4.getOptions(options));
-
     let data;
     if (response.ok) {
         data = await response.text() as TData;
@@ -172,7 +166,6 @@ const doFetchWithTextResponse = async <TData extends string>(url: string, option
 
 const doFetchWithoutResponse = async (url: string, options = {}) => {
     const response = await fetch(url, Client4.getOptions(options));
-
     if (response.ok) {
         return;
     }
