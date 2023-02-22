@@ -1,16 +1,13 @@
 import React, {createContext, useEffect, useState} from 'react';
+import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import qs from 'qs';
 import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import qs from 'qs';
-import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
-import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
-import {Team} from 'mattermost-webapp/packages/types/src/teams';
-import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 
-import {useChannelById} from 'src/hooks';
+import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {ToastProvider} from 'src/components/backstage/toast_banner';
+import {useChannelById} from 'src/hooks';
 
 import RHSWidgets from './rhs_widgets';
 
@@ -22,9 +19,6 @@ type SectionContextOptions = {
 export const IsRhsClosedContext = createContext(true);
 export const FullUrlContext = createContext('');
 export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: ''});
-
-const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
-const channelNameSelector = (channelId: string) => (state: GlobalState): Channel => getChannel(state, channelId);
 
 const RHSView = () => {
     const [closed, setClosed] = useState(true);
