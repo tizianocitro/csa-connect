@@ -13,6 +13,8 @@ import {SecondaryButton} from 'src/components/assets/buttons';
 
 type Props = {
     path: string;
+    placeholder?: string;
+    showIcon?: boolean;
     text: string;
 };
 
@@ -20,10 +22,16 @@ export const formatUrlAsMarkdown = (path: string, text: string) => {
     return `[${text}](${path})`;
 };
 
-export const CopyLinkMenuItem = ({path, text}: Props) => {
+export const CopyLinkMenuItem = ({
+    path,
+    placeholder,
+    showIcon = true,
+    text,
+}: Props) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
 
+    const showPlaceholder = placeholder ? <span>{placeholder}</span> : <FormattedMessage defaultMessage='Copy link'/>;
     return (
         <StyledDropdownMenuItem
             onClick={() => {
@@ -31,8 +39,8 @@ export const CopyLinkMenuItem = ({path, text}: Props) => {
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >
-            <LinkVariantIcon size={16}/>
-            <FormattedMessage defaultMessage='Copy link'/>
+            {showIcon && <LinkVariantIcon size={16}/>}
+            {showPlaceholder}
         </StyledDropdownMenuItem>
     );
 };

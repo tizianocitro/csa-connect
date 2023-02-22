@@ -12,14 +12,23 @@ import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 
 interface AnchorLinkTitleProps {
+    fullUrl: string;
     id: string;
     query?: string;
     text: string;
     title: string;
 }
 
-const buildTo = (id: string, query: string | undefined, url: string) => {
-    return query ? `${url}?${query}#${id}` : `${url}#${id}`;
+const buildTo = (
+    fullUrl: string,
+    id: string,
+    query: string | undefined,
+    url: string,
+) => {
+    const isFullUrlProvided = fullUrl !== '';
+    let to = isFullUrlProvided ? `${fullUrl}` : url;
+    to = query ? `${to}?${query}` : to;
+    return `${to}#${id}`;
 };
 
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
@@ -30,7 +39,7 @@ export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
             <CopyLink
                 id={itemId}
                 text={props.text}
-                to={buildToForCopy(buildTo(props.id, props.query, url))}
+                to={buildToForCopy(buildTo(props.fullUrl, props.id, props.query, url))}
                 name={props.title}
                 area-hidden={true}
             />
@@ -119,4 +128,10 @@ export const StyledInput = styled(BaseInput)<{error?: boolean}>`
     )}
 
     scroll-margin-top: 36px;
+`;
+
+export const Header = styled.div`
+    display: flex;
+    flex: 1;
+    margin-bottom: 8px;
 `;

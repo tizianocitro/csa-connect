@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {Widget} from 'src/types/organization';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import ChannelsWrapper from './channels/channels_wrapper';
+import GraphWrapper from './graph/graph_wrapper';
 import TableWrapper from './table/table_wrapper';
 import TextBoxWrapper from './text_box/text_box_wrapper';
 
 export enum WidgetType {
     Channels = 'channels',
+    Graph = 'graph',
     Table = 'table',
     TextBox = 'text-box',
 }
@@ -21,11 +24,20 @@ const filterWidgetsByType = (widgets: Widget[], type: string) => {
 };
 
 const Widgets = ({widgets}: Props) => {
-    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
-    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
+    const isRhs = useContext(IsRhsContext);
     const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const graphWidgets = filterWidgetsByType(widgets, WidgetType.Graph);
+    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
+    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
     return (
         <>
+            {graphWidgets.map(({name, url}, index) => (
+                <GraphWrapper
+                    key={`${name}-${index}`}
+                    name={name}
+                    url={url}
+                />
+            ))}
             {textBoxWidgets.map(({name, url}, index) => (
                 <TextBoxWrapper
                     key={`${name}-${index}`}
@@ -40,7 +52,7 @@ const Widgets = ({widgets}: Props) => {
                     url={url}
                 />
             ))}
-            {channelWidgets.length > 0 &&
+            {channelWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
             }
         </>

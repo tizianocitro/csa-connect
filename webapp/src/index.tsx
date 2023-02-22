@@ -1,17 +1,17 @@
-import React from 'react';
-import {render} from 'react-dom';
-import {Store} from 'redux';
-import {GlobalState} from '@mattermost/types/store';
 import {Client4} from 'mattermost-redux/client';
+import {GlobalState} from '@mattermost/types/store';
+import React from 'react';
+import {Store} from 'redux';
+import {render} from 'react-dom';
 
-import {pluginId} from 'src/manifest';
-import {GlobalSelectStyle} from 'src/components/backstage/styles';
-import Backstage from 'src/components/backstage/backstage';
-import {loadPlatformConfig, setSiteUrl} from 'src/clients';
-import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
-import RHSView from 'src/components/rhs/right_hand_sidebar';
 import {DEFAULT_PATH, PRODUCT_ICON, PRODUCT_NAME} from 'src/constants';
 import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
+import {loadPlatformConfig, setSiteUrl} from 'src/clients';
+import Backstage from 'src/components/backstage/backstage';
+import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
+import {GlobalSelectStyle} from 'src/components/backstage/styles';
+import RHSView from 'src/components/rhs/rhs';
+import {pluginId} from 'src/manifest';
 
 type WindowObject = {
     location: {

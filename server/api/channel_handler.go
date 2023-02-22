@@ -26,6 +26,9 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 	channelsRouter.HandleFunc("", withContext(handler.getChannels)).Methods(http.MethodGet)
 	channelsRouter.HandleFunc("", withContext(handler.addChannel)).Methods(http.MethodPost)
 
+	channelRouter := router.PathPrefix("/channel/{channelId:[A-Za-z0-9]+}").Subrouter()
+	channelRouter.HandleFunc("", withContext(handler.getChannelByID)).Methods(http.MethodGet)
+
 	return handler
 }
 
@@ -34,6 +37,17 @@ func (h *ChannelHandler) getChannels(c *Context, w http.ResponseWriter, r *http.
 	sectionID := vars["sectionId"]
 	parentID := r.URL.Query().Get("parent_id")
 	channels, err := h.channelService.GetChannels(sectionID, parentID)
+	if err != nil {
+		h.HandleError(w, c.logger, err)
+		return
+	}
+	ReturnJSON(w, channels, http.StatusOK)
+}
+
+func (h *ChannelHandler) getChannelByID(c *Context, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelID := vars["channelId"]
+	channels, err := h.channelService.GetChannelByID(channelID)
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return

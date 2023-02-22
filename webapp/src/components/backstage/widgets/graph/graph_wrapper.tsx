@@ -2,38 +2,45 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {formatUrlWithId, useTextBoxData} from 'src/hooks';
-import {SectionContext} from 'src/components/rhs/rhs';
+import {formatUrlWithId, useGraphData} from 'src/hooks';
+import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 
-import TextBox from './text_box';
+import Graph from './graph';
 
 type Props = {
     name?: string;
     url?: string;
 }
 
-const TextBoxWrapper = ({
+const GraphWrapper = ({
     name = 'default',
     url = '',
 }: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const sectionContextOptions = useContext(SectionContext);
-    const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
-    const location = useLocation();
-    const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
+
+    const {url: sectionUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
+    const {hash: urlHash, search} = useLocation();
+
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
+
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
+    const isFullUrlProvided = fullUrl !== '';
+    const routeUrl = isFullUrlProvided ? fullUrl : sectionUrl;
 
-    const {text} = useTextBoxData(formatUrlWithId(url, sectionIdForUrl));
+    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), urlHash, routeUrl);
+
     return (
-        <TextBox
+        <Graph
+            data={data}
             name={name}
-            parentId={parentId}
             sectionId={sectionIdForUrl}
-            text={text}
+            parentId={parentId}
         />
     );
 };
 
-export default TextBoxWrapper;
+export default GraphWrapper;

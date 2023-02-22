@@ -44,7 +44,7 @@ func NewChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ChannelS
 	}
 }
 
-// GetChannels retrieves all channels for a product given a set of filters
+// GetChannels retrieves all channels for a section
 func (s *channelStore) GetChannels(sectionID string, parentID string) (app.GetChannelsResults, error) {
 	queryForResults := s.channelsSelect.Where(sq.Eq{"SectionID": sectionID}).Where(sq.Eq{"ParentID": parentID})
 	var channelsEntities []ChannelEntity
@@ -57,6 +57,22 @@ func (s *channelStore) GetChannels(sectionID string, parentID string) (app.GetCh
 
 	return app.GetChannelsResults{
 		Items: s.toChannels(channelsEntities),
+	}, nil
+}
+
+// GetChannelByID retrieves a channel given the channel id
+func (s *channelStore) GetChannelByID(channelID string) (app.GetChannelByIDResult, error) {
+	queryForResult := s.channelsSelect.Where(sq.Eq{"ChannelID": channelID})
+	var channel ChannelEntity
+	err := s.store.getBuilder(s.store.db, &channel, queryForResult)
+	if err == sql.ErrNoRows {
+		return app.GetChannelByIDResult{}, errors.Wrap(app.ErrNotFound, "no channel found for the given id")
+	} else if err != nil {
+		return app.GetChannelByIDResult{}, errors.Wrap(err, "failed to get channel for the given id")
+	}
+
+	return app.GetChannelByIDResult{
+		Channel: s.toChannel(channel),
 	}, nil
 }
 
@@ -164,12 +180,16 @@ func (s *channelStore) toChannels(channelsEntities []ChannelEntity) []app.Channe
 	}
 	channels := make([]app.Channel, 0, len(channelsEntities))
 	for _, c := range channelsEntities {
-		channel := app.Channel{}
-		err := util.Convert(c, &channel)
-		if err != nil {
-			return nil
-		}
-		channels = append(channels, channel)
+		channels = append(channels, s.toChannel(c))
 	}
 	return channels
+}
+
+func (s *channelStore) toChannel(channelEntity ChannelEntity) app.Channel {
+	channel := app.Channel{}
+	err := util.Convert(channelEntity, &channel)
+	if err != nil {
+		return app.Channel{}
+	}
+	return channel
 }

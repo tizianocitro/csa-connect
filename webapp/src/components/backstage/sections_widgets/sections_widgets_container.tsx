@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {createContext} from 'react';
 
 import {
     Body,
@@ -12,17 +12,21 @@ import {NameHeader} from 'src/components/backstage/header/header';
 import {Section, Widget} from 'src/types/organization';
 import Sections from 'src/components/backstage/sections/sections';
 
+export const IsRhsContext = createContext(false);
+
 type Props = {
     headerPath: string;
+    isRhs?: boolean;
     name: string;
-    sectionPath: string;
-    sections: Section[];
+    sectionPath?: string;
+    sections?: Section[];
     url: string;
     widgets: Widget[];
 }
 
 const SectionsWidgetsContainer = ({
     headerPath,
+    isRhs = false,
     name,
     sectionPath,
     sections,
@@ -30,28 +34,32 @@ const SectionsWidgetsContainer = ({
     widgets,
 }: Props) => {
     return (
-        <Container>
-            <MainWrapper>
-                <Header>
-                    <NameHeader
-                        path={headerPath}
-                        name={name}
-                    />
-                </Header>
-                <Main>
-                    <Body>
-                        <Sections
-                            path={sectionPath}
-                            sections={sections}
-                            url={url}
+        <IsRhsContext.Provider value={isRhs}>
+            <Container>
+                <MainWrapper>
+                    <Header>
+                        <NameHeader
+                            path={headerPath}
+                            name={name}
                         />
-                        <Widgets
-                            widgets={widgets}
-                        />
-                    </Body>
-                </Main>
-            </MainWrapper>
-        </Container>
+                    </Header>
+                    <Main>
+                        <Body>
+                            {sections && sectionPath &&
+                                <Sections
+                                    path={sectionPath}
+                                    sections={sections}
+                                    url={url}
+                                />
+                            }
+                            <Widgets
+                                widgets={widgets}
+                            />
+                        </Body>
+                    </Main>
+                </MainWrapper>
+            </Container>
+        </IsRhsContext.Provider>
     );
 };
 
