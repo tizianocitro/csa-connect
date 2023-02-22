@@ -6,7 +6,7 @@ import {SectionInfo} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 
-export const fetchSectionInfo = async (id: string, url: string) => {
+export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet(`${url}/${id}`);
     if (!data) {
         data = {description: '', id: '', name: ''} as SectionInfo;
@@ -14,7 +14,7 @@ export const fetchSectionInfo = async (id: string, url: string) => {
     return data as SectionInfo;
 };
 
-export const fetchGraphData = async (url: string) => {
+export const fetchGraphData = async (url: string): Promise<GraphData> => {
     let data = await doGet(url);
     if (!data) {
         data = {edges: [], nodes: []} as GraphData;
@@ -22,7 +22,7 @@ export const fetchGraphData = async (url: string) => {
     return data as GraphData;
 };
 
-export const fetchTableData = async (url: string) => {
+export const fetchTableData = async (url: string): Promise<TableData> => {
     let data = await doGet(url);
     if (!data) {
         data = {caption: '', headers: [], rows: []} as TableData;
@@ -30,20 +30,20 @@ export const fetchTableData = async (url: string) => {
     return data as TableData;
 };
 
-export const fetchTextBoxData = async (url: string) => {
+export const fetchTextBoxData = async (url: string): Promise<TextBoxData> => {
     let data = await doGet(url);
     if (!data) {
         data = {text: ''} as TextBoxData;
     }
-    return data as TableData;
+    return data as TextBoxData;
 };
 
-const doGet = async <TData = any>(url: string) => {
+const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
     return data;
 };
 
-const doPost = async <TData = any>(url: string, body = {}) => {
+const doPost = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'POST',
         body,
@@ -51,7 +51,7 @@ const doPost = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doDelete = async <TData = any>(url: string, body = {}) => {
+const doDelete = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'DELETE',
         body,
@@ -59,16 +59,15 @@ const doDelete = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doPut = async <TData = any>(url: string, body = {}) => {
+const doPut = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PUT',
         body,
     });
-
     return data;
 };
 
-const doPatch = async <TData = any>(url: string, body = {}) => {
+const doPatch = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PATCH',
         body,
@@ -76,7 +75,13 @@ const doPatch = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
+const doFetchWithResponse = async <TData = any>(
+    url: string,
+    options = {},
+): Promise<{
+    response: Response;
+    data: TData | undefined;
+}> => {
     const response = await fetch(url, options);
     let data;
     if (response.ok) {

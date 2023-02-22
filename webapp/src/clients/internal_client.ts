@@ -10,7 +10,7 @@ import {
     AddChannelResult,
     FetchChannelByIDResult,
     FetchChannelsParams,
-    FetchChannelsReturn,
+    FetchChannelsResult,
 } from 'src/types/channels';
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
@@ -19,7 +19,7 @@ let siteURL = '';
 let basePath = '';
 let apiUrl = `${basePath}/plugins/${pluginId}/api/v0`;
 
-export const setSiteUrl = (url?: string) => {
+export const setSiteUrl = (url?: string): void => {
     if (url) {
         basePath = new URL(url).pathname.replace(/\/+$/, '');
         siteURL = url;
@@ -30,33 +30,33 @@ export const setSiteUrl = (url?: string) => {
     apiUrl = `${basePath}/plugins/${pluginId}/api/v0`;
 };
 
-export const getSiteUrl = () => {
+export const getSiteUrl = (): string => {
     return siteURL;
 };
 
-export const getApiUrl = () => {
+export const getApiUrl = (): string => {
     return apiUrl;
 };
 
 export const loadPlatformConfig = async (
     path: string,
     setConfig: (config: PlatformConfig) => void,
-) => {
+): Promise<void> => {
     doGet(`${apiUrl}${path}`).
         then((config) => setConfig(config)).
         catch(() => setConfig({organizations: []}));
 };
 
-export const fetchChannels = async (params: FetchChannelsParams) => {
+export const fetchChannels = async (params: FetchChannelsParams): Promise<FetchChannelsResult> => {
     const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
     let data = await doGet(`${apiUrl}/channels/${params.section_id}${queryParams}`);
     if (!data) {
-        data = {items: []} as FetchChannelsReturn;
+        data = {items: []} as FetchChannelsResult;
     }
-    return data as FetchChannelsReturn;
+    return data as FetchChannelsResult;
 };
 
-export const fetchChannelById = async (channelId: string) => {
+export const fetchChannelById = async (channelId: string): Promise<FetchChannelByIDResult> => {
     let data = await doGet(`${apiUrl}/channel/${channelId}`);
     if (!data) {
         data = {channel: {}} as FetchChannelByIDResult;
@@ -83,12 +83,12 @@ export const addChannel = async ({
     return data as AddChannelResult;
 };
 
-const doGet = async <TData = any>(url: string) => {
+const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
     return data;
 };
 
-const doPost = async <TData = any>(url: string, body = {}) => {
+const doPost = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'POST',
         body,
@@ -96,7 +96,7 @@ const doPost = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doDelete = async <TData = any>(url: string, body = {}) => {
+const doDelete = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'DELETE',
         body,
@@ -104,7 +104,7 @@ const doDelete = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doPut = async <TData = any>(url: string, body = {}) => {
+const doPut = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PUT',
         body,
@@ -112,7 +112,7 @@ const doPut = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doPatch = async <TData = any>(url: string, body = {}) => {
+const doPatch = async <TData = any>(url: string, body = {}): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {
         method: 'PATCH',
         body,
@@ -120,7 +120,13 @@ const doPatch = async <TData = any>(url: string, body = {}) => {
     return data;
 };
 
-const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
+const doFetchWithResponse = async <TData = any>(
+    url: string,
+    options = {},
+): Promise<{
+    response: Response;
+    data: TData | undefined;
+}> => {
     const response = await fetch(url, Client4.getOptions(options));
     let data;
     if (response.ok) {
@@ -143,12 +149,17 @@ const doFetchWithResponse = async <TData = any>(url: string, options = {}) => {
     });
 };
 
-const doFetchWithTextResponse = async <TData extends string>(url: string, options = {}) => {
+const doFetchWithTextResponse = async <TData extends string>(
+    url: string,
+    options = {},
+): Promise<{
+    response: Response;
+    data: TData;
+}> => {
     const response = await fetch(url, Client4.getOptions(options));
     let data;
     if (response.ok) {
         data = await response.text() as TData;
-
         return {
             response,
             data,
@@ -164,7 +175,10 @@ const doFetchWithTextResponse = async <TData extends string>(url: string, option
     });
 };
 
-const doFetchWithoutResponse = async (url: string, options = {}) => {
+const doFetchWithoutResponse = async (
+    url: string,
+    options = {},
+): Promise<void> => {
     const response = await fetch(url, Client4.getOptions(options));
     if (response.ok) {
         return;

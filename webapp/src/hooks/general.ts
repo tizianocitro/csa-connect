@@ -47,7 +47,7 @@ export enum ReservedCategory {
     Organizations = 'Organizations',
 }
 
-export const useReservedCategoryTitleMapper = () => {
+export const useReservedCategoryTitleMapper = (): (categoryName: ReservedCategory | string) => string => {
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
@@ -296,7 +296,7 @@ const useUpdateFetchParams = (
     fetchParams: FetchParams,
     history: any,
     location: any,
-) => {
+): void => {
     useEffect(() => {
         if (routed) {
             const newFetchParams: Record<string, unknown> = {...fetchParams};
@@ -307,7 +307,10 @@ const useUpdateFetchParams = (
     }, [fetchParams, history]);
 };
 
-const combineQueryParameters = (oldParams: FetchOrganizationsParams, searchString: string) => {
+const combineQueryParameters = (
+    oldParams: FetchOrganizationsParams,
+    searchString: string,
+): FetchOrganizationsParams => {
     const queryParams = qs.parse(searchString, {ignoreQueryPrefix: true});
     return {...oldParams, ...queryParams};
 };

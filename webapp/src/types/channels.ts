@@ -9,7 +9,7 @@ export interface FetchChannelsParams {
     section_id: string;
 }
 
-export interface FetchChannelsReturn {
+export interface FetchChannelsResult {
     items: WidgetChannel[];
 }
 
