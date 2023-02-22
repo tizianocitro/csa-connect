@@ -19,39 +19,33 @@ type Props = {
     widgets: Widget[];
 };
 
-const filterWidgetsByType = (widgets: Widget[], type: string) => {
+const buildWidgetByType = ({name, type, url}: Widget, index: number): JSX.Element => {
+    const key = `${name}-${type}-${index}`;
+    const props = {key, name, url};
+
+    switch (type) {
+    case WidgetType.Graph:
+        return <GraphWrapper {...props}/>;
+    case WidgetType.Table:
+        return <TableWrapper {...props}/>;
+    case WidgetType.TextBox:
+        return <TextBoxWrapper {...props}/>;
+    default:
+        return <></>;
+    }
+};
+
+const filterWidgetsByType = (widgets: Widget[], type: string): Widget[] => {
     return widgets.filter((widget) => widget.type === type);
 };
 
 const Widgets = ({widgets}: Props) => {
     const isRhs = useContext(IsRhsContext);
     const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
-    const graphWidgets = filterWidgetsByType(widgets, WidgetType.Graph);
-    const tableWidgets = filterWidgetsByType(widgets, WidgetType.Table);
-    const textBoxWidgets = filterWidgetsByType(widgets, WidgetType.TextBox);
+
     return (
         <>
-            {graphWidgets.map(({name, url}, index) => (
-                <GraphWrapper
-                    key={`${name}-${index}`}
-                    name={name}
-                    url={url}
-                />
-            ))}
-            {textBoxWidgets.map(({name, url}, index) => (
-                <TextBoxWrapper
-                    key={`${name}-${index}`}
-                    name={name}
-                    url={url}
-                />
-            ))}
-            {tableWidgets.map(({name, url}, index) => (
-                <TableWrapper
-                    key={`${name}-${index}`}
-                    name={name}
-                    url={url}
-                />
-            ))}
+            {widgets.map((widget, index) => buildWidgetByType(widget, index))}
             {channelWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
             }

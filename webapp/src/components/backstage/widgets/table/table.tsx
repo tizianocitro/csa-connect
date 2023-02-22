@@ -87,7 +87,7 @@ const InnertTable = styled.div`
 `;
 
 const Footer = styled.div`
-    margin: 10px 0 20px;
+    margin: 10px 0;
     font-size: 14px;
 `;
 

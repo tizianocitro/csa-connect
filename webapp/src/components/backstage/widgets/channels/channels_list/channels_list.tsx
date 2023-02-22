@@ -21,25 +21,24 @@ const ChannelsList = ({channels}: Props) => {
             id='channelsList'
             className='channelsList'
         >
-            {channels === null &&
-                <div className='text-center pt-8'>
-                    <FormattedMessage defaultMessage='Channels have not been added yet.'/>
-                </div>
-            }
-            <InfiniteScroll
-                dataLength={channels?.length}
-                next={nextPage}
-                hasMore={false}
-                loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
-                scrollableTarget={'channels-backstageRoot'}
-            >
-                {channels?.map((channel) => (
-                    <Row
-                        key={channel.channelId}
-                        channel={channel}
-                    />
-                ))}
-            </InfiniteScroll>
+            {channels !== null &&
+                <InfiniteScroll
+                    dataLength={channels?.length}
+                    next={nextPage}
+                    hasMore={false}
+                    loader={<SpinnerContainer><StyledSpinner/></SpinnerContainer>}
+                    scrollableTarget={'channels-backstageRoot'}
+                >
+                    {channels?.map((channel) => (
+                        <Row
+                            key={channel.channelId}
+                            channel={channel}
+                        />
+                    ))}
+                </InfiniteScroll>}
+            <div className='text-center pt-8'>
+                <FormattedMessage defaultMessage='All the related channels will show here.'/>
+            </div>
         </ChannelList>
     );
 };

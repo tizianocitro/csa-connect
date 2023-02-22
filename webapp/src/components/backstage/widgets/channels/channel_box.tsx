@@ -74,7 +74,7 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                     data-testid='titleAddedChannels'
                     level={5}
                     heading={formatMessage({defaultMessage: 'Added Channels'})}
-                    subtitle={formatMessage({defaultMessage: 'All the added channels will show here'})}
+                    subtitle={formatMessage({defaultMessage: 'All the related channels will show here'})}
                     css={`
                         border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                     `}
