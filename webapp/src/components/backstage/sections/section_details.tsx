@@ -33,18 +33,28 @@ const SectionDetails = () => {
     }, [urlHash]);
 
     useEffect(() => {
-        const elements = document.getElementsByClassName(SECTION_NAV_ITEM);
-        let htmlElement: HTMLElement;
-        for (let i = 0; i < elements.length; i++) {
-            htmlElement = elements[i] as HTMLElement;
-            if (htmlElement.innerText === section.name) {
-                htmlElement.classList.add(SECTION_NAV_ITEM_ACTIVE);
+        const navItems = document.getElementsByClassName(SECTION_NAV_ITEM) as HTMLCollectionOf<HTMLElement>;
+        let currentNavItem: HTMLElement;
+        for (let i = 0; i < navItems.length; i++) {
+            currentNavItem = navItems[i];
+            const isCurrentNavItem = currentNavItem.innerText === section.name;
+            if (isCurrentNavItem) {
+                currentNavItem.classList.add(SECTION_NAV_ITEM_ACTIVE);
                 break;
             }
         }
         return () => {
-            if (htmlElement) {
-                htmlElement.classList.remove(SECTION_NAV_ITEM_ACTIVE);
+            let isAnotherNavItemActive = false;
+            for (let i = 0; i < navItems.length; i++) {
+                const isNotCurrentNavItem = navItems[i].innerText !== currentNavItem.innerText;
+                const isNextCurrentNavItem = navItems[i].classList.contains(SECTION_NAV_ITEM_ACTIVE);
+                if (isNotCurrentNavItem && isNextCurrentNavItem) {
+                    isAnotherNavItemActive = true;
+                    break;
+                }
+            }
+            if (isAnotherNavItemActive && currentNavItem) {
+                currentNavItem.classList.remove(SECTION_NAV_ITEM_ACTIVE);
             }
         };
     }, [parentIdParam]);
