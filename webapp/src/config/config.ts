@@ -13,6 +13,9 @@ export const getPlatformConfig = (): PlatformConfig => {
 };
 
 export const setPlatformConfig = (config: PlatformConfig) => {
+    if (!config) {
+        return;
+    }
     platformConfig = config;
 };
 

@@ -15,6 +15,8 @@ import {
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
 
+import {getCachedResponse, putCacheResponse} from './cache';
+
 let siteURL = '';
 let basePath = '';
 let apiUrl = `${basePath}/plugins/${pluginId}/api/v0`;
@@ -42,9 +44,21 @@ export const loadPlatformConfig = async (
     path: string,
     setConfig: (config: PlatformConfig) => void,
 ): Promise<void> => {
-    doGet(`${apiUrl}${path}`).
-        then((config) => setConfig(config)).
-        catch(() => setConfig({organizations: []}));
+    const cacheName = 'platform-config-cache';
+    const url = `${apiUrl}${path}`;
+
+    const cachedConfig = await getCachedResponse(cacheName, url) as PlatformConfig;
+    if (cachedConfig) {
+        setConfig(cachedConfig);
+        return;
+    }
+
+    const config = await doGet(url);
+    if (!config) {
+        return;
+    }
+    await putCacheResponse(cacheName, url, config);
+    setConfig(config);
 };
 
 export const fetchChannels = async (params: FetchChannelsParams): Promise<FetchChannelsResult> => {

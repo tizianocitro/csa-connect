@@ -16,8 +16,8 @@ export const putCacheResponse = async (
     value: any,
 ): Promise<void> => {
     const cache = await caches.open(cacheName);
-    if (value === null) {
+    if (!value) {
         return;
     }
-    cache.put(key, value.clone());
+    await cache.put(key, new Response(JSON.stringify(value)));
 };
