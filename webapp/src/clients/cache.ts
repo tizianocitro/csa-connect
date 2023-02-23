@@ -1,13 +1,14 @@
-export const getCachedResponse = async (
+export const getCachedResponse = async <CachedResponse = any>(
     cacheName: string,
     key: string,
-): Promise<any> => {
+): Promise<CachedResponse | null> => {
     const cache = await caches.open(cacheName);
     const cachedResponse = await cache.match(key);
     if (!cachedResponse) {
         return null;
     }
-    return cachedResponse.json();
+    const response = await cachedResponse.json();
+    return response as CachedResponse;
 };
 
 export const putCacheResponse = async (

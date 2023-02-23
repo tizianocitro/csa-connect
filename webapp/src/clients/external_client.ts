@@ -7,35 +7,35 @@ import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
-    let data = await doGet(`${url}/${id}`);
+    let data = await doGet<SectionInfo>(`${url}/${id}`);
     if (!data) {
         data = {description: '', id: '', name: ''} as SectionInfo;
     }
-    return data as SectionInfo;
+    return data;
 };
 
 export const fetchGraphData = async (url: string): Promise<GraphData> => {
-    let data = await doGet(url);
+    let data = await doGet<GraphData>(url);
     if (!data) {
         data = {edges: [], nodes: []} as GraphData;
     }
-    return data as GraphData;
+    return data;
 };
 
 export const fetchTableData = async (url: string): Promise<TableData> => {
-    let data = await doGet(url);
+    let data = await doGet<TableData>(url);
     if (!data) {
         data = {caption: '', headers: [], rows: []} as TableData;
     }
-    return data as TableData;
+    return data;
 };
 
 export const fetchTextBoxData = async (url: string): Promise<TextBoxData> => {
-    let data = await doGet(url);
+    let data = await doGet<TextBoxData>(url);
     if (!data) {
         data = {text: ''} as TextBoxData;
     }
-    return data as TextBoxData;
+    return data;
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
