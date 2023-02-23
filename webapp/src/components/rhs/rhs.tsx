@@ -20,9 +20,12 @@ export const IsRhsClosedContext = createContext(true);
 export const FullUrlContext = createContext('');
 export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: ''});
 
+export const ROOT = 'root';
+
 const RHS = 'sidebar-right';
 export const RHS_OPEN = 'rhs-open';
-export const ROOT = 'root';
+export const RHS_PARAM = 'rhs';
+export const RHS_PARAM_VALUE = 'clean';
 
 const RHSView = () => {
     const [closed, setClosed] = useState(true);
