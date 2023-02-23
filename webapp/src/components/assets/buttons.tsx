@@ -1,10 +1,9 @@
 // Copyright (c) 2017-present Mattermost, Inc. All Rights Reserved.
 // See License for license information.
 
+import {KeyVariantCircleIcon} from '@mattermost/compass-icons/components';
 import React from 'react';
 import styled from 'styled-components';
-
-import {KeyVariantCircleIcon} from '@mattermost/compass-icons/components';
 
 export const Button = styled.button`
     display: inline-flex;

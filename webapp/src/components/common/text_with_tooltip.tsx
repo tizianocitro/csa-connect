@@ -6,17 +6,16 @@ import React, {
     useRef,
     useState,
 } from 'react';
-
 import {debounce} from 'debounce';
 
 import Tooltip from './tooltip';
 
-interface Props {
+type Props = {
     id: string;
     text: string;
     className?: string;
     placement?: ComponentProps<typeof Tooltip>['placement'];
-}
+};
 
 const TextWithTooltip = (props: Props) => {
     const ref = useRef<HTMLAnchorElement|null>(null);

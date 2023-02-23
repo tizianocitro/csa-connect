@@ -3,11 +3,13 @@
 
 import React from 'react';
 
-export default function WarningIcon() {
+const WarningIcon = () => {
     return (
         <i
             id='warningIcon'
             className='icon-alert-outline'
         />
     );
-}
+};
+
+export default WarningIcon;

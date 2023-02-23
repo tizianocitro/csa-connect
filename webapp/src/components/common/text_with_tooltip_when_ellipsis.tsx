@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import React, {
     MutableRefObject,
     useEffect,
@@ -8,18 +9,17 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {debounce} from 'debounce';
 
 import {OVERLAY_DELAY} from 'src/constants';
 
-interface Props {
+type Props = {
     id: string;
     text: string;
     parentRef: MutableRefObject<HTMLElement|null>;
     className?: string;
     placement?: 'top' | 'bottom' | 'right' | 'left';
-}
+};
 
 const TextWithTooltipWhenEllipsis = (props: Props) => {
     const ref = useRef<HTMLElement|null>(null);

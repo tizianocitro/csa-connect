@@ -6,9 +6,9 @@ import styled from 'styled-components';
 
 import TextWithTooltipWhenEllipsis from 'src/components/common/text_with_tooltip_when_ellipsis';
 
-interface Props {
+type Props = {
     name: string;
-}
+};
 
 export function ColHeader({name}: Props) {
     const nameRef = useRef(null);

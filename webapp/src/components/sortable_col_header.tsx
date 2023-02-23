@@ -7,14 +7,14 @@ import styled from 'styled-components';
 
 import TextWithTooltipWhenEllipsis from 'src/components/common/text_with_tooltip_when_ellipsis';
 
-interface Props {
+type Props = {
     name: string;
     direction: string;
     active: boolean;
     onClick: () => void;
-}
+};
 
-export function SortableColHeader({name, direction, active, onClick}: Props) {
+export const SortableColHeader = ({name, direction, active, onClick}: Props) => {
     const nameRef = useRef(null);
 
     const chevron = classNames('icon--small', 'ml-2', {
@@ -37,7 +37,7 @@ export function SortableColHeader({name, direction, active, onClick}: Props) {
             }
         </Header>
     );
-}
+};
 
 const Header = styled.div`
     display: flex;
