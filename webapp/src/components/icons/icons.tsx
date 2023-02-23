@@ -1,15 +1,15 @@
 import React, {useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {useLocation} from 'react-router-dom';
-import qs from 'qs';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+import qs from 'qs';
+import {useLocation} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 export const ChannelHeaderButtonIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
 
-    const location = useLocation();
-    const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
+    const {search} = useLocation();
+    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
 
     // const parent = document.getElementById('open-product-rhs')?.parentElement;
     useEffect(() => {

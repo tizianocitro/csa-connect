@@ -1,9 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentProps, cloneElement, useState} from 'react';
-import styled, {css} from 'styled-components';
-
 import {
     FloatingFocusManager,
     FloatingPortal,
@@ -18,33 +15,8 @@ import {
     useInteractions,
     useRole,
 } from '@floating-ui/react-dom-interactions';
-
-const FloatingContainer = styled.div`
-    min-width: 16rem;
-	z-index: 50;
-
-	.PlaybookRunProfileButton {
-		.Profile {
-			background-color: var(--button-bg-08);
-		}
-	}
-
-    .playbook-react-select__menu-list {
-        padding: 0 0 12px;
-        border: none;
-    }
-
-    .playbook-react-select {
-        border-radius: 4px;
-        -webkit-overflow-scrolling: touch;
-        background-color: var(--center-channel-bg);
-        border: 1px solid var(--center-channel-color-16);
-        max-height: 100%;
-        max-width: 340px;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    }
-`;
+import React, {ComponentProps, cloneElement, useState} from 'react';
+import styled, {css} from 'styled-components';
 
 type DropdownProps = {
     target: JSX.Element;
@@ -128,5 +100,32 @@ const Dropdown = (props: DropdownProps) => {
         </>
     );
 };
+
+const FloatingContainer = styled.div`
+    min-width: 16rem;
+	z-index: 50;
+
+	.PlaybookRunProfileButton {
+		.Profile {
+			background-color: var(--button-bg-08);
+		}
+	}
+
+    .playbook-react-select__menu-list {
+        padding: 0 0 12px;
+        border: none;
+    }
+
+    .playbook-react-select {
+        border-radius: 4px;
+        -webkit-overflow-scrolling: touch;
+        background-color: var(--center-channel-bg);
+        border: 1px solid var(--center-channel-color-16);
+        max-height: 100%;
+        max-width: 340px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+`;
 
 export default Dropdown;

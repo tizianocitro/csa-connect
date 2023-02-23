@@ -1,16 +1,15 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 
-interface TextEditProps {
+type TextEditProps = {
     value: string;
     children: React.ReactNode;
     placeholder?: string;
     className?: string;
     noBorder?: boolean;
     disabled?: boolean;
-
     editStyles?: ReturnType<typeof css>;
-}
+};
 
 const TextEdit = (props: TextEditProps) => {
     return (
