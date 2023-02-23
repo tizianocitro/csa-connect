@@ -1,40 +1,19 @@
 import React, {useEffect, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {useLocation} from 'react-router-dom';
-import qs from 'qs';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+import {useSelector} from 'react-redux';
+
+import {RHS_OPEN, ROOT} from 'src/components/rhs/rhs';
 
 export const ChannelHeaderButtonIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
 
-    const location = useLocation();
-    const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
-
-    // const parent = document.getElementById('open-product-rhs')?.parentElement;
     useEffect(() => {
-        const parent = icon.current?.parentElement;
-        if (typeof queryParams.from === 'undefined') {
-            parent?.click();
+        const iconButton = icon.current?.parentElement;
+        const root = document.getElementById(ROOT) as HTMLElement;
+        if (!root.classList.contains(RHS_OPEN)) {
+            iconButton?.click();
         }
-        return () => {
-            if (typeof queryParams.from === 'undefined') {
-                parent?.click();
-            }
-        };
-    }, [channelId]);
-
-    useEffect(() => {
-        const parent = icon.current?.parentElement;
-        let timer: NodeJS.Timer;
-        if (typeof queryParams.from !== 'undefined') {
-            timer = setTimeout(() => parent?.click(), 300);
-        }
-        return () => {
-            if (typeof queryParams.from !== 'undefined') {
-                clearTimeout(timer);
-            }
-        };
     }, [channelId]);
 
     return (
