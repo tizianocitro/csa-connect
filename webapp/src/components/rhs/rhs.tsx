@@ -20,6 +20,10 @@ export const IsRhsClosedContext = createContext(true);
 export const FullUrlContext = createContext('');
 export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: ''});
 
+const RHS = 'sidebar-right';
+export const RHS_OPEN = 'rhs-open';
+export const ROOT = 'root';
+
 const RHSView = () => {
     const [closed, setClosed] = useState(true);
     const updateClosed = () => {
@@ -46,7 +50,7 @@ const RHSView = () => {
 
     useEffect(() => {
         // Select the node that will be observed for mutations
-        const targetNode = document.getElementById('sidebar-right') as HTMLElement;
+        const targetNode = document.getElementById(RHS) as HTMLElement;
 
         // Options for the observer (which mutations to observe)
         const config = {attributes: true};
