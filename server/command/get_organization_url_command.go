@@ -213,13 +213,24 @@ func buildModelDialogElements() []model.DialogElement {
 }
 
 func buildSelectElementOtions() []*model.PostActionOptions {
-	return []*model.PostActionOptions{{
-		Text:  "My First Organization",
-		Value: "My First Organization",
-	}, {
-		Text:  "My Second Organization",
-		Value: "My Second Organization",
-	}}
+	return []*model.PostActionOptions{
+		{
+			Text:  "Ecosystem",
+			Value: "Ecosystem",
+		},
+		{
+			Text:  "Organization X",
+			Value: "Organization X",
+		},
+		{
+			Text:  "Organization Y",
+			Value: "Organization Y",
+		},
+		{
+			Text:  "Organization Z",
+			Value: "Organization Z",
+		},
+	}
 }
 
 func createPost(config *OrganizationURLPostConfig, request *model.SubmitDialogRequest, name string) *model.Post {
@@ -243,12 +254,20 @@ func createPost(config *OrganizationURLPostConfig, request *model.SubmitDialogRe
 	}
 }
 
-// TODO: Make proper call to DB, this is just a mock
+// TODO: This is just a mock, retrieve them in the proper way
 func getIDByName(name string) string {
-	if name == "Ecosystem" {
+	switch name {
+	case "Ecosytem":
+		return "0"
+	case "Organization X":
+		return "1"
+	case "Organization Y":
+		return "2"
+	case "Organization Z":
+		return "3"
+	default:
 		return "0"
 	}
-	return "1"
 }
 
 func getMarkdownOrganizationURL(config *OrganizationURLMarkdownConfig) string {
