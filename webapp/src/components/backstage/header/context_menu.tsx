@@ -9,10 +9,10 @@ import {SemiBoldHeading} from 'src/styles/headings';
 
 import {CopyLinkMenuItem} from './controls';
 
-interface Props {
+type Props = {
     name: string;
     path: string;
-}
+};
 
 export const ContextMenu = ({path, name}: Props) => {
     return (

@@ -1,19 +1,18 @@
+import styled, {css} from 'styled-components';
 import React from 'react';
 import {useIntl} from 'react-intl';
 
-import styled, {css} from 'styled-components';
-
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
 import CopyLink from 'src/components/commons/copy_link';
-import TextEdit from 'src/components/commons/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
+import TextEdit from 'src/components/commons/text_edit';
 
 import {ContextMenu} from './context_menu';
 
-interface Props {
+type Props = {
     name: string;
     path: string;
-}
+};
 
 export const NameHeader = ({name, path}: Props) => {
     const {formatMessage} = useIntl();
