@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import {useIntl} from 'react-intl';
 
-import {SortableColHeader} from 'src/components/common/sortable_col_header';
+import {SortableColHeader} from 'src/components/commons/sortable_col_header';
 import {FetchOrganizationsParams} from 'src/types/organization';
 
 interface Props {

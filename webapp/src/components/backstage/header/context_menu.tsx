@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import DotMenu, {TitleButton} from 'src/components/common/dot_menu';
+import DotMenu, {TitleButton} from 'src/components/commons/dot_menu';
 import {SemiBoldHeading} from 'src/styles/headings';
 
 import {CopyLinkMenuItem} from './controls';

@@ -13,7 +13,7 @@ import {
 } from 'src/reducer';
 import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
-import Header from 'src/components/common/header';
+import Header from 'src/components/commons/header';
 
 import {CreateChannel} from './controls';
 

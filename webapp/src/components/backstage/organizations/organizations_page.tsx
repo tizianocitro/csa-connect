@@ -4,7 +4,7 @@ import {useIntl} from 'react-intl';
 
 import {useOrganizationsList} from 'src/hooks';
 import {BACKSTAGE_LIST_PER_PAGE} from 'src/constants';
-import Header from 'src/components/common/header';
+import Header from 'src/components/commons/header';
 
 import OrganizationsList from './organizations_list';
 

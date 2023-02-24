@@ -4,8 +4,8 @@ import classNames from 'classnames';
 
 import styled, {css} from 'styled-components';
 
-import Tooltip from 'src/components/common/tooltip';
-import {DotMenuButton} from 'src/components/common/dot_menu';
+import Tooltip from 'src/components/commons/tooltip';
+import {DotMenuButton} from 'src/components/commons/dot_menu';
 
 interface ItemProps {
     icon: string;

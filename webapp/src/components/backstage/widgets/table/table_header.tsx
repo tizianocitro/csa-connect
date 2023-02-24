@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {ColHeader} from 'src/components/common/col_header';
+import {ColHeader} from 'src/components/commons/col_header';
 import {TableHeaderData} from 'src/types/table';
 
 type Props = {

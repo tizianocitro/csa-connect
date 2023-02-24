@@ -6,7 +6,7 @@ import styled, {css} from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {OVERLAY_DELAY} from 'src/constants';
-import Tooltip from 'src/components/common/tooltip';
+import Tooltip from 'src/components/commons/tooltip';
 import {copyToClipboard} from 'src/utils';
 import {formatUrlAsMarkdown} from 'src/components/backstage/header/controls';
 

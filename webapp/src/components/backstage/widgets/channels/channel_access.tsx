@@ -16,7 +16,7 @@ import {
 } from 'src/components/backstage/widgets/channels/styles';
 import {RadioInput} from 'src/components/backstage/styles';
 import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
-import {ErrorMessage} from 'src/components/common/messages';
+import {ErrorMessage} from 'src/components/commons/messages';
 import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/backstage/widgets/channels/clear_indicator';
 import MenuList from 'src/components/backstage/widgets/channels/menu_list';

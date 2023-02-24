@@ -21,7 +21,7 @@ import {
     ORGANIZATION_PATH,
 } from 'src/constants';
 import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
-import ErrorPage from 'src/components/common/error_page';
+import ErrorPage from 'src/components/commons/error_page';
 import OrganizationsPage from 'src/components/backstage/organizations/organizations_page';
 import OrganizationDetails from 'src/components/backstage/organizations/organization_details';
 
