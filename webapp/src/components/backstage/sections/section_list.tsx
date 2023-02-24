@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
-import {Section} from 'src/types/organization';
-import {navigateToUrl} from 'src/browser_routing';
-import Table from 'src/components/backstage/widgets/table/table';
 import {formatName, formatStringToLowerCase, useSectionData} from 'src/hooks';
 import {PARENT_ID_PARAM} from 'src/constants';
+import {Section} from 'src/types/organization';
+import Table from 'src/components/backstage/widgets/table/table';
+import {navigateToUrl} from 'src/browser_routing';
 
 type Props = {
     path: string;
@@ -20,6 +20,7 @@ const SectionList = ({path, section}: Props) => {
     const openOrganizationDetails = (resourceId: string) => {
         navigateToUrl(`${path}/${formatStringToLowerCase(name)}/${resourceId}?${PARENT_ID_PARAM}=${id}`);
     };
+
     return (
         <Body>
             <Table

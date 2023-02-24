@@ -1,11 +1,11 @@
+import {NavLink, Route, Switch} from 'react-router-dom';
 import React from 'react';
 import styled from 'styled-components';
-import {NavLink, Route, Switch} from 'react-router-dom';
 
-import {Section} from 'src/types/organization';
-import SectionList from 'src/components/backstage/sections/section_list';
-import SectionDetails from 'src/components/backstage/sections/section_details';
 import {SECTION_ID_PARAM} from 'src/constants';
+import {Section} from 'src/types/organization';
+import SectionDetails from 'src/components/backstage/sections/section_details';
+import SectionList from 'src/components/backstage/sections/section_list';
 import {formatStringToLowerCase} from 'src/hooks';
 
 type Props = {
