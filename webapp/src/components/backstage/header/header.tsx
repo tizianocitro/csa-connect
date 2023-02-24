@@ -5,7 +5,7 @@ import styled, {css} from 'styled-components';
 
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
 import CopyLink from 'src/components/common/copy_link';
-import TextEdit from 'src/components/text_edit';
+import TextEdit from 'src/components/common/text_edit';
 import {SemiBoldHeading} from 'src/styles/headings';
 
 import {ContextMenu} from './context_menu';

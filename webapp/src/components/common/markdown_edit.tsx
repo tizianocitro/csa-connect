@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useUpdateEffect} from 'react-use';
 
-import FormattedMarkdown from 'src/components/formatted_markdown';
-
-import ShowMore from './common/show_more';
+import FormattedMarkdown from './formatted_markdown';
+import ShowMore from './show_more';
 
 type MarkdownEditProps = {
     value: string;

@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import MarkdownEdit from 'src/components/markdown_edit';
+import MarkdownEdit from 'src/components/common/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {formatName} from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';

@@ -3,7 +3,7 @@
 
 import styled from 'styled-components';
 
-import {DotMenuButton, DropdownMenuItem} from 'src/components/dot_menu';
+import {DotMenuButton, DropdownMenuItem} from 'src/components/common/dot_menu';
 
 export const DotMenuButtonStyled = styled(DotMenuButton)`
     flex-shrink: 0;

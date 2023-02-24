@@ -1,7 +1,7 @@
 import React from 'react';
 import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 
-import DotMenu from 'src/components/dot_menu';
+import DotMenu from 'src/components/common/dot_menu';
 import {getSiteUrl} from 'src/clients';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';

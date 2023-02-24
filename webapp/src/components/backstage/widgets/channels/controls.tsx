@@ -14,7 +14,7 @@ import {AddChannelResult, ChannelCreation} from 'src/types/channels';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
-import {ErrorMessage} from 'src/components/messages';
+import {ErrorMessage} from 'src/components/common/messages';
 
 type AddChannelProps = {
     channelCreation: ChannelCreation;

@@ -5,11 +5,11 @@ import React, {ComponentProps, useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useUpdateEffect} from 'react-use';
 
+import {PrimaryButton} from 'src/components/assets/buttons';
 import Tooltip from 'src/components/common/tooltip';
 import {useUniqueId} from 'src/utils';
 
 import Dropdown from './dropdown';
-import {PrimaryButton} from './assets/buttons';
 
 type DotMenuProps = {
     children: React.ReactNode;
