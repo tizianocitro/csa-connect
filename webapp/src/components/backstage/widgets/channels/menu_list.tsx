@@ -1,8 +1,7 @@
-import React from 'react';
-
-import styled from 'styled-components';
-import {Scrollbars} from 'react-custom-scrollbars';
 import {MenuListComponentProps, OptionTypeBase} from 'react-select';
+import React from 'react';
+import {Scrollbars} from 'react-custom-scrollbars';
+import styled from 'styled-components';
 
 const MenuList = <T extends OptionTypeBase>(props: MenuListComponentProps<T, false>) => {
     return (

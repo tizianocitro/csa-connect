@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import styled, {css} from 'styled-components';
+import React from 'react';
 
 import {SelectorWrapper} from 'src/components/backstage/widgets/channels/styles';
 
-interface Props {
+type Props = {
     enabled: boolean;
     placeholderText: string;
     errorText: string;
@@ -15,7 +15,7 @@ interface Props {
     pattern: string;
     onChange: (updatedInput: string) => void;
     maxLength?: number;
-}
+};
 
 export const PatternedInput = (props: Props) => (
     <SelectorWrapper>
@@ -41,9 +41,9 @@ const ErrorMessage = styled.div`
     display: none;
 `;
 
-interface TextBoxProps {
+type TextBoxProps = {
     disabled: boolean;
-}
+};
 
 const TextBox = styled.input<TextBoxProps>`
     ::placeholder {

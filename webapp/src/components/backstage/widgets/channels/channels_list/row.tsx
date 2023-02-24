@@ -1,5 +1,5 @@
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import React from 'react';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 
@@ -8,9 +8,9 @@ import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {WidgetChannel} from 'src/types/channels';
 import {navigateToUrl} from 'src/browser_routing';
 
-interface Props {
+type Props = {
     channel: WidgetChannel;
-}
+};
 
 const Row = (props: Props) => {
     const channel = useSelector(channelNameSelector(props.channel.channelId));

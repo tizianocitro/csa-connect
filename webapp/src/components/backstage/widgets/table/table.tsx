@@ -2,9 +2,9 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {TableData} from 'src/types/table';
-import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {TableData} from 'src/types/table';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
@@ -39,8 +39,10 @@ const Table = ({
     urlHash,
 }: Props) => {
     const fullUrl = useContext(FullUrlContext);
+
     const {caption, headers, rows} = data;
     const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
+
     return (
         <Container
             id={tableId}

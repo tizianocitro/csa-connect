@@ -1,3 +1,4 @@
+import 'reactflow/dist/style.css';
 import React, {
     useCallback,
     useContext,
@@ -5,7 +6,6 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import styled from 'styled-components';
 import ReactFlow, {
     Background,
     Controls,
@@ -18,15 +18,15 @@ import ReactFlow, {
     applyEdgeChanges,
     applyNodeChanges,
 } from 'reactflow';
-import 'reactflow/dist/style.css';
+import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {formatName} from 'src/hooks';
-import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
-import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
-import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {formatName} from 'src/hooks';
 
 import GraphNodeType from './graph_node_type';
 

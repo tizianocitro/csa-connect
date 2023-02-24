@@ -2,10 +2,10 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
-import CopyLink from 'src/components/commons/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
-import {TableRowData} from 'src/types/table';
+import CopyLink from 'src/components/commons/copy_link';
 import {FullUrlContext} from 'src/components/rhs/rhs';
+import {TableRowData} from 'src/types/table';
 
 type Props = {
     pointer: boolean;
@@ -30,8 +30,10 @@ const buildTo = (
 const TableRow = ({onClick, pointer, query, row, urlHash}: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
+
     const {id, name, values} = row;
     const itemId = buildIdForUrlHashReference('table-row', id);
+
     return (
         <RowItem
             className='row'

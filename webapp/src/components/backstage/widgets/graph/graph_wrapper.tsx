@@ -2,15 +2,15 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {formatUrlWithId, useGraphData} from 'src/hooks';
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
+import {formatUrlWithId, useGraphData} from 'src/hooks';
 
 import Graph from './graph';
 
 type Props = {
     name?: string;
     url?: string;
-}
+};
 
 const GraphWrapper = ({
     name = 'default',

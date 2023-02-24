@@ -1,36 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {Dispatch} from 'react';
-import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
+import React, {Dispatch} from 'react';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import styled from 'styled-components';
+import {useSelector} from 'react-redux';
 
-import {PatternedInput} from 'src/components/backstage/widgets/channels/patterned_input';
 import {
     AutomationHeader,
     AutomationLabel,
     AutomationTitle,
     SelectorWrapper,
 } from 'src/components/backstage/widgets/channels/styles';
-import {RadioInput} from 'src/components/backstage/styles';
 import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
-import {ErrorMessage} from 'src/components/commons/messages';
+import {ChannelCreation} from 'src/types/channels';
 import ChannelSelector from 'src/components/backstage/channel_selector';
 import ClearIndicator from 'src/components/backstage/widgets/channels/clear_indicator';
+import {ErrorMessage} from 'src/components/commons/messages';
 import MenuList from 'src/components/backstage/widgets/channels/menu_list';
-import {ChannelCreation} from 'src/types/channels';
+import {PatternedInput} from 'src/components/backstage/widgets/channels/patterned_input';
+import {RadioInput} from 'src/components/backstage/styles';
 import {channelCreationAction} from 'src/actions';
 
-interface Props {
+type Props = {
     channelCreation: ChannelCreation;
     selectErrorMessage: string,
     nameErrorMessage: string,
     dispatchChannelCreation: Dispatch<any>;
     cleanErrorMessages: () => void,
     setChangesMade?: (b: boolean) => void;
-}
+};
 
 export const CreateAChannel = ({
     channelCreation,
@@ -52,6 +52,7 @@ export const CreateAChannel = ({
         }));
         setChangesMade?.(true);
     };
+
     const handleChannelNameTemplateChange = (channelName: string) => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({
@@ -60,6 +61,7 @@ export const CreateAChannel = ({
         }));
         setChangesMade?.(true);
     };
+
     const handleChannelModeChange = (mode: 'create_new_channel' | 'link_existing_channel') => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({
@@ -68,6 +70,7 @@ export const CreateAChannel = ({
         }));
         setChangesMade?.(true);
     };
+
     const handleChannelIdChange = (channel_id: string) => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({

@@ -2,26 +2,26 @@ import React, {useReducer} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
-import {Section} from 'src/components/backstage/widgets/channels/styles';
-import {useChannelsList} from 'src/hooks';
+import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {
     setAddChannelErrorMessage,
     setChannelCreation,
     setNameErrorMessage,
     setSelectErrorMessage,
 } from 'src/reducer';
-import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
+import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
 import Header from 'src/components/commons/header';
+import {Section} from 'src/components/backstage/widgets/channels/styles';
+import {useChannelsList} from 'src/hooks';
 
 import {CreateChannel} from './controls';
 
-interface Props {
+type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
-}
+};
 
 const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const {formatMessage} = useIntl();
@@ -31,14 +31,14 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
     const [nameErrorMessage, dispatchNameErrorMessage] = useReducer(setNameErrorMessage, '');
 
-    const baseChannelCreation = {
+    const defaultChannelCreation = {
         teamId: '',
         channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, but also create_new_channel
+        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, otherwise create_new_channel
         channelName: '',
         createPublicChannel: true,
     };
-    const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, baseChannelCreation);
+    const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
 
     const cleanErrorMessages = () => {
         dispacthAddChannelErrorMessage(addChannelErrorMessageAction(''));

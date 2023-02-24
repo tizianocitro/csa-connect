@@ -8,17 +8,19 @@ import {PARENT_ID_PARAM} from 'src/constants';
 
 import ChannelBox from './channel_box';
 
-interface Props {
+type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
-}
+};
 
 const ChannelsSection = ({parentId, sectionId, teamId}: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
+
     const id = 'channels-widget';
     const title = formatMessage({defaultMessage: 'Channels'});
+
     return (
         <Container
             id={id}

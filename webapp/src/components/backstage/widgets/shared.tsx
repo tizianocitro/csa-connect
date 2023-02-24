@@ -2,20 +2,20 @@
 // See LICENSE.txt for license information.
 
 import styled, {css} from 'styled-components';
-import {useRouteMatch} from 'react-router-dom';
 import React from 'react';
+import {useRouteMatch} from 'react-router-dom';
 
+import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 import {BaseInput} from 'src/components/assets/inputs';
 import CopyLink from 'src/components/commons/copy_link';
-import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 
-interface AnchorLinkTitleProps {
+type AnchorLinkTitleProps = {
     fullUrl: string;
     id: string;
     query?: string;
     text: string;
     title: string;
-}
+};
 
 const buildTo = (
     fullUrl: string,
@@ -32,6 +32,7 @@ const buildTo = (
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
     const {url} = useRouteMatch();
     const itemId = buildIdForUrlHashReference('section-link', props.id);
+
     return (
         <LinkTitle>
             <CopyLink

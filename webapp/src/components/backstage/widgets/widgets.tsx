@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 
-import {Widget} from 'src/types/organization';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {Widget} from 'src/types/organization';
 
 import ChannelsWrapper from './channels/channels_wrapper';
 import GraphWrapper from './graph/graph_wrapper';
@@ -19,7 +19,10 @@ type Props = {
     widgets: Widget[];
 };
 
-const buildWidgetByType = ({name, type, url}: Widget, index: number): JSX.Element => {
+const buildWidgetByType = (
+    {name, type, url}: Widget,
+    index: number,
+): JSX.Element => {
     const key = `${name}-${type}-${index}`;
     const props = {key, name, url};
 

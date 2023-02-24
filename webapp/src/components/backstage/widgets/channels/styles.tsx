@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import styled from 'styled-components';
 import {mdiClockOutline, mdiCurrencyUsd, mdiPound} from '@mdi/js';
 import Icon from '@mdi/react';
+import React from 'react';
+import styled from 'styled-components';
 
 export const AutomationHeader = styled.div`
     display: flex;

@@ -1,17 +1,16 @@
+import {FormattedMessage} from 'react-intl';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import React from 'react';
 import styled from 'styled-components';
-import {FormattedMessage} from 'react-intl';
-
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 import LoadingSpinner from 'src/components/assets/loading_spinner';
 import {WidgetChannel} from 'src/types/channels';
 
 import Row from './row';
 
-interface Props {
+type Props = {
     channels: WidgetChannel[];
-}
+};
 
 const ChannelsList = ({channels}: Props) => {
     const nextPage = () => null;
