@@ -2,22 +2,20 @@
 // See LICENSE.txt for license information.
 
 import styled, {css} from 'styled-components';
-import {useRouteMatch} from 'react-router-dom';
 import React from 'react';
+import {useRouteMatch} from 'react-router-dom';
 
-import StatusBadge from 'src/components/backstage/status_badge';
-
-import {BaseInput} from 'src/components/assets/inputs';
-import CopyLink from 'src/components/common/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
+import {BaseInput} from 'src/components/assets/inputs';
+import CopyLink from 'src/components/commons/copy_link';
 
-interface AnchorLinkTitleProps {
+type AnchorLinkTitleProps = {
     fullUrl: string;
     id: string;
     query?: string;
     text: string;
     title: string;
-}
+};
 
 const buildTo = (
     fullUrl: string,
@@ -34,6 +32,7 @@ const buildTo = (
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
     const {url} = useRouteMatch();
     const itemId = buildIdForUrlHashReference('section-link', props.id);
+
     return (
         <LinkTitle>
             <CopyLink
@@ -87,13 +86,6 @@ export const Content = styled.div`
 
 export const ExpandRight = styled.div`
     margin-left: auto;
-`;
-
-export const Badge = styled(StatusBadge)`
-    display: unset;
-    position: unset;
-    height: unset;
-    white-space: nowrap;
 `;
 
 export const HelpText = styled.div`

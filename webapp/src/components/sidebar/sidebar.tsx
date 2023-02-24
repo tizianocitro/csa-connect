@@ -1,15 +1,12 @@
-import React, {ReactNode} from 'react';
-import styled from 'styled-components';
-import {getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {GlobalState} from '@mattermost/types/store';
-import {useSelector} from 'react-redux';
-import {Team} from '@mattermost/types/teams';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import React, {ReactNode} from 'react';
 import Scrollbars from 'react-custom-scrollbars';
+import styled from 'styled-components';
+import {useSelector} from 'react-redux';
 
 import {renderThumbVertical, renderTrackHorizontal, renderView} from 'src/components/rhs/rhs_shared';
-
 import {OVERLAY_DELAY} from 'src/constants';
+import {teamNameSelector} from 'src/selectors';
 
 import Group from './group';
 
@@ -32,14 +29,12 @@ export interface SidebarGroup {
     afterGroup?: ReactNode;
 }
 
-interface SidebarProps {
+type Props = {
     team_id: string;
     groups: Array<SidebarGroup>;
-}
+};
 
-const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
-
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = (props: Props) => {
     let team = useSelector(teamNameSelector(props.team_id));
     if (!props.team_id) {
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};

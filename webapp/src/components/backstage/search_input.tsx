@@ -3,20 +3,19 @@
 
 import React, {useState} from 'react';
 import styled from 'styled-components';
-
 import {useIntl} from 'react-intl';
 
-import Tooltip from 'src/components/common/tooltip';
+import Tooltip from 'src/components/commons/tooltip';
 
-interface Props {
+type Props = {
     testId: string;
     default: string | undefined;
     onSearch: (term: string) => void;
     placeholder: string;
     width?: string;
-}
+};
 
-export default function SearchInput(props: Props) {
+export const SearchInput = (props: Props) => {
     const {formatMessage} = useIntl();
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +57,7 @@ export default function SearchInput(props: Props) {
             )}
         </Search>
     );
-}
+};
 
 export const Search = styled.div<{width?: string}>`
     position: relative;
@@ -110,3 +109,5 @@ const ClearButtonContainer = styled.div`
     height: 100%;
     align-items: center;
 `;
+
+export default SearchInput;

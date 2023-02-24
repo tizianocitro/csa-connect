@@ -1,13 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {useSelector} from 'react-redux';
-
+import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from '@mattermost/types/store';
 import {Team} from '@mattermost/types/teams';
-
 import {getChannelsNameMapInTeam} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {useSelector} from 'react-redux';
 
 import {formatText, messageHtmlToComponent} from 'src/webapp_globals';
 
@@ -44,7 +42,6 @@ const FormattedMarkdown = ({
     const messageHtmlToComponentOptions = {
         hasPluginTooltips: true,
     };
-
     return messageHtmlToComponent(formatText(value, opts), true, messageHtmlToComponentOptions);
 };
 

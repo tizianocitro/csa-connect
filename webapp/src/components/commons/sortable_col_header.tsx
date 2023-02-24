@@ -2,19 +2,28 @@
 // See LICENSE.txt for license information.
 
 import React, {useRef} from 'react';
+import classNames from 'classnames';
 import styled from 'styled-components';
 
-import TextWithTooltipWhenEllipsis from 'src/components/common/text_with_tooltip_when_ellipsis';
+import TextWithTooltipWhenEllipsis from 'src/components/commons/text_with_tooltip_when_ellipsis';
 
-interface Props {
+type Props = {
     name: string;
-}
+    direction: string;
+    active: boolean;
+    onClick: () => void;
+};
 
-export function ColHeader({name}: Props) {
+export const SortableColHeader = ({name, direction, active, onClick}: Props) => {
     const nameRef = useRef(null);
 
+    const chevron = classNames('icon--small', 'ml-2', {
+        'icon-chevron-down': direction === 'desc',
+        'icon-chevron-up': direction === 'asc',
+    });
+
     return (
-        <Header>
+        <Header onClick={() => onClick()}>
             <Name ref={nameRef}>
                 <TextWithTooltipWhenEllipsis
                     id={`col_${name}`}
@@ -22,12 +31,17 @@ export function ColHeader({name}: Props) {
                     parentRef={nameRef}
                 />
             </Name>
+            {
+                active &&
+                <i className={chevron}/>
+            }
         </Header>
     );
-}
+};
 
 const Header = styled.div`
     display: flex;
+    cursor: pointer;
 `;
 
 const Name = styled.div`

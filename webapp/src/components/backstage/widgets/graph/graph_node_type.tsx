@@ -1,5 +1,3 @@
-import React from 'react';
-import styled from 'styled-components';
 import {
     Edge,
     Handle,
@@ -7,10 +5,12 @@ import {
     NodeProps,
     Position,
 } from 'reactflow';
+import React from 'react';
+import styled from 'styled-components';
 
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';

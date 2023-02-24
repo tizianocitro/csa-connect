@@ -3,20 +3,20 @@
 
 import React from 'react';
 import styled from 'styled-components';
-
 import {useIntl} from 'react-intl';
 
-import {SortableColHeader} from 'src/components/sortable_col_header';
 import {FetchOrganizationsParams} from 'src/types/organization';
+import {SortableColHeader} from 'src/components/commons/sortable_col_header';
 
-interface Props {
+type Props = {
     fetchParams: FetchOrganizationsParams;
     setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
-}
+};
 
 const OrganizationsListHeader = ({fetchParams, setFetchParams}: Props) => {
     const {formatMessage} = useIntl();
-    function colHeaderClicked(colName: string) {
+
+    const colHeaderClicked = (colName: string) => {
         if (fetchParams.sort === colName) {
             // if the direction is not provided, the default is ascending
             // if we're already sorting on the column, reverse the direction
@@ -35,7 +35,8 @@ const OrganizationsListHeader = ({fetchParams, setFetchParams}: Props) => {
         setFetchParams((oldParams: FetchOrganizationsParams) => {
             return {...oldParams, sort: colName, direction: newDirection, page: 0};
         });
-    }
+    };
+
     return (
         <OrganizationListHeader>
             <div className='row'>

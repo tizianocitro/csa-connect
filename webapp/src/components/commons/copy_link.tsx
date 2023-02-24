@@ -5,10 +5,9 @@ import React, {HTMLAttributes, useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import {copyToClipboard} from 'src/utils';
-
 import {OVERLAY_DELAY} from 'src/constants';
-import Tooltip from 'src/components/common/tooltip';
+import Tooltip from 'src/components/commons/tooltip';
+import {copyToClipboard} from 'src/utils';
 import {formatUrlAsMarkdown} from 'src/components/backstage/header/controls';
 
 type Props = {
@@ -28,13 +27,13 @@ type Props = {
 type Attrs = HTMLAttributes<HTMLElement>;
 
 const CopyLink = ({
-    id,
-    text,
-    to,
-    name,
-    tooltipMessage,
     iconWidth,
     iconHeight,
+    id,
+    name,
+    text,
+    to,
+    tooltipMessage,
     ...attrs
 }: Props & Attrs) => {
     const {formatMessage} = useIntl();
@@ -67,8 +66,6 @@ const CopyLink = ({
     );
 };
 
-// width: 1.25em;
-// height: 1.25em;
 const CopyIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeight?: string}>`
     display: inline-block;
 

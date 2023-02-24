@@ -2,24 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
+import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {matchPath, useLocation, useRouteMatch} from 'react-router-dom';
-import {useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
 import {GlobalState} from '@mattermost/types/store';
-import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {useSelector} from 'react-redux';
 
-import {useForceDocumentTitle} from 'src/hooks';
-import {applyTheme} from 'src/components/backstage/css_utils';
 import {
     DEFAULT_PATH,
     ORGANIZATIONS_PATH,
     ORGANIZATION_ID_PARAM,
     PRODUCT_NAME,
 } from 'src/constants';
+import {applyTheme} from 'src/components/backstage/css_utils';
+import {useForceDocumentTitle} from 'src/hooks';
 
-import {ToastProvider} from './toast_banner';
 import LHSNavigation from './lhs/lhs_navigation';
 import MainBody from './main_body';
+import {ToastProvider} from './toast_banner';
 
 export const BackstageID = 'organization-backstageRoot';
 

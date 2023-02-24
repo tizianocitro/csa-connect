@@ -1,16 +1,16 @@
-import React from 'react';
 import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
+import React from 'react';
 
-import DotMenu from 'src/components/dot_menu';
-import {getSiteUrl} from 'src/clients';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
+import DotMenu from 'src/components/commons/dot_menu';
 import {DotMenuButtonStyled} from 'src/components/backstage/shared';
+import {getSiteUrl} from 'src/clients';
 
-interface Props {
+type Props = {
     organizationId: string;
     organizationName: string;
-}
+};
 
 export const LHSOrganizationDotMenu = ({organizationId, organizationName}: Props) => {
     return (

@@ -12,8 +12,11 @@ import {
     FetchChannelsParams,
     FetchChannelsResult,
 } from 'src/types/channels';
+import {PLATFORM_CONFIG_CACHE_NAME} from 'src/config/config';
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
+
+import {getCachedResponse, putCacheResponse} from './cache';
 
 let siteURL = '';
 let basePath = '';
@@ -42,9 +45,20 @@ export const loadPlatformConfig = async (
     path: string,
     setConfig: (config: PlatformConfig) => void,
 ): Promise<void> => {
-    doGet(`${apiUrl}${path}`).
-        then((config) => setConfig(config)).
-        catch(() => setConfig({organizations: []}));
+    const url = `${apiUrl}${path}`;
+
+    const cachedConfig = await getCachedResponse<PlatformConfig>(PLATFORM_CONFIG_CACHE_NAME, url);
+    if (cachedConfig) {
+        setConfig(cachedConfig);
+        return;
+    }
+
+    const config = await doGet<PlatformConfig>(url);
+    if (!config) {
+        return;
+    }
+    await putCacheResponse(PLATFORM_CONFIG_CACHE_NAME, url, config);
+    setConfig(config);
 };
 
 export const fetchChannels = async (params: FetchChannelsParams): Promise<FetchChannelsResult> => {
@@ -57,30 +71,22 @@ export const fetchChannels = async (params: FetchChannelsParams): Promise<FetchC
 };
 
 export const fetchChannelById = async (channelId: string): Promise<FetchChannelByIDResult> => {
-    let data = await doGet(`${apiUrl}/channel/${channelId}`);
+    let data = await doGet<FetchChannelByIDResult>(`${apiUrl}/channel/${channelId}`);
     if (!data) {
         data = {channel: {}} as FetchChannelByIDResult;
     }
-    return data as FetchChannelByIDResult;
+    return data;
 };
 
-export const addChannel = async ({
-    channelId,
-    channelName,
-    createPublicChannel,
-    parentId,
-    sectionId,
-    teamId,
-}: AddChannelParams) => {
-    const data = await doPost(`${apiUrl}/channels/${sectionId}`, JSON.stringify({
-        channelId,
-        channelName,
-        createPublicChannel,
-        parentId,
-        sectionId,
-        teamId,
-    }));
-    return data as AddChannelResult;
+export const addChannel = async (params: AddChannelParams): Promise<AddChannelResult> => {
+    let data = await doPost<AddChannelResult>(
+        `${apiUrl}/channels/${params.sectionId}`,
+        JSON.stringify(params),
+    );
+    if (!data) {
+        data = {channelId: '', parentId: '', sectionId: ''} as AddChannelResult;
+    }
+    return data;
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {

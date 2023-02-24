@@ -1,14 +1,12 @@
-import React from 'react';
+import styled, {css} from 'styled-components';
 import {NavLink} from 'react-router-dom';
+import React from 'react';
 import classNames from 'classnames';
 
-import styled, {css} from 'styled-components';
+import {DotMenuButton} from 'src/components/commons/dot_menu';
+import Tooltip from 'src/components/commons/tooltip';
 
-import Tooltip from 'src/components/common/tooltip';
-
-import {DotMenuButton} from 'src/components/dot_menu';
-
-interface ItemProps {
+type Props = {
     icon: string;
     itemMenu?: React.ReactNode;
     id: string;
@@ -17,9 +15,9 @@ interface ItemProps {
     areaLabel: string;
     link: string;
     isCollapsed: boolean;
-}
+};
 
-const Item = (props: ItemProps) => {
+const Item = (props: Props) => {
     return (
         <ItemContainer
             isCollapsed={props.isCollapsed}

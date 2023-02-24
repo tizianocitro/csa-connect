@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
-import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import qs from 'qs';
+import {useSelector} from 'react-redux';
 
 import {SectionContext} from 'src/components/rhs/rhs';
 
@@ -19,6 +19,7 @@ const ChannelsWrapper = () => {
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionId = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : params.sectionId;
+
     return (
         <ChannelsSection
             parentId={parentId}

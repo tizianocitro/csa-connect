@@ -10,20 +10,20 @@ import Row from './row';
 import OrganizationsListHeader from './organizations_list_header';
 import Filters from './filters';
 
-interface Props {
+type Props = {
     organizations: Organization[];
-    totalCount: number;
     fetchParams: FetchOrganizationsParams;
-    setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
     filterPill: React.ReactNode | null;
-}
+    setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
+    totalCount: number;
+};
 
 const OrganizationsList = ({
     organizations,
-    totalCount,
     fetchParams,
-    setFetchParams,
     filterPill,
+    setFetchParams,
+    totalCount,
 }: Props) => {
     const isFiltering = (
         (fetchParams?.search_term?.length ?? 0) > 0

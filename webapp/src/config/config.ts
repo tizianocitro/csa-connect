@@ -4,6 +4,8 @@ import {formatStringToLowerCase} from 'src/hooks';
 
 export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
 
+export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
+
 let platformConfig: PlatformConfig = {
     organizations: [],
 };
@@ -13,6 +15,9 @@ export const getPlatformConfig = (): PlatformConfig => {
 };
 
 export const setPlatformConfig = (config: PlatformConfig) => {
+    if (!config) {
+        return;
+    }
     platformConfig = config;
 };
 

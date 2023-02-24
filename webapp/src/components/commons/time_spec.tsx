@@ -1,7 +1,5 @@
-
-import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
+import React from 'react';
 
 export const PAST_TIME_SPEC = [
     {within: ['second', -45], display: <FormattedMessage defaultMessage='just now'/>},

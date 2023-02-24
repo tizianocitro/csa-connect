@@ -7,10 +7,10 @@ import {
     Main,
     MainWrapper,
 } from 'src/components/backstage/shared';
-import Widgets from 'src/components/backstage/widgets/widgets';
-import {NameHeader} from 'src/components/backstage/header/header';
 import {Section, Widget} from 'src/types/organization';
+import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
+import Widgets from 'src/components/backstage/widgets/widgets';
 
 export const IsRhsContext = createContext(false);
 
@@ -22,7 +22,7 @@ type Props = {
     sections?: Section[];
     url: string;
     widgets: Widget[];
-}
+};
 
 const SectionsWidgetsContainer = ({
     headerPath,

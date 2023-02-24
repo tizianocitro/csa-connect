@@ -3,58 +3,13 @@
 
 import React, {ComponentProps, useState} from 'react';
 import styled, {css} from 'styled-components';
-
 import {useUpdateEffect} from 'react-use';
 
-import Tooltip from 'src/components/common/tooltip';
+import {PrimaryButton} from 'src/components/assets/buttons';
+import Tooltip from 'src/components/commons/tooltip';
 import {useUniqueId} from 'src/utils';
 
 import Dropdown from './dropdown';
-import {PrimaryButton} from './assets/buttons';
-
-export const DotMenuButton = styled.div<{isActive: boolean}>`
-    display: inline-flex;
-    padding: 0;
-    border: none;
-    border-radius: 4px;
-    width: 3.2rem;
-    height: 3.2rem;
-    fill: rgba(var(--center-channel-color-rgb), 0.56);
-    cursor: pointer;
-
-    color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
-    background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'transparent')};
-
-    &:hover {
-        color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
-        background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'rgba(var(--center-channel-color-rgb), 0.08)')};
-    }
-`;
-
-export const DropdownMenu = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    width: max-content;
-    min-width: 16rem;
-    text-align: left;
-    list-style: none;
-
-    padding: 10px 0;
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--center-channel-color);
-
-    background: var(--center-channel-bg);
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-    border-radius: 4px;
-
-    z-index: 12;
-`;
 
 type DotMenuProps = {
     children: React.ReactNode;
@@ -73,15 +28,15 @@ type DropdownProps = Omit<ComponentProps<typeof Dropdown>, 'target' | 'children'
 
 const DotMenu = ({
     children,
-    icon,
-    title,
     className,
-    disabled,
-    isActive,
     closeOnClick = true,
+    disabled,
     dotMenuButton: MenuButton = DotMenuButton,
     dropdownMenu: Menu = DropdownMenu,
+    icon,
+    isActive,
     onOpenChange,
+    title,
     ...props
 }: DotMenuProps & DropdownProps) => {
     const [isOpen, setOpen] = useState(false);
@@ -142,6 +97,90 @@ const DotMenu = ({
     );
 };
 
+export const DropdownMenuItem = (props: {
+    className?: string,
+    children: React.ReactNode,
+    disabled?: boolean,
+    disabledAltText?: string,
+    onClick: () => void,
+}) => {
+    const tooltipId = useUniqueId();
+
+    if (props.disabled) {
+        return (
+            <Tooltip
+                id={tooltipId}
+                content={props.disabledAltText}
+            >
+                <DisabledDropdownMenuItemStyled
+                    className={props.className}
+                >
+                    {props.children}
+                </DisabledDropdownMenuItemStyled>
+            </Tooltip>
+        );
+    }
+
+    return (
+        <DropdownMenuItemStyled
+            href='#'
+            onClick={props.onClick}
+            className={props.className}
+            role={'button'}
+
+            // Prevent trigger icon (parent) from propagating title prop to options
+            // Menu items use to be full text (not just icons) so don't need title
+            title=''
+        >
+            {props.children}
+        </DropdownMenuItemStyled>
+    );
+};
+
+export const DotMenuButton = styled.div<{isActive: boolean}>`
+    display: inline-flex;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    width: 3.2rem;
+    height: 3.2rem;
+    fill: rgba(var(--center-channel-color-rgb), 0.56);
+    cursor: pointer;
+
+    color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
+    background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'transparent')};
+
+    &:hover {
+        color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
+        background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'rgba(var(--center-channel-color-rgb), 0.08)')};
+    }
+`;
+
+export const DropdownMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    width: max-content;
+    min-width: 16rem;
+    text-align: left;
+    list-style: none;
+
+    padding: 10px 0;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--center-channel-color);
+
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+
+    z-index: 12;
+`;
+
 export const DropdownMenuItemStyled = styled.a`
  && {
     font-family: 'Open Sans';
@@ -181,40 +220,6 @@ export const iconSplitStyling = css`
     align-items: center;
     gap: 8px;
 `;
-
-export const DropdownMenuItem = (props: { children: React.ReactNode, onClick: () => void, className?: string, disabled?: boolean, disabledAltText?: string }) => {
-    const tooltipId = useUniqueId();
-
-    if (props.disabled) {
-        return (
-            <Tooltip
-                id={tooltipId}
-                content={props.disabledAltText}
-            >
-                <DisabledDropdownMenuItemStyled
-                    className={props.className}
-                >
-                    {props.children}
-                </DisabledDropdownMenuItemStyled>
-            </Tooltip>
-        );
-    }
-
-    return (
-        <DropdownMenuItemStyled
-            href='#'
-            onClick={props.onClick}
-            className={props.className}
-            role={'button'}
-
-            // Prevent trigger icon (parent) from propagating title prop to options
-            // Menu items use to be full text (not just icons) so don't need title
-            title=''
-        >
-            {props.children}
-        </DropdownMenuItemStyled>
-    );
-};
 
 // Alternate dot menu button. Use `dotMenuButton={TitleButton}` for this style.
 export const TitleButton = styled.div<{isActive: boolean}>`

@@ -1,22 +1,20 @@
+import {Channel, ChannelMembership} from '@mattermost/types/channels';
+import {GlobeIcon, LockIcon} from '@mattermost/compass-icons/components';
+import {IDMappedObjects, RelationOneToMany, RelationOneToOne} from '@mattermost/types/utilities';
 import React, {useEffect} from 'react';
 import {SelectComponentsConfig, components as defaultComponents} from 'react-select';
+import {fetchMyChannelsAndMembersREST, getChannel} from 'mattermost-redux/actions/channels';
+import {getAllChannels, getChannelsInTeam, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
 import {useDispatch, useSelector} from 'react-redux';
+import General from 'mattermost-redux/constants/general';
+import {Team} from '@mattermost/types/teams';
 import {createSelector} from 'reselect';
 import styled from 'styled-components';
-
-import {getAllChannels, getChannelsInTeam, getMyChannelMemberships} from 'mattermost-redux/selectors/entities/channels';
-import {IDMappedObjects, RelationOneToMany, RelationOneToOne} from '@mattermost/types/utilities';
-import {GlobeIcon, LockIcon} from '@mattermost/compass-icons/components';
-import General from 'mattermost-redux/constants/general';
-import {Channel, ChannelMembership} from '@mattermost/types/channels';
-import {Team} from '@mattermost/types/teams';
-import {fetchMyChannelsAndMembersREST, getChannel} from 'mattermost-redux/actions/channels';
-
 import {useIntl} from 'react-intl';
 
 import {StyledSelect} from './styles';
 
-export interface Props {
+export type Props = {
     id?: string;
     onChannelsSelected?: (channelIds: string[]) => void; // if isMulti=true
     onChannelSelected?: (channelId: string, channelName: string) => void; // if isMulti=false
@@ -29,7 +27,7 @@ export interface Props {
     placeholder?: string;
     teamId: string;
     isMulti: boolean;
-}
+};
 
 const getAllPublicChannelsInTeam = (teamId: string) => createSelector(
     'getAllPublicChannelsInTeam',

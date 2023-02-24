@@ -2,17 +2,17 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
-import MarkdownEdit from 'src/components/markdown_edit';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {formatName} from 'src/hooks';
-import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import MarkdownEdit from 'src/components/commons/markdown_edit';
+import {formatName} from 'src/hooks';
 
 export type TextBoxStyle = {
     height?: string;
     marginTop?: string;
     width?: string;
-}
+};
 
 type Props = {
     name: string;
@@ -20,7 +20,7 @@ type Props = {
     sectionId: string;
     style?: TextBoxStyle;
     text: string;
-}
+};
 
 const TextBox = ({
     name,
@@ -36,6 +36,7 @@ const TextBox = ({
     const {formatMessage} = useIntl();
     const id = `${formatName(name)}-text-box-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
+
     return (
         <Container
             id={id}

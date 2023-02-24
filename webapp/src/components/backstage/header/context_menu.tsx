@@ -4,15 +4,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import DotMenu, {TitleButton} from 'src/components/dot_menu';
+import DotMenu, {TitleButton} from 'src/components/commons/dot_menu';
 import {SemiBoldHeading} from 'src/styles/headings';
 
 import {CopyLinkMenuItem} from './controls';
 
-interface Props {
+type Props = {
     name: string;
     path: string;
-}
+};
 
 export const ContextMenu = ({path, name}: Props) => {
     return (

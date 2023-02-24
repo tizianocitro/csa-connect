@@ -1,7 +1,7 @@
 import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
 import cssVars from 'css-vars-ponyfill';
 
-export function applyTheme(theme: any) {
+export const applyTheme = (theme: any): void => {
     cssVars({
         variables: {
 
@@ -120,23 +120,28 @@ export function applyTheme(theme: any) {
             'error-text-12': changeOpacity(theme.errorTextColor, 0.12),
         },
     });
-}
+};
 
 // given '#fffff', returns '255, 255, 255' (no trailing comma)
-function toRgbValues(hexStr: string) {
+const toRgbValues = (hexStr: string): string => {
     const rgbaStr = `${parseInt(hexStr.substr(1, 2), 16)}, ${parseInt(hexStr.substr(3, 2), 16)}, ${parseInt(hexStr.substr(5, 2), 16)}`;
     return rgbaStr;
-}
+};
 
-function dropAlpha(value: string) {
+const dropAlpha = (value: string): string => {
     return value.substr(value.indexOf('(') + 1).split(',', 3).join(',');
-}
+};
 
-function blendComponent(background: number, foreground: number, opacity: number): number {
+const blendComponent = (background: number, foreground: number, opacity: number): number => {
     return ((1 - opacity) * background) + (opacity * foreground);
-}
+};
 
-export const blendColors = (background: string, foreground: string, opacity: number, hex = false): string => {
+export const blendColors = (
+    background: string,
+    foreground: string,
+    opacity: number,
+    hex = false,
+): string => {
     const backgroundComponents = getComponents(background);
     const foregroundComponents = getComponents(foreground);
 
@@ -182,7 +187,12 @@ export const blendColors = (background: string, foreground: string, opacity: num
     return `rgba(${red},${green},${blue},${alpha})`;
 };
 
-function getComponents(inColor: string): {red: number; green: number; blue: number; alpha: number} {
+const getComponents = (inColor: string): {
+    red: number;
+    green: number;
+    blue: number;
+    alpha: number;
+} => {
     let color = inColor;
 
     // RGB color
@@ -216,6 +226,6 @@ function getComponents(inColor: string): {red: number; green: number; blue: numb
         blue: parseInt(color.substring(4, 6), 16),
         alpha: 1,
     };
-}
+};
 
 const rgbPattern = /^rgba?\((\d+),(\d+),(\d+)(?:,([\d.]+))?\)$/;

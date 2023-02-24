@@ -1,20 +1,17 @@
-
+import {FormattedMessage, useIntl} from 'react-intl';
 import React, {Dispatch} from 'react';
 import styled, {css} from 'styled-components';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {GlobalState} from 'mattermost-webapp/packages/types/src/store';
-import {Team} from 'mattermost-webapp/packages/types/src/teams';
 
+import {AddChannelResult, ChannelCreation} from 'src/types/channels';
+import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
+import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
+import {ErrorMessage} from 'src/components/commons/messages';
 import {PrimaryButton} from 'src/components/assets/buttons';
 import {addChannel} from 'src/clients';
-import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
-import {AddChannelResult, ChannelCreation} from 'src/types/channels';
 import {navigateToUrl} from 'src/browser_routing';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
-import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
-import {ErrorMessage} from 'src/components/messages';
+import {teamNameSelector} from 'src/selectors';
 
 type AddChannelProps = {
     channelCreation: ChannelCreation;
@@ -52,6 +49,7 @@ const createChannel = (
         dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
         return;
     }
+
     addChannel({
         channelId: linkExistingChannel ? channelId : undefined,
         channelName: createNewChannel ? channelName : undefined,
@@ -68,8 +66,6 @@ const createChannel = (
         });
 };
 
-const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
-
 export const CreateChannel = ({
     channelCreation,
     parentId,
@@ -85,6 +81,7 @@ export const CreateChannel = ({
     if (!teamId) {
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};
     }
+
     const title = formatMessage({defaultMessage: 'Add Channel'});
     return (
         <HorizontalSplit>

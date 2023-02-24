@@ -7,7 +7,7 @@ export enum ToastStyle {
     Informational = 'inform',
 }
 
-export interface ToastProps {
+export type ToastProps = {
     content: string;
     toastStyle?: ToastStyle;
     iconName?: string;
@@ -16,7 +16,7 @@ export interface ToastProps {
     closeCallback?: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
-}
+};
 
 export const Toast = (props: ToastProps) => {
     let iconName = props.iconName;

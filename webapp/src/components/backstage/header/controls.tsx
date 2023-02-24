@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
+import styled, {css} from 'styled-components';
 import {LinkVariantIcon} from '@mattermost/compass-icons/components';
+import React from 'react';
 
-import {copyToClipboard} from 'src/utils';
-import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
-import {useToaster} from 'src/components/backstage/toast_banner';
 import {SecondaryButton} from 'src/components/assets/buttons';
+import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
+import {copyToClipboard} from 'src/utils';
+import {useToaster} from 'src/components/backstage/toast_banner';
 
 type Props = {
     path: string;

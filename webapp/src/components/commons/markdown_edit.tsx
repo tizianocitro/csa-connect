@@ -1,20 +1,18 @@
 import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
-
 import {useUpdateEffect} from 'react-use';
 
-import FormattedMarkdown from 'src/components/formatted_markdown';
+import FormattedMarkdown from './formatted_markdown';
+import ShowMore from './show_more';
 
-import ShowMore from './common/show_more';
-
-interface MarkdownEditProps {
+type MarkdownEditProps = {
     value: string;
     placeholder: string;
     className?: string;
     noBorder?: boolean;
     disabled?: boolean;
     previewDisabled?: boolean;
-}
+};
 
 const MarkdownEdit = (props: MarkdownEditProps) => {
     const [value, setValue] = useState(props.value);
@@ -78,7 +76,7 @@ const commonTextStyle = css`
     }
 `;
 
-// To reenable editing you ha to put the following before ${HoverMenuContainer}
+// To reenable editing you have to put the following before ${HoverMenuContainer}
 // ${CancelSaveContainer} {
 //    padding: 8px 0;
 // }
