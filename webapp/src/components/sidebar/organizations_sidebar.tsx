@@ -1,22 +1,21 @@
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import React from 'react';
 import styled from 'styled-components';
-import {useSelector} from 'react-redux';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
 
-import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs/lhs_organization_dot_menu';
-
-import {pluginUrl} from 'src/browser_routing';
+import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 import {
     ReservedCategory,
     useEcosystem,
     useOrganizationsNoPageList,
     useReservedCategoryTitleMapper,
 } from 'src/hooks';
-import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
+import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs/lhs_organization_dot_menu';
+import {pluginUrl} from 'src/browser_routing';
 
-import Sidebar, {SidebarGroup} from './sidebar';
 import {ItemContainer, StyledNavLink} from './item';
+import Sidebar, {SidebarGroup} from './sidebar';
 
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();
@@ -45,6 +44,7 @@ const useLHSData = () => {
             className: '',
         };
     });
+
     const organizationsWithoutEcosystem = organizationsItems.filter((group) => group.display_name !== ecosystem.name);
     const organizationsWithEcosystem = organizationsItems.filter((group) => group.display_name === ecosystem.name);
     const groups = [
