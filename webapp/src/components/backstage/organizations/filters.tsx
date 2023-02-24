@@ -2,19 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React, {useMemo} from 'react';
-import {useIntl} from 'react-intl';
-
 import debounce from 'debounce';
 import styled from 'styled-components';
-
-import SearchInput from 'src/components/backstage/search_input';
+import {useIntl} from 'react-intl';
 
 import {FetchOrganizationsParams} from 'src/types/organization';
+import SearchInput from 'src/components/backstage/search_input';
 
-interface Props {
+type Props = {
     fetchParams: FetchOrganizationsParams;
     setFetchParams: React.Dispatch<React.SetStateAction<FetchOrganizationsParams>>;
-}
+};
 
 const searchDebounceDelayMilliseconds = 300;
 

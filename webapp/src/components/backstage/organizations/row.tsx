@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {navigateToPluginUrl} from 'src/browser_routing';
 import {InfoLine} from 'src/components/backstage/styles';
 import {ORGANIZATIONS_PATH} from 'src/constants';
 import {Organization} from 'src/types/organization';
+import {navigateToPluginUrl} from 'src/browser_routing';
 
-interface Props {
+type Props = {
     organization: Organization;
-}
+};
 
 const Row = (props: Props) => {
     function openOrganizationDetails(organization: Organization) {
