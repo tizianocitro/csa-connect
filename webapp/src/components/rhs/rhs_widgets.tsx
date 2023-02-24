@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
-import styled from 'styled-components';
 import {FormattedMessage} from 'react-intl';
+import styled from 'styled-components';
+import {useLocation} from 'react-router-dom';
 
-import {useSection, useSectionInfo} from 'src/hooks';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
+import {useScrollIntoView, useSection, useSectionInfo} from 'src/hooks';
 import RhsSectionsWidgetsContainer from 'src/components/rhs/rhs_sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 
@@ -17,17 +17,7 @@ type Props = {
 
 const RHSWidgets = (props: Props) => {
     const {hash: urlHash} = useLocation();
-
-    // When first loading the page, the element with the ID corresponding to the URL
-    // hash is not mounted, so the browser fails to automatically scroll to such section.
-    // To fix this, we need to manually scroll to the component
-    useEffect(() => {
-        if (urlHash !== '') {
-            setTimeout(() => {
-                document.querySelector(urlHash)?.scrollIntoView();
-            }, 300);
-        }
-    }, [urlHash]);
+    useScrollIntoView(urlHash);
 
     const [parentId, setParentId] = useState('');
     const [sectionId, setSectionId] = useState('');
@@ -35,9 +25,11 @@ const RHSWidgets = (props: Props) => {
         setParentId(props.parentId || '');
         setSectionId(props.sectionId || '');
     }, [props.parentId, props.sectionId]);
+
     const section = useSection(parentId);
     const sectionInfo = useSectionInfo(sectionId, section?.url);
     const fullUrl = useContext(FullUrlContext);
+
     return (
         <Container>
             {(section && sectionInfo) ?

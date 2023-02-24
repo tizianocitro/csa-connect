@@ -53,9 +53,10 @@ const RHSView = () => {
 
     useEffect(() => {
         // Select the node that will be observed for mutations
-        const targetNode = document.getElementById(RHS) as HTMLElement;
+        const root = document.getElementById(RHS) as HTMLElement;
 
         // Options for the observer (which mutations to observe)
+        // We need only the attributes because we need to look for class mutations
         const config = {attributes: true};
 
         // Callback function to execute when mutations are observed
@@ -72,11 +73,11 @@ const RHSView = () => {
         // Create an observer instance linked to the callback function
         const observer = new MutationObserver(callback);
 
-        // Start observing the target node for configured mutations
-        observer.observe(targetNode, config);
+        // Start observing the target node (the root component) for configured mutations
+        observer.observe(root, config);
 
         return () => {
-            // Later, you can stop observing
+            // Stop observing
             observer.disconnect();
         };
     });

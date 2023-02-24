@@ -4,38 +4,38 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export function renderView(props: any): JSX.Element {
+export const renderView = (props: any): JSX.Element => {
     return (
         <div
             {...props}
             className='scrollbar--view'
         />);
-}
+};
 
-export function renderThumbHorizontal(props: any): JSX.Element {
+export const renderThumbHorizontal = (props: any): JSX.Element => {
     return (
         <div
             {...props}
             className='scrollbar--horizontal'
         />);
-}
+};
 
-export function renderThumbVertical(props: any): JSX.Element {
+export const renderThumbVertical = (props: any): JSX.Element => {
     return (
         <div
             {...props}
             className='scrollbar--vertical'
         />);
-}
+};
 
-export function renderTrackHorizontal(props: any): JSX.Element {
+export const renderTrackHorizontal = (props: any): JSX.Element => {
     return (
         <div
             {...props}
             style={{display: 'none'}}
             className='track-horizontal'
         />);
-}
+};
 
 export const RHSContainer = styled.div`
     height: calc(100vh - 119px);
