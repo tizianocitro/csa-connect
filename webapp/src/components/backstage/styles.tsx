@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import styled, {createGlobalStyle, css} from 'styled-components';
-import Select from 'react-select';
 import Creatable from 'react-select/creatable';
+import Select from 'react-select';
 
 export const Banner = styled.div`
     color: var(--button-color);

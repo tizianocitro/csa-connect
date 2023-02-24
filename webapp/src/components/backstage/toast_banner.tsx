@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-
-import styled from 'styled-components';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import React, {useState} from 'react';
+import styled from 'styled-components';
 
 import {Toast, ToastProps} from './toast';
 
@@ -12,9 +11,9 @@ const DEFAULT_DURATION = 3000;
 let toastCount = 0;
 const toastTimeoutMap: Record<number, number> = {};
 
-interface Props {
+type Props = {
     children: React.ReactNode;
-}
+};
 
 interface ToastOptions extends ToastProps {
     duration?: number;

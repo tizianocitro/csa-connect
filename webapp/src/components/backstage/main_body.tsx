@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Redirect,
     Route,
@@ -8,11 +7,12 @@ import {
     useLocation,
     useRouteMatch,
 } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
 import {getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {useDispatch, useSelector} from 'react-redux';
 import {useEffectOnce, useLocalStorage, useUpdateEffect} from 'react-use';
-import {selectTeam} from 'mattermost-redux/actions/teams';
+import React from 'react';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {selectTeam} from 'mattermost-redux/actions/teams';
 
 import {
     ErrorPageTypes,
@@ -20,10 +20,10 @@ import {
     ORGANIZATION_ID_PARAM,
     ORGANIZATION_PATH,
 } from 'src/constants';
-import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 import ErrorPage from 'src/components/commons/error_page';
-import OrganizationsPage from 'src/components/backstage/organizations/organizations_page';
 import OrganizationDetails from 'src/components/backstage/organizations/organization_details';
+import OrganizationsPage from 'src/components/backstage/organizations/organizations_page';
+import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 
 const useInitTeamRoutingLogic = () => {
     const dispatch = useDispatch();

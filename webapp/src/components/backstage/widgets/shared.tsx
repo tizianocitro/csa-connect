@@ -5,8 +5,6 @@ import styled, {css} from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 import React from 'react';
 
-import StatusBadge from 'src/components/backstage/status_badge';
-
 import {BaseInput} from 'src/components/assets/inputs';
 import CopyLink from 'src/components/commons/copy_link';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
@@ -87,13 +85,6 @@ export const Content = styled.div`
 
 export const ExpandRight = styled.div`
     margin-left: auto;
-`;
-
-export const Badge = styled(StatusBadge)`
-    display: unset;
-    position: unset;
-    height: unset;
-    white-space: nowrap;
 `;
 
 export const HelpText = styled.div`
