@@ -80,7 +80,7 @@ const PaginatedTable = ({onClick}: Props) => {
             <TableSearch
                 placeholder='Search by name'
                 value={searchText}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={({target}) => handleSearch(target.value)}
             />
             <Table
                 dataSource={filteredRows}
@@ -108,8 +108,8 @@ const TableRow = (props: any) => {
     const {record} = props;
     return (
         <TableRowItem
-            id={buildIdForUrlHashReference('paginated-table-row', record.id)}
-            isUrlHashed={isReferencedByUrlHash(urlHash, buildIdForUrlHashReference('paginated-table-row', record.id))}
+            id={buildIdForUrlHashReference('paginated-table-row', record?.id)}
+            isUrlHashed={isReferencedByUrlHash(urlHash, buildIdForUrlHashReference('paginated-table-row', record?.id))}
             {...props}
         >
             {props.children}
