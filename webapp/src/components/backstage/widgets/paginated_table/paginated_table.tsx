@@ -12,7 +12,7 @@ const columns = [
         title: '',
         dataIndex: 'icon',
         key: 'icon',
-        width: '1.45em',
+        width: '0px',
         render: (text: string, record: PaginatedTableRow) => (
             <CopyLink
                 id={buildIdForUrlHashReference('paginated-table-row', record.id)}
@@ -111,7 +111,9 @@ const TableRow = (props: any) => {
             id={buildIdForUrlHashReference('paginated-table-row', record.id)}
             isUrlHashed={isReferencedByUrlHash(urlHash, buildIdForUrlHashReference('paginated-table-row', record.id))}
             {...props}
-        />
+        >
+            {props.children}
+        </TableRowItem>
     );
 };
 
@@ -123,6 +125,14 @@ const TableRowItem = styled.tr<{isUrlHashed?: boolean}>`
     }
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.04);
+    }
+    ${CopyLink} {
+        margin-left: -1.25em;
+        opacity: 1;
+        transition: opacity ease 0.15s;
+    }
+    &:not(:hover) ${CopyLink}:not(:hover) {
+        opacity: 0;
     }
 `;
 
