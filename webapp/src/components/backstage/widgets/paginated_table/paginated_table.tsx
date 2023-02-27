@@ -1,11 +1,11 @@
-import {Table} from 'antd';
-import React from 'react';
+import {Input, Table} from 'antd';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
 import CopyLink from 'src/components/commons/copy_link';
 import {PaginatedTableRow} from 'src/types/paginated_table';
-import {buildIdForUrlHashReference, isReferencedByUrlHash} from 'src/hooks';
+import {buildIdForUrlHashReference, formatStringToLowerCase, isReferencedByUrlHash} from 'src/hooks';
 
 const columns = [
     {
@@ -63,24 +63,43 @@ type Props = {
 };
 
 const PaginatedTable = ({onClick}: Props) => {
+    const [searchText, setSearchText] = useState('');
+    const [filteredRows, setFilteredRows] = useState(rows);
+
+    const handleSearch = (value: string) => {
+        const filtered = rows.filter((record: PaginatedTableRow) => {
+            const name = formatStringToLowerCase(record.name);
+            return name.includes(formatStringToLowerCase(value));
+        });
+        setSearchText(value);
+        setFilteredRows(filtered);
+    };
+
     return (
-        <Table
-            dataSource={rows}
-            columns={columns}
-            components={{
-                body: {
-                    row: TableRow,
-                },
-            }}
-            onRow={(record: PaginatedTableRow) => {
-                return {
-                    onClick: () => alert('Clicked ' + record.id),
-                    record,
-                };
-            }}
-            rowKey='key'
-            size='middle'
-        />
+        <Container>
+            <TableSearch
+                placeholder='Search by name'
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)}
+            />
+            <Table
+                dataSource={filteredRows}
+                columns={columns}
+                components={{
+                    body: {
+                        row: TableRow,
+                    },
+                }}
+                onRow={(record: PaginatedTableRow) => {
+                    return {
+                        onClick: () => alert('Clicked ' + record.id),
+                        record,
+                    };
+                }}
+                rowKey='key'
+                size='middle'
+            />
+        </Container>
     );
 };
 
@@ -105,6 +124,16 @@ const TableRowItem = styled.tr<{isUrlHashed?: boolean}>`
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.04);
     }
+`;
+
+const TableSearch = styled(Input.Search)`
+    margin-bottom: 4px;
+    width: 50%;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 export default PaginatedTable;
