@@ -2,6 +2,7 @@ import {Client4} from 'mattermost-redux/client';
 import {ClientError} from '@mattermost/client';
 
 import {GraphData} from 'src/types/graph';
+import {PaginatedTableData} from 'src/types/paginated_table';
 import {SectionInfo} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
@@ -26,6 +27,14 @@ export const fetchTableData = async (url: string): Promise<TableData> => {
     let data = await doGet<TableData>(url);
     if (!data) {
         data = {caption: '', headers: [], rows: []} as TableData;
+    }
+    return data;
+};
+
+export const fetchPaginatedTableData = async (url: string): Promise<PaginatedTableData> => {
+    let data = await doGet<PaginatedTableData>(url);
+    if (!data) {
+        data = {columns: [], rows: []} as PaginatedTableData;
     }
     return data;
 };
