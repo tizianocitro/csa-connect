@@ -15,7 +15,6 @@ import {
 type Props = {
     data: PaginatedTableData;
     id: string;
-    onClick?: () => void;
 };
 
 const iconColumn: PaginatedTableColumn = {
@@ -36,7 +35,7 @@ const iconColumn: PaginatedTableColumn = {
     ),
 };
 
-const PaginatedTable = ({data, id, onClick}: Props) => {
+const PaginatedTable = ({data, id}: Props) => {
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
@@ -56,7 +55,7 @@ const PaginatedTable = ({data, id, onClick}: Props) => {
             id={paginatedTableId}
             data-testid={paginatedTableId}
         >
-            {filteredRows.length > 0 && (
+            {(filteredRows.length > 0 || searchText !== '') &&
                 <>
                     <TableSearch
                         placeholder='Search by name'
@@ -74,25 +73,26 @@ const PaginatedTable = ({data, id, onClick}: Props) => {
                         }}
                         onRow={(record: PaginatedTableRow) => {
                             return {
-                                onClick,
+                                onClick: record.onClick ? record.onClick : undefined,
                                 record,
                             };
                         }}
                         rowKey='key'
                         size='middle'
                     />
-                </>)}
+                </>}
         </Container>
     );
 };
 
 const TableRow = (props: any) => {
     const {hash: urlHash} = useLocation();
-    const {record} = props;
+    const {open, record} = props;
     return (
         <TableRowItem
             id={buildIdForUrlHashReference('paginated-table-row', record?.id)}
             isUrlHashed={isReferencedByUrlHash(urlHash, buildIdForUrlHashReference('paginated-table-row', record?.id))}
+            onClick={open ? open(record?.id) : undefined}
             {...props}
         >
             {props.children}

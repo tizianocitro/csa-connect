@@ -259,6 +259,7 @@ export const usePaginatedTableData = (url: string, query: string): PaginatedTabl
                         key: row.id,
                         itemId,
                         to: buildTo(fullUrl, itemId, query, routeUrl),
+                        onClick: () => alert('clicked ' + row.id), // TODO: make this a proper onClick
                     });
                 });
 
