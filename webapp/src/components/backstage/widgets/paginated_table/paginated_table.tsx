@@ -4,70 +4,44 @@ import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
 import CopyLink from 'src/components/commons/copy_link';
-import {PaginatedTableRow} from 'src/types/paginated_table';
-import {buildIdForUrlHashReference, formatStringToLowerCase, isReferencedByUrlHash} from 'src/hooks';
-
-const columns = [
-    {
-        title: '',
-        dataIndex: 'icon',
-        key: 'icon',
-        width: '0px',
-        render: (text: string, record: PaginatedTableRow) => (
-            <CopyLink
-                id={buildIdForUrlHashReference('paginated-table-row', record.id)}
-                text={record.name}
-                to={record.to}
-                name={record.name}
-                area-hidden={true}
-                iconWidth={'1.45em'}
-                iconHeight={'1.45em'}
-            />
-        ),
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Description',
-        dataIndex: 'description',
-        key: 'description',
-    },
-];
-
-const rows = [
-    {
-        key: '0',
-        id: '0',
-        name: 'X',
-        description: 'X Description',
-    },
-    {
-        key: '1',
-        id: '1',
-        name: 'Y',
-        description: 'Y description',
-    },
-    {
-        key: '2',
-        id: '2',
-        name: 'Z',
-        description: 'Z Description',
-    },
-];
+import {PaginatedTableColumn, PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
+import {
+    buildIdForUrlHashReference,
+    buildToForCopy,
+    formatStringToLowerCase,
+    isReferencedByUrlHash,
+} from 'src/hooks';
 
 type Props = {
+    data: PaginatedTableData;
+    id: string;
     onClick?: () => void;
 };
 
-const PaginatedTable = ({onClick}: Props) => {
+const iconColumn: PaginatedTableColumn = {
+    title: '',
+    dataIndex: 'icon',
+    key: 'icon',
+    width: '0px',
+    render: (text: string, record: PaginatedTableRow) => (
+        <CopyLink
+            id={record.itemId}
+            text={record.name}
+            to={buildToForCopy(record.to)}
+            name={record.name}
+            area-hidden={true}
+            iconWidth={'1.45em'}
+            iconHeight={'1.45em'}
+        />
+    ),
+};
+
+const PaginatedTable = ({data, id, onClick}: Props) => {
     const [searchText, setSearchText] = useState('');
-    const [filteredRows, setFilteredRows] = useState(rows);
+    const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
     const handleSearch = (value: string) => {
-        const filtered = rows.filter((record: PaginatedTableRow) => {
+        const filtered = data.rows.filter((record: PaginatedTableRow) => {
             const name = formatStringToLowerCase(record.name);
             return name.includes(formatStringToLowerCase(value));
         });
@@ -75,30 +49,47 @@ const PaginatedTable = ({onClick}: Props) => {
         setFilteredRows(filtered);
     };
 
+    const paginatedTableId = `${id}-paginated-table-widget`;
+
     return (
-        <Container>
-            <TableSearch
-                placeholder='Search by name'
-                value={searchText}
-                onChange={({target}) => handleSearch(target.value)}
-            />
-            <Table
-                dataSource={filteredRows}
-                columns={columns}
-                components={{
-                    body: {
-                        row: TableRow,
-                    },
-                }}
-                onRow={(record: PaginatedTableRow) => {
-                    return {
-                        onClick: () => alert('Clicked ' + record.id),
-                        record,
-                    };
-                }}
-                rowKey='key'
-                size='middle'
-            />
+        <Container
+            id={paginatedTableId}
+            data-testid={paginatedTableId}
+        >
+            {JSON.stringify(data, null, 2)}
+            <br/>
+            <br/>
+            <br/>
+            {JSON.stringify(filteredRows, null, 2)}
+            <br/>
+            <br/>
+            <br/>
+            {filteredRows.length > 0 && (
+                <>
+                    <TableSearch
+                        placeholder='Search by name'
+                        value={searchText}
+                        onChange={({target}) => handleSearch(target.value)}
+                    />
+                    <Table
+                        id={paginatedTableId}
+                        dataSource={filteredRows}
+                        columns={[iconColumn, ...data.columns]}
+                        components={{
+                            body: {
+                                row: TableRow,
+                            },
+                        }}
+                        onRow={(record: PaginatedTableRow) => {
+                            return {
+                                onClick,
+                                record,
+                            };
+                        }}
+                        rowKey='key'
+                        size='middle'
+                    />
+                </>)}
         </Container>
     );
 };
