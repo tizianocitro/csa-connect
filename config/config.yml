@@ -47,7 +47,9 @@ organizations:
             url: http://localhost:3000/policies/:id/text_box
           - type: channels
     widgets:
-      - type: paginated-table
+      - name: My Paginated Table
+        type: paginated-table
+        url: http://localhost:3000/incidents/paginated_table
   - name: Organization X
     id: "1"
     description: This is the X organization
