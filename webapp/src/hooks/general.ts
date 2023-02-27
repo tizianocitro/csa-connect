@@ -38,14 +38,14 @@ import {
     getOrganizationsNoEcosystem,
 } from 'src/config/config';
 import {GraphData} from 'src/types/graph';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 import {resolve} from 'src/utils';
-import {FullUrlContext} from 'src/components/rhs/rhs';
 
+import {buildIdForUrlHashReference, buildTo} from './url';
 import {formatStringToLowerCase} from './format';
-import {buildIdForUrlHashReference} from './url';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -230,18 +230,6 @@ export const useTableData = (url: string): TableData => {
         };
     }, [url]);
     return tableData as TableData;
-};
-
-const buildTo = (
-    fullUrl: string,
-    id: string,
-    query: string | undefined,
-    url: string
-) => {
-    const isFullUrlProvided = fullUrl !== '';
-    let to = isFullUrlProvided ? fullUrl : url;
-    to = query ? `${to}?${query}` : to;
-    return `${to}#${id}`;
 };
 
 export const usePaginatedTableData = (url: string, query: string): PaginatedTableData => {

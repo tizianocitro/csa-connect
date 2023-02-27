@@ -2,9 +2,9 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {TableData} from 'src/types/table';
+import {buildQuery} from 'src/hooks';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
@@ -18,14 +18,6 @@ type Props = {
     pointer?: boolean;
     sectionId?: string;
     urlHash: string;
-};
-
-const buildQuery = (parentId: string, sectionId: string | undefined) => {
-    let query = `${PARENT_ID_PARAM}=${parentId}`;
-    if (sectionId) {
-        query = `${query}&${SECTION_ID_PARAM}=${sectionId}`;
-    }
-    return query;
 };
 
 const Table = ({

@@ -56,14 +56,6 @@ const PaginatedTable = ({data, id, onClick}: Props) => {
             id={paginatedTableId}
             data-testid={paginatedTableId}
         >
-            {JSON.stringify(data, null, 2)}
-            <br/>
-            <br/>
-            <br/>
-            {JSON.stringify(filteredRows, null, 2)}
-            <br/>
-            <br/>
-            <br/>
             {filteredRows.length > 0 && (
                 <>
                     <TableSearch
