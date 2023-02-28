@@ -5,9 +5,11 @@ import qs from 'qs';
 import {
     buildQuery,
     formatName,
+    formatStringToLowerCase,
     formatUrlWithId,
     usePaginatedTableData,
 } from 'src/hooks';
+import {PaginatedTableColumn} from 'src/types/paginated_table';
 import {SectionContext} from 'src/components/rhs/rhs';
 
 import PaginatedTable from './paginated_table';
@@ -15,6 +17,15 @@ import PaginatedTable from './paginated_table';
 type Props = {
     name?: string;
     url?: string;
+};
+
+export const fillColumn = (title: string): PaginatedTableColumn => {
+    const lowerCaseTitle = formatStringToLowerCase(title);
+    return {
+        title,
+        dataIndex: lowerCaseTitle,
+        key: lowerCaseTitle,
+    };
 };
 
 const PaginatedTableWrapper = ({

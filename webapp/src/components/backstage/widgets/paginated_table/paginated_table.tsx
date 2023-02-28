@@ -15,6 +15,7 @@ import {
 type Props = {
     data: PaginatedTableData;
     id: string;
+    isSection?: boolean;
 };
 
 const iconColumn: PaginatedTableColumn = {
@@ -35,7 +36,11 @@ const iconColumn: PaginatedTableColumn = {
     ),
 };
 
-const PaginatedTable = ({data, id}: Props) => {
+const PaginatedTable = ({
+    data,
+    id,
+    isSection = false,
+}: Props) => {
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
@@ -48,7 +53,7 @@ const PaginatedTable = ({data, id}: Props) => {
         setFilteredRows(filtered);
     };
 
-    const paginatedTableId = `${id}-paginated-table-widget`;
+    const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
 
     return (
         <Container
