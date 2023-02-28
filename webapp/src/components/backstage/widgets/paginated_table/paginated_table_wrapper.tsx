@@ -48,6 +48,9 @@ const PaginatedTableWrapper = ({
         <PaginatedTable
             id={formatName(name)}
             data={data}
+            name={name}
+            sectionId={sectionIdForUrl}
+            parentId={parentId}
         />
     );
 };

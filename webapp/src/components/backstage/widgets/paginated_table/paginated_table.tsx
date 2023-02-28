@@ -1,21 +1,28 @@
 import {Input, Table} from 'antd';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
+import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
 import {PaginatedTableColumn, PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {
     buildIdForUrlHashReference,
+    buildQuery,
     buildToForCopy,
     formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
+import {FullUrlContext} from 'src/components/rhs/rhs';
 
 type Props = {
     data: PaginatedTableData;
     id: string;
     isSection?: boolean;
+    name: string;
+    parentId: string;
+    pointer?: boolean;
+    sectionId?: string;
 };
 
 const iconColumn: PaginatedTableColumn = {
@@ -40,14 +47,19 @@ const PaginatedTable = ({
     data,
     id,
     isSection = false,
+    name,
+    parentId,
+    pointer = false,
+    sectionId,
 }: Props) => {
+    const fullUrl = useContext(FullUrlContext);
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
     const handleSearch = (value: string) => {
         const filtered = data.rows.filter((record: PaginatedTableRow) => {
-            const name = formatStringToLowerCase(record.name);
-            return name.includes(formatStringToLowerCase(value));
+            const recordName = formatStringToLowerCase(record.name);
+            return recordName.includes(formatStringToLowerCase(value));
         });
         setSearchText(value);
         setFilteredRows(filtered);
@@ -60,6 +72,15 @@ const PaginatedTable = ({
             id={paginatedTableId}
             data-testid={paginatedTableId}
         >
+            <Header>
+                <AnchorLinkTitle
+                    fullUrl={fullUrl}
+                    id={paginatedTableId}
+                    query={buildQuery(parentId, sectionId)}
+                    text={name}
+                    title={name}
+                />
+            </Header>
             {(filteredRows.length > 0 || searchText !== '') &&
                 <>
                     <TableSearch
@@ -79,6 +100,7 @@ const PaginatedTable = ({
                         onRow={(record: PaginatedTableRow) => {
                             return {
                                 onClick: record.onClick ? record.onClick : undefined,
+                                pointer,
                                 record,
                             };
                         }}
@@ -92,12 +114,12 @@ const PaginatedTable = ({
 
 const TableRow = (props: any) => {
     const {hash: urlHash} = useLocation();
-    const {open, record} = props;
+    const {pointer, record} = props;
     return (
         <TableRowItem
             id={buildIdForUrlHashReference('paginated-table-row', record?.id)}
             isUrlHashed={isReferencedByUrlHash(urlHash, buildIdForUrlHashReference('paginated-table-row', record?.id))}
-            onClick={open ? open(record?.id) : undefined}
+            pointer={pointer}
             {...props}
         >
             {props.children}
@@ -105,8 +127,8 @@ const TableRow = (props: any) => {
     );
 };
 
-const TableRowItem = styled.tr<{isUrlHashed?: boolean}>`
-    cursor: pointer;
+const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
+    cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.04);

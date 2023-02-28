@@ -51,8 +51,7 @@ const Sections = ({path, sections, url}: Props) => {
                             path={toPath}
                             exact={true}
                         >
-                            <SectionList section={section}
-                            />
+                            <SectionList section={section}/>
                         </Route>
                     );
                 })}

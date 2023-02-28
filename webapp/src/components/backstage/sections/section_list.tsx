@@ -10,25 +10,24 @@ type Props = {
 };
 
 const SectionList = ({section}: Props) => {
-    const {name} = section;
+    const {id, name} = section;
     const data = useSectionData(section);
 
     return (
         <Body>
             <PaginatedTable
                 id={formatName(name)}
+                name={name}
                 data={data}
+                parentId={id}
             />
         </Body>
     );
 };
 
-const RowContainer = styled.div`
+const Body = styled.div`
     display: flex;
     flex-direction: column;
-`;
-
-const Body = styled(RowContainer)`
 `;
 
 export default SectionList;
