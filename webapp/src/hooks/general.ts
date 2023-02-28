@@ -42,13 +42,12 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
-import {fillColumn} from 'src/components/backstage/widgets/paginated_table/paginated_table_wrapper';
+import {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table_wrapper';
 import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 
-import {buildIdForUrlHashReference, buildTo} from './url';
 import {formatSectionPath, formatStringToLowerCase} from './format';
 
 type FetchParams = FetchOrganizationsParams;
@@ -174,26 +173,15 @@ export const useSectionData = ({id, name, url}: Section): PaginatedTableData => 
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
                 const {columns, rows} = sectionData;
-
                 paginatedTableDataResult.columns.forEach(({title}) => {
-                    columns.push({
-                        title,
-                        dataIndex: formatStringToLowerCase(title),
-                        key: formatStringToLowerCase(title),
-                    });
+                    columns.push(fillColumn(title));
                 });
-
                 paginatedTableDataResult.rows.forEach((row) => {
-                    const itemId = buildIdForUrlHashReference('paginated-table-row', row.id);
                     rows.push({
-                        ...row,
-                        key: row.id,
-                        itemId,
-                        to: buildTo('', itemId, '', routeUrl),
+                        ...fillRow(row, '', routeUrl, ''),
                         onClick: () => navigateToUrl(`${basePath}/${row.id}?${PARENT_ID_PARAM}=${id}`),
                     });
                 });
-
                 setSectionData({columns, rows});
             }
         }
@@ -272,21 +260,12 @@ export const usePaginatedTableData = (url: string, query: string): PaginatedTabl
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
                 const {columns, rows} = paginatedTableData;
-
                 paginatedTableDataResult.columns.forEach(({title}) => {
                     columns.push(fillColumn(title));
                 });
-
                 paginatedTableDataResult.rows.forEach((row) => {
-                    const itemId = buildIdForUrlHashReference('paginated-table-row', row.id);
-                    rows.push({
-                        ...row,
-                        key: row.id,
-                        itemId,
-                        to: buildTo(fullUrl, itemId, query, routeUrl),
-                    });
+                    rows.push(fillRow(row, fullUrl, routeUrl, query));
                 });
-
                 setPaginatedTableData({columns, rows});
             }
         }

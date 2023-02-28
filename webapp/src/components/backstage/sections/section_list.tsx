@@ -20,6 +20,7 @@ const SectionList = ({section}: Props) => {
                 name={name}
                 data={data}
                 parentId={id}
+                pointer={true}
             />
         </Body>
     );
