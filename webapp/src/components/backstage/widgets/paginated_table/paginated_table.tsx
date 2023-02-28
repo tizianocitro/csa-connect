@@ -1,4 +1,4 @@
-import {Input, Table} from 'antd';
+import {Collapse, Input, Table} from 'antd';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
@@ -15,6 +15,8 @@ import {
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 
+import RowInputFields from './input_fields';
+
 type Props = {
     data: PaginatedTableData;
     id: string;
@@ -24,6 +26,8 @@ type Props = {
     pointer?: boolean;
     sectionId?: string;
 };
+
+const {Panel} = Collapse;
 
 const iconColumn: PaginatedTableColumn = {
     title: '',
@@ -65,6 +69,12 @@ const PaginatedTable = ({
         setFilteredRows(filtered);
     };
 
+    const handleAddRow = (row: PaginatedTableRow) => {
+        setFilteredRows([...filteredRows, row]);
+
+        // TODO: API call here
+    };
+
     const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
 
     return (
@@ -88,7 +98,7 @@ const PaginatedTable = ({
                         value={searchText}
                         onChange={({target}) => handleSearch(target.value)}
                     />
-                    <Table
+                    <StyledTable
                         id={paginatedTableId}
                         dataSource={filteredRows}
                         columns={[iconColumn, ...data.columns]}
@@ -107,10 +117,32 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
+                    <Collapse>
+                        <TablePanel
+                            header='Add new'
+                            key='add-new-row'
+                        >
+                            <RowInputFields
+                                columns={data.columns}
+                                onAddRow={handleAddRow}
+                            />
+                        </TablePanel>
+                    </Collapse>
                 </>}
         </Container>
     );
 };
+
+const StyledTable = styled(Table)`
+`;
+
+const TablePanel = styled(Panel)`
+    background: var(--center-channel-bg) !important;
+
+    .ant-collapse-header {
+        color: rgba(var(--center-channel-color-rgb), 0.90) !important;
+    }
+`;
 
 const TableRow = (props: any) => {
     const {hash: urlHash} = useLocation();
@@ -129,12 +161,10 @@ const TableRow = (props: any) => {
 
 const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
     cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
+    color: rgba(var(--center-channel-color-rgb), 0.90);
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.04);
-    }
-    &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.04);
+        background: rgba(var(--center-channel-color-rgb), 0.04) !important;
     }
     ${CopyLink} {
         margin-left: -1.25em;
