@@ -1,3 +1,5 @@
+import {ORGANIZATIONS_PATH, ORGANIZATION_ID_PARAM} from 'src/constants';
+
 export const formatName = (name: string): string => {
     return name.replace(/\s/g, '-').toLowerCase();
 };
@@ -8,4 +10,17 @@ export const formatStringToLowerCase = (s: string): string => {
 
 export const formatUrlWithId = (url: string, id: string): string => {
     return url.replace(':id', id);
+};
+
+export const formatSectionPath = (path: string, organizatioId: string): string => {
+    const formattedPath = path.replace(`:${ORGANIZATION_ID_PARAM}`, organizatioId);
+    const organizationSegment = `/${ORGANIZATIONS_PATH}/`;
+    const organizationIndex = path.indexOf(organizationSegment);
+    const slashStartSearchIndex = organizationIndex + organizationSegment.length;
+    const isSectionNameInPath = organizationIndex !== -1 && path.indexOf('/', slashStartSearchIndex) !== -1;
+    if (!isSectionNameInPath) {
+        return formattedPath;
+    }
+    const lastSlashIndex = formattedPath.lastIndexOf('/');
+    return formattedPath.substring(0, lastSlashIndex);
 };

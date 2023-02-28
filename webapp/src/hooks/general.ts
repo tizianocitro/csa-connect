@@ -42,10 +42,14 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
+import {fillColumn} from 'src/components/backstage/widgets/paginated_table/paginated_table_wrapper';
+import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
+import {PARENT_ID_PARAM} from 'src/constants';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 
 import {buildIdForUrlHashReference, buildTo} from './url';
-import {formatStringToLowerCase} from './format';
+import {formatSectionPath, formatStringToLowerCase} from './format';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -158,15 +162,39 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
     return info as SectionInfo;
 };
 
-export const useSectionData = (url: string): TableData => {
-    const [sectionData, setSectionData] = useState<TableData | {}>({});
+export const useSectionData = ({id, name, url}: Section): PaginatedTableData => {
+    const [sectionData, setSectionData] = useState<PaginatedTableData>({columns: [], rows: []});
+    const {path, url: routeUrl} = useRouteMatch();
+    const organizationId = useContext(OrganizationIdContext);
+    const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
 
     useEffect(() => {
         let isCanceled = false;
         async function fetchSectionDataAsync() {
-            const tableDataResult = await fetchTableData(url);
+            const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
-                setSectionData(tableDataResult);
+                const {columns, rows} = sectionData;
+
+                paginatedTableDataResult.columns.forEach(({title}) => {
+                    columns.push({
+                        title,
+                        dataIndex: formatStringToLowerCase(title),
+                        key: formatStringToLowerCase(title),
+                    });
+                });
+
+                paginatedTableDataResult.rows.forEach((row) => {
+                    const itemId = buildIdForUrlHashReference('paginated-table-row', row.id);
+                    rows.push({
+                        ...row,
+                        key: row.id,
+                        itemId,
+                        to: buildTo('', itemId, '', routeUrl),
+                        onClick: () => navigateToUrl(`${basePath}/${row.id}?${PARENT_ID_PARAM}=${id}`),
+                    });
+                });
+
+                setSectionData({columns, rows});
             }
         }
 
@@ -175,8 +203,9 @@ export const useSectionData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
-    return sectionData as TableData;
+    }, [url]);
+
+    return sectionData as PaginatedTableData;
 };
 
 export const useGraphData = (url: string, hash: string, routeUrl: string): GraphData => {
@@ -242,14 +271,10 @@ export const usePaginatedTableData = (url: string, query: string): PaginatedTabl
         async function fetchPaginatedTableDataAsync() {
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
-                const {columns, rows} = paginatedTableData as PaginatedTableData;
+                const {columns, rows} = paginatedTableData;
 
                 paginatedTableDataResult.columns.forEach(({title}) => {
-                    columns.push({
-                        title,
-                        dataIndex: formatStringToLowerCase(title),
-                        key: formatStringToLowerCase(title),
-                    });
+                    columns.push(fillColumn(title));
                 });
 
                 paginatedTableDataResult.rows.forEach((row) => {
@@ -259,7 +284,6 @@ export const usePaginatedTableData = (url: string, query: string): PaginatedTabl
                         key: row.id,
                         itemId,
                         to: buildTo(fullUrl, itemId, query, routeUrl),
-                        onClick: () => alert('clicked ' + row.id), // TODO: make this a proper onClick
                     });
                 });
 

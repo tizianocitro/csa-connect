@@ -21,7 +21,8 @@ export const buildTo = (
 ) => {
     const isFullUrlProvided = fullUrl !== '';
     let to = isFullUrlProvided ? fullUrl : url;
-    to = query ? `${to}?${query}` : to;
+    const isQueryProvided = query || query !== '';
+    to = isQueryProvided ? `${to}?${query}` : to;
     return `${to}#${id}`;
 };
 
