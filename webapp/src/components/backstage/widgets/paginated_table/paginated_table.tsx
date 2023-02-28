@@ -147,13 +147,14 @@ const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
 `;
 
 const TableSearch = styled(Input.Search)`
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     width: 50%;
 `;
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 24px;
 `;
 
 export default PaginatedTable;
