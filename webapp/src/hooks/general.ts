@@ -1,12 +1,13 @@
 import {debounce, isEqual} from 'lodash';
 import {
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {useIntl} from 'react-intl';
@@ -24,6 +25,7 @@ import {
     fetchChannelById,
     fetchChannels,
     fetchGraphData,
+    fetchPaginatedTableData,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -36,9 +38,17 @@ import {
     getOrganizationsNoEcosystem,
 } from 'src/config/config';
 import {GraphData} from 'src/types/graph';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
+import {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table_wrapper';
+import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
+import {PARENT_ID_PARAM} from 'src/constants';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+
+import {formatSectionPath, formatStringToLowerCase} from './format';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -151,15 +161,28 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
     return info as SectionInfo;
 };
 
-export const useSectionData = (url: string): TableData => {
-    const [sectionData, setSectionData] = useState<TableData | {}>({});
+export const useSectionData = ({id, name, url}: Section): PaginatedTableData => {
+    const [sectionData, setSectionData] = useState<PaginatedTableData>({columns: [], rows: []});
+    const {path, url: routeUrl} = useRouteMatch();
+    const organizationId = useContext(OrganizationIdContext);
+    const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
 
     useEffect(() => {
         let isCanceled = false;
         async function fetchSectionDataAsync() {
-            const tableDataResult = await fetchTableData(url);
+            const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
-                setSectionData(tableDataResult);
+                const {columns, rows} = sectionData;
+                paginatedTableDataResult.columns.forEach(({title}) => {
+                    columns.push(fillColumn(title));
+                });
+                paginatedTableDataResult.rows.forEach((row) => {
+                    rows.push({
+                        ...fillRow(row, '', routeUrl, ''),
+                        onClick: () => navigateToUrl(`${basePath}/${row.id}?${PARENT_ID_PARAM}=${id}`),
+                    });
+                });
+                setSectionData({columns, rows});
             }
         }
 
@@ -168,8 +191,9 @@ export const useSectionData = (url: string): TableData => {
         return () => {
             isCanceled = true;
         };
-    }, []);
-    return sectionData as TableData;
+    }, [url]);
+
+    return sectionData as PaginatedTableData;
 };
 
 export const useGraphData = (url: string, hash: string, routeUrl: string): GraphData => {
@@ -223,6 +247,37 @@ export const useTableData = (url: string): TableData => {
         };
     }, [url]);
     return tableData as TableData;
+};
+
+export const usePaginatedTableData = (url: string, query: string): PaginatedTableData => {
+    const [paginatedTableData, setPaginatedTableData] = useState<PaginatedTableData>({columns: [], rows: []});
+    const fullUrl = useContext(FullUrlContext);
+    const {url: routeUrl} = useRouteMatch();
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPaginatedTableDataAsync() {
+            const paginatedTableDataResult = await fetchPaginatedTableData(url);
+            if (!isCanceled) {
+                const {columns, rows} = paginatedTableData;
+                paginatedTableDataResult.columns.forEach(({title}) => {
+                    columns.push(fillColumn(title));
+                });
+                paginatedTableDataResult.rows.forEach((row) => {
+                    rows.push(fillRow(row, fullUrl, routeUrl, query));
+                });
+                setPaginatedTableData({columns, rows});
+            }
+        }
+
+        fetchPaginatedTableDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+
+    return paginatedTableData as PaginatedTableData;
 };
 
 export const useTextBoxData = (url: string): TextBoxData => {

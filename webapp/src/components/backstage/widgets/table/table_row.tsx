@@ -2,7 +2,12 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
-import {buildIdForUrlHashReference, buildToForCopy, isReferencedByUrlHash} from 'src/hooks';
+import {
+    buildIdForUrlHashReference,
+    buildTo,
+    buildToForCopy,
+    isReferencedByUrlHash,
+} from 'src/hooks';
 import CopyLink from 'src/components/commons/copy_link';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {TableRowData} from 'src/types/table';
@@ -13,18 +18,6 @@ type Props = {
     row: TableRowData;
     urlHash: string;
     onClick?: () => void;
-};
-
-const buildTo = (
-    fullUrl: string,
-    id: string,
-    query: string | undefined,
-    url: string
-) => {
-    const isFullUrlProvided = fullUrl !== '';
-    let to = isFullUrlProvided ? fullUrl : url;
-    to = query ? `${to}?${query}` : to;
-    return `${to}#${id}`;
 };
 
 const TableRow = ({onClick, pointer, query, row, urlHash}: Props) => {

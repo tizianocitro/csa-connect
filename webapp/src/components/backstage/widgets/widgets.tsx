@@ -5,12 +5,14 @@ import {Widget} from 'src/types/organization';
 
 import ChannelsWrapper from './channels/channels_wrapper';
 import GraphWrapper from './graph/graph_wrapper';
+import PaginatedTableWrapper from './paginated_table/paginated_table_wrapper';
 import TableWrapper from './table/table_wrapper';
 import TextBoxWrapper from './text_box/text_box_wrapper';
 
 export enum WidgetType {
     Channels = 'channels',
     Graph = 'graph',
+    PaginatedTable = 'paginated-table',
     Table = 'table',
     TextBox = 'text-box',
 }
@@ -29,6 +31,8 @@ const buildWidgetByType = (
     switch (type) {
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
+    case WidgetType.PaginatedTable:
+        return <PaginatedTableWrapper {...props}/>;
     case WidgetType.Table:
         return <TableWrapper {...props}/>;
     case WidgetType.TextBox:
