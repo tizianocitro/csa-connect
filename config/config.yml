@@ -18,22 +18,8 @@ organizations:
             type: text-box
             url: http://localhost:3000/incidents/:id/text_box
           - type: channels
-      - name: Stories
-        id: "1"
-        url: http://localhost:3000/stories
-        widgets:
-          - name: My Graph
-            type: graph
-            url: http://localhost:3000/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://localhost:3000/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://localhost:3000/stories/:id/text_box
-          - type: channels
       - name: Policies
-        id: "2"
+        id: "1"
         url: http://localhost:3000/policies
         widgets:
           - name: My Graph
@@ -45,6 +31,20 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/policies/:id/text_box
+          - type: channels
+      - name: Stories
+        id: "2"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization X
@@ -65,22 +65,8 @@ organizations:
             type: text-box
             url: http://localhost:3000/incidents/:id/text_box
           - type: channels
-      - name: Stories
-        id: "4"
-        url: http://localhost:3000/stories
-        widgets:
-          - name: My Graph
-            type: graph
-            url: http://localhost:3000/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://localhost:3000/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://localhost:3000/stories/:id/text_box
-          - type: channels
       - name: Policies
-        id: "5"
+        id: "4"
         url: http://localhost:3000/policies
         widgets:
           - name: My Graph
@@ -92,6 +78,20 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/policies/:id/text_box
+          - type: channels
+      - name: Stories
+        id: "5"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization Y
@@ -112,22 +112,8 @@ organizations:
             type: text-box
             url: http://localhost:3000/incidents/:id/text_box
           - type: channels
-      - name: Stories
-        id: "7"
-        url: http://localhost:3000/stories
-        widgets:
-          - name: My Graph
-            type: graph
-            url: http://localhost:3000/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://localhost:3000/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://localhost:3000/stories/:id/text_box
-          - type: channels
       - name: Policies
-        id: "8"
+        id: "7"
         url: http://localhost:3000/policies
         widgets:
           - name: My Graph
@@ -139,6 +125,20 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/policies/:id/text_box
+          - type: channels
+      - name: Stories
+        id: "8"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization Z
@@ -159,22 +159,8 @@ organizations:
             type: text-box
             url: http://localhost:3000/incidents/:id/text_box
           - type: channels
-      - name: Stories
-        id: "10"
-        url: http://localhost:3000/stories
-        widgets:
-          - name: My Graph
-            type: graph
-            url: http://localhost:3000/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://localhost:3000/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://localhost:3000/stories/:id/text_box
-          - type: channels
       - name: Policies
-        id: "11"
+        id: "10"
         url: http://localhost:3000/policies
         widgets:
           - name: My Graph
@@ -186,5 +172,19 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/policies/:id/text_box
+          - type: channels
+      - name: Stories
+        id: "11"
+        url: http://localhost:3000/stories
+        widgets:
+          - name: My Graph
+            type: graph
+            url: http://localhost:3000/stories/:id/graph
+          - name: My Table
+            type: table
+            url: http://localhost:3000/stories/:id/table
+          - name: My Text Box
+            type: text-box
+            url: http://localhost:3000/stories/:id/text_box
           - type: channels
     widgets: []
