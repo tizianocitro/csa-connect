@@ -10,13 +10,14 @@ type Props = {
 };
 
 const SectionList = ({section}: Props) => {
-    const {id, name} = section;
+    const {id, internal, name} = section;
     const data = useSectionData(section);
 
     return (
         <Body>
             <PaginatedTable
                 id={formatName(name)}
+                internal={internal}
                 name={name}
                 data={data}
                 parentId={id}

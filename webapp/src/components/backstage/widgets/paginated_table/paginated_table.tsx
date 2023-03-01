@@ -21,6 +21,7 @@ import RowInputFields from './input_fields';
 type Props = {
     data: PaginatedTableData;
     id: string;
+    internal?: boolean;
     isSection?: boolean;
     name: string;
     parentId: string;
@@ -75,6 +76,7 @@ export const fillRow = (
 const PaginatedTable = ({
     data,
     id,
+    internal = false,
     isSection = false,
     name,
     parentId,
@@ -142,17 +144,18 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
-                    <Collapse>
-                        <TablePanel
-                            header='Add new'
-                            key='add-new-row'
-                        >
-                            <RowInputFields
-                                columns={data.columns}
-                                onAddRow={handleAddRow}
-                            />
-                        </TablePanel>
-                    </Collapse>
+                    {internal &&
+                        <Collapse>
+                            <TablePanel
+                                header='Add new'
+                                key='add-new-row'
+                            >
+                                <RowInputFields
+                                    columns={data.columns}
+                                    onAddRow={handleAddRow}
+                                />
+                            </TablePanel>
+                        </Collapse>}
                 </>}
         </Container>
     );

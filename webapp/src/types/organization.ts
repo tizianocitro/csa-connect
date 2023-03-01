@@ -13,6 +13,7 @@ export interface Organization {
 
 export interface Section {
     id: string,
+    internal: boolean;
     name: string,
     url: string,
     sections: Section[],
