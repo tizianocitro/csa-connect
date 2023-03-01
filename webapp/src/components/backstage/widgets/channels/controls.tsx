@@ -1,6 +1,5 @@
 import {FormattedMessage, useIntl} from 'react-intl';
 import React, {Dispatch} from 'react';
-import styled, {css} from 'styled-components';
 import {useSelector} from 'react-redux';
 
 import {AddChannelResult, ChannelCreation} from 'src/types/channels';
@@ -8,10 +7,10 @@ import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {ErrorMessage} from 'src/components/commons/messages';
-import {PrimaryButton} from 'src/components/assets/buttons';
 import {addChannel} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {teamNameSelector} from 'src/selectors';
+import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 
 type AddChannelProps = {
     channelCreation: ChannelCreation;
@@ -108,19 +107,3 @@ export const CreateChannel = ({
         </HorizontalSplit>
     );
 };
-
-const buttonCommon = css`
-    padding: 0 16px;
-    height: 36px;
-    gap: 8px;
-
-    i::before {
-        margin-left: 0;
-        margin-right: 0;
-        font-size: 1.05em;
-    }
-`;
-
-const PrimaryButtonLarger = styled(PrimaryButton)`
-    ${buttonCommon};
-`;
