@@ -2,7 +2,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import React, {Dispatch} from 'react';
 import {useSelector} from 'react-redux';
 
-import {AddChannelResult, ChannelCreation} from 'src/types/channels';
+import {ChannelCreation} from 'src/types/channels';
 import {HorizontalSpacer, HorizontalSplit} from 'src/components/backstage/grid';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
@@ -57,7 +57,7 @@ const createChannel = (
         sectionId,
         teamId,
     }).
-        then((result: AddChannelResult) => {
+        then((result) => {
             navigateToUrl(`/${teamName}/channels/${result.channelId}?${SECTION_ID_PARAM}=${result.sectionId}&${PARENT_ID_PARAM}=${result.parentId}&from=channel_list`);
         }).
         catch(() => {
