@@ -3,14 +3,25 @@ import {ClientError} from '@mattermost/client';
 
 import {GraphData} from 'src/types/graph';
 import {PaginatedTableData} from 'src/types/paginated_table';
-import {SectionInfo} from 'src/types/organization';
+import {SectionInfo, SectionInfoParams} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet<SectionInfo>(`${url}/${id}`);
     if (!data) {
-        data = {description: '', id: '', name: ''} as SectionInfo;
+        data = {id: '', name: ''} as SectionInfo;
+    }
+    return data;
+};
+
+export const saveSectionInfo = async (params: SectionInfoParams, url: string): Promise<SectionInfo> => {
+    let data = await doPost<SectionInfo>(
+        url,
+        JSON.stringify(params),
+    );
+    if (!data) {
+        data = {id: '', name: ''} as SectionInfo;
     }
     return data;
 };
