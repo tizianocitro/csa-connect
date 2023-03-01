@@ -2,7 +2,7 @@ import {Collapse, Input, Table} from 'antd';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
@@ -12,10 +12,16 @@ import {
     buildQuery,
     buildTo,
     buildToForCopy,
+    formatSectionPath,
     formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
+import {navigateToUrl} from 'src/browser_routing';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {PARENT_ID_PARAM} from 'src/constants';
+import {saveSectionInfo} from 'src/clients';
+import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
 
 import RowInputFields from './row_input_fields';
 
@@ -85,7 +91,12 @@ const PaginatedTable = ({
     sectionId,
 }: Props) => {
     const {formatMessage} = useIntl();
+    const {path} = useRouteMatch();
+
     const fullUrl = useContext(FullUrlContext);
+    const sectionUrl = useContext(SectionUrlContext);
+    const organizationId = useContext(OrganizationIdContext);
+
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
@@ -98,10 +109,19 @@ const PaginatedTable = ({
         setFilteredRows(filtered);
     };
 
-    const handleAddRow = (row: PaginatedTableRow) => {
-        setFilteredRows([...filteredRows, row]);
+    const handleCreateRow = (row: PaginatedTableRow) => {
+        saveSectionInfo(row, sectionUrl).
+            then((result) => {
+                const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
 
-        // TODO: API call here
+                // We are routing to a child of this section, so the parentId is the id of this section
+                navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
+            }).
+            catch(() => {
+                // TODO: Do something in case of error
+            });
+
+        // setFilteredRows([...filteredRows, row]);
     };
 
     const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
@@ -154,7 +174,7 @@ const PaginatedTable = ({
                             >
                                 <RowInputFields
                                     columns={data.columns}
-                                    onAddRow={handleAddRow}
+                                    createRow={handleCreateRow}
                                 />
                             </TablePanel>
                         </Collapse>}

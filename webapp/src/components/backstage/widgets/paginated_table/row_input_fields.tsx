@@ -10,12 +10,12 @@ import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 
 type Props = {
     columns: PaginatedTableColumn[];
-    onAddRow: (row: PaginatedTableRow) => void;
+    createRow: (row: PaginatedTableRow) => void;
 };
 
 type RowState = any;
 
-const RowInputFields = ({columns, onAddRow}: Props) => {
+const RowInputFields = ({columns, createRow}: Props) => {
     const initRowState = useCallback<RowState>(() => {
         const state: RowState = {};
         columns.forEach(({key}) => {
@@ -31,7 +31,7 @@ const RowInputFields = ({columns, onAddRow}: Props) => {
         setErrors({...errors, [key]: ''});
     };
 
-    const handleAddRow = () => {
+    const handleCreateRow = () => {
         const addRowErrors: RowState = initRowState();
         let allKeysNotEmpty = true;
         Object.keys(inputValues).forEach((key) => {
@@ -46,7 +46,7 @@ const RowInputFields = ({columns, onAddRow}: Props) => {
             return;
         }
 
-        onAddRow(inputValues);
+        createRow(inputValues);
         setInputValues(initRowState());
         setErrors(initRowState());
     };
@@ -71,7 +71,7 @@ const RowInputFields = ({columns, onAddRow}: Props) => {
                     </PaddedErrorMessage>
                 </>
             ))}
-            <PrimaryButtonLarger onClick={handleAddRow}>
+            <PrimaryButtonLarger onClick={handleCreateRow}>
                 <FormattedMessage defaultMessage='Create'/>
             </PrimaryButtonLarger>
         </Container>
