@@ -1,6 +1,7 @@
 import {Collapse, Input, Table} from 'antd';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
+import {useIntl} from 'react-intl';
 import {useLocation} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
@@ -83,6 +84,7 @@ const PaginatedTable = ({
     pointer = false,
     sectionId,
 }: Props) => {
+    const {formatMessage} = useIntl();
     const fullUrl = useContext(FullUrlContext);
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
@@ -147,7 +149,7 @@ const PaginatedTable = ({
                     {internal &&
                         <Collapse>
                             <TablePanel
-                                header='Add new'
+                                header={formatMessage({defaultMessage: 'Create new'})}
                                 key='add-new-row'
                             >
                                 <RowInputFields
