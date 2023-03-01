@@ -42,7 +42,7 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
-import {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table_wrapper';
+import {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
 import {PARENT_ID_PARAM} from 'src/constants';

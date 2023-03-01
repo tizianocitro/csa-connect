@@ -9,6 +9,7 @@ import {PaginatedTableColumn, PaginatedTableData, PaginatedTableRow} from 'src/t
 import {
     buildIdForUrlHashReference,
     buildQuery,
+    buildTo,
     buildToForCopy,
     formatStringToLowerCase,
     isReferencedByUrlHash,
@@ -45,6 +46,30 @@ const iconColumn: PaginatedTableColumn = {
             iconHeight={'1.45em'}
         />
     ),
+};
+
+export const fillColumn = (title: string): PaginatedTableColumn => {
+    const lowerCaseTitle = formatStringToLowerCase(title);
+    return {
+        title,
+        dataIndex: lowerCaseTitle,
+        key: lowerCaseTitle,
+    };
+};
+
+export const fillRow = (
+    row: PaginatedTableRow,
+    fullUrl: string,
+    routeUrl: string,
+    query: string,
+): PaginatedTableRow => {
+    const itemId = buildIdForUrlHashReference('paginated-table-row', row.id);
+    return {
+        ...row,
+        key: row.id,
+        itemId,
+        to: buildTo(fullUrl, itemId, query, routeUrl),
+    };
 };
 
 const PaginatedTable = ({
