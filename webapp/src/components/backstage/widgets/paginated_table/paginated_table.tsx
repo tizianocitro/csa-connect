@@ -17,7 +17,7 @@ import {
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 
-import RowInputFields from './input_fields';
+import RowInputFields from './row_input_fields';
 
 type Props = {
     data: PaginatedTableData;
