@@ -1,7 +1,8 @@
 import React, {useEffect, useRef} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import {LoadingOutlined} from '@ant-design/icons';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import qs from 'qs';
-import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
 import {
@@ -58,4 +59,11 @@ export const ChannelHeaderButtonIcon = () => {
 
 export const MainMenuMobileIcon = () => (
     <i className='icon fa fa-plug'/>
+);
+
+export const LoadingIcon = (
+    <LoadingOutlined
+        style={{fontSize: 24}}
+        spin={true}
+    />
 );

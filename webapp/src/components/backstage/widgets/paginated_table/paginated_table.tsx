@@ -17,6 +17,7 @@ import {
     isReferencedByUrlHash,
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
+import Loading from 'src/components/commons/loading';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {PARENT_ID_PARAM} from 'src/constants';
@@ -140,6 +141,7 @@ const PaginatedTable = ({
                     title={name}
                 />
             </Header>
+            {(filteredRows.length < 1 && searchText === '') && <Loading/>}
             {(filteredRows.length > 0 || searchText !== '') &&
                 <>
                     <TableSearch
