@@ -13,6 +13,7 @@ export interface Organization {
 
 export interface Section {
     id: string,
+    internal: boolean;
     name: string,
     url: string,
     sections: Section[],
@@ -26,9 +27,13 @@ export interface Widget {
 }
 
 export interface SectionInfo {
-    description?: string;
     id: string;
     name: string;
+}
+
+export interface SectionInfoParams {
+    name: string;
+    [propName: string]: any;
 }
 
 export interface FetchOrganizationsParams {

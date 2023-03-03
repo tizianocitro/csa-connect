@@ -8,6 +8,7 @@ import {useRouteMatch} from 'react-router-dom';
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 import {BaseInput} from 'src/components/assets/inputs';
 import CopyLink from 'src/components/commons/copy_link';
+import {PrimaryButton} from 'src/components/assets/buttons';
 
 type AnchorLinkTitleProps = {
     fullUrl: string;
@@ -126,4 +127,20 @@ export const Header = styled.div`
     display: flex;
     flex: 1;
     margin-bottom: 8px;
+`;
+
+const buttonCommon = css`
+    padding: 0 16px;
+    height: 36px;
+    gap: 8px;
+
+    i::before {
+        margin-left: 0;
+        margin-right: 0;
+        font-size: 1.05em;
+    }
+`;
+
+export const PrimaryButtonLarger = styled(PrimaryButton)`
+    ${buttonCommon};
 `;

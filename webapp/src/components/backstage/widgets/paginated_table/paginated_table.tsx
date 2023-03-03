@@ -1,7 +1,8 @@
-import {Input, Table} from 'antd';
+import {Collapse, Input, Table} from 'antd';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
-import {useLocation} from 'react-router-dom';
+import {useIntl} from 'react-intl';
+import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
@@ -9,21 +10,34 @@ import {PaginatedTableColumn, PaginatedTableData, PaginatedTableRow} from 'src/t
 import {
     buildIdForUrlHashReference,
     buildQuery,
+    buildTo,
     buildToForCopy,
+    formatSectionPath,
     formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
+import Loading from 'src/components/commons/loading';
+import {navigateToUrl} from 'src/browser_routing';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {PARENT_ID_PARAM} from 'src/constants';
+import {saveSectionInfo} from 'src/clients';
+import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
+
+import RowInputFields from './row_input_fields';
 
 type Props = {
     data: PaginatedTableData;
     id: string;
+    internal?: boolean;
     isSection?: boolean;
     name: string;
     parentId: string;
     pointer?: boolean;
     sectionId?: string;
 };
+
+const {Panel} = Collapse;
 
 const iconColumn: PaginatedTableColumn = {
     title: '',
@@ -43,16 +57,47 @@ const iconColumn: PaginatedTableColumn = {
     ),
 };
 
+export const fillColumn = (title: string): PaginatedTableColumn => {
+    const lowerCaseTitle = formatStringToLowerCase(title);
+    return {
+        title,
+        dataIndex: lowerCaseTitle,
+        key: lowerCaseTitle,
+    };
+};
+
+export const fillRow = (
+    row: PaginatedTableRow,
+    fullUrl: string,
+    routeUrl: string,
+    query: string,
+): PaginatedTableRow => {
+    const itemId = buildIdForUrlHashReference('paginated-table-row', row.id);
+    return {
+        ...row,
+        key: row.id,
+        itemId,
+        to: buildTo(fullUrl, itemId, query, routeUrl),
+    };
+};
+
 const PaginatedTable = ({
     data,
     id,
+    internal = false,
     isSection = false,
     name,
     parentId,
     pointer = false,
     sectionId,
 }: Props) => {
+    const {formatMessage} = useIntl();
+    const {path} = useRouteMatch();
+
     const fullUrl = useContext(FullUrlContext);
+    const sectionUrl = useContext(SectionUrlContext);
+    const organizationId = useContext(OrganizationIdContext);
+
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
@@ -63,6 +108,21 @@ const PaginatedTable = ({
         });
         setSearchText(value);
         setFilteredRows(filtered);
+    };
+
+    const handleCreateRow = (row: PaginatedTableRow) => {
+        saveSectionInfo(row, sectionUrl).
+            then((result) => {
+                const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+
+                // We are routing to a child of this section, so the parentId is the id of this section
+                navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
+            }).
+            catch(() => {
+                // TODO: Do something in case of error
+            });
+
+        // setFilteredRows([...filteredRows, row]);
     };
 
     const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
@@ -81,6 +141,7 @@ const PaginatedTable = ({
                     title={name}
                 />
             </Header>
+            {(filteredRows.length < 1 && searchText === '') && <Loading/>}
             {(filteredRows.length > 0 || searchText !== '') &&
                 <>
                     <TableSearch
@@ -88,7 +149,7 @@ const PaginatedTable = ({
                         value={searchText}
                         onChange={({target}) => handleSearch(target.value)}
                     />
-                    <Table
+                    <StyledTable
                         id={paginatedTableId}
                         dataSource={filteredRows}
                         columns={[iconColumn, ...data.columns]}
@@ -107,10 +168,33 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
+                    {internal &&
+                        <Collapse>
+                            <TablePanel
+                                header={formatMessage({defaultMessage: 'Create new'})}
+                                key='add-new-row'
+                            >
+                                <RowInputFields
+                                    columns={data.columns}
+                                    createRow={handleCreateRow}
+                                />
+                            </TablePanel>
+                        </Collapse>}
                 </>}
         </Container>
     );
 };
+
+const StyledTable = styled(Table)`
+`;
+
+const TablePanel = styled(Panel)`
+    background: var(--center-channel-bg) !important;
+
+    .ant-collapse-header {
+        color: rgba(var(--center-channel-color-rgb), 0.90) !important;
+    }
+`;
 
 const TableRow = (props: any) => {
     const {hash: urlHash} = useLocation();
@@ -129,12 +213,10 @@ const TableRow = (props: any) => {
 
 const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
     cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
+    color: rgba(var(--center-channel-color-rgb), 0.90);
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.04);
-    }
-    &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.04);
+        background: rgba(var(--center-channel-color-rgb), 0.04) !important;
     }
     ${CopyLink} {
         margin-left: -1.25em;

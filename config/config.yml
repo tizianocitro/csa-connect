@@ -34,6 +34,7 @@ organizations:
           - type: channels
       - name: Stories
         id: "2"
+        internal: true
         url: http://localhost:3000/stories
         widgets:
           - name: My Graph
@@ -81,6 +82,7 @@ organizations:
           - type: channels
       - name: Stories
         id: "5"
+        internal: true
         url: http://localhost:3000/stories
         widgets:
           - name: My Graph
@@ -128,6 +130,7 @@ organizations:
           - type: channels
       - name: Stories
         id: "8"
+        internal: true
         url: http://localhost:3000/stories
         widgets:
           - name: My Graph
@@ -175,6 +178,7 @@ organizations:
           - type: channels
       - name: Stories
         id: "11"
+        internal: true
         url: http://localhost:3000/stories
         widgets:
           - name: My Graph
