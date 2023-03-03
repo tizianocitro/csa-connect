@@ -6,46 +6,46 @@ organizations:
     sections:
       - name: Incidents
         id: "0"
-        url: http://172.16.15.1:3000/incidents
+        url: http://www.isislab.it:3000/incidents
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/incidents/:id/graph
+            url: http://www.isislab.it:3000/incidents/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/incidents/:id/table
+            url: http://www.isislab.it:3000/incidents/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/incidents/:id/text_box
+            url: http://www.isislab.it:3000/incidents/:id/text_box
           - type: channels
       - name: Policies
         id: "1"
-        url: http://172.16.15.1:3000/policies
+        url: http://www.isislab.it:3000/policies
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/policies/:id/graph
+            url: http://www.isislab.it:3000/policies/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/policies/:id/table
+            url: http://www.isislab.it:3000/policies/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/policies/:id/text_box
+            url: http://www.isislab.it:3000/policies/:id/text_box
           - type: channels
       - name: Stories
         id: "2"
         internal: true
-        url: http://172.16.15.1:3000/stories
+        url: http://www.isislab.it:3000/stories
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/stories/:id/graph
+            url: http://www.isislab.it:3000/stories/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/stories/:id/table
+            url: http://www.isislab.it:3000/stories/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/stories/:id/text_box
+            url: http://www.isislab.it:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization X
@@ -54,46 +54,46 @@ organizations:
     sections:
       - name: Incidents
         id: "3"
-        url: http://172.16.15.1:3000/incidents
+        url: http://www.isislab.it:3000/incidents
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/incidents/:id/graph
+            url: http://www.isislab.it:3000/incidents/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/incidents/:id/table
+            url: http://www.isislab.it:3000/incidents/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/incidents/:id/text_box
+            url: http://www.isislab.it:3000/incidents/:id/text_box
           - type: channels
       - name: Policies
         id: "4"
-        url: http://172.16.15.1:3000/policies
+        url: http://www.isislab.it:3000/policies
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/policies/:id/graph
+            url: http://www.isislab.it:3000/policies/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/policies/:id/table
+            url: http://www.isislab.it:3000/policies/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/policies/:id/text_box
+            url: http://www.isislab.it:3000/policies/:id/text_box
           - type: channels
       - name: Stories
         id: "5"
         internal: true
-        url: http://172.16.15.1:3000/stories
+        url: http://www.isislab.it:3000/stories
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/stories/:id/graph
+            url: http://www.isislab.it:3000/stories/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/stories/:id/table
+            url: http://www.isislab.it:3000/stories/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/stories/:id/text_box
+            url: http://www.isislab.it:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization Y
@@ -102,46 +102,46 @@ organizations:
     sections:
       - name: Incidents
         id: "6"
-        url: http://172.16.15.1:3000/incidents
+        url: http://www.isislab.it:3000/incidents
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/incidents/:id/graph
+            url: http://www.isislab.it:3000/incidents/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/incidents/:id/table
+            url: http://www.isislab.it:3000/incidents/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/incidents/:id/text_box
+            url: http://www.isislab.it:3000/incidents/:id/text_box
           - type: channels
       - name: Policies
         id: "7"
-        url: http://172.16.15.1:3000/policies
+        url: http://www.isislab.it:3000/policies
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/policies/:id/graph
+            url: http://www.isislab.it:3000/policies/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/policies/:id/table
+            url: http://www.isislab.it:3000/policies/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/policies/:id/text_box
+            url: http://www.isislab.it:3000/policies/:id/text_box
           - type: channels
       - name: Stories
         id: "8"
         internal: true
-        url: http://172.16.15.1:3000/stories
+        url: http://www.isislab.it:3000/stories
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/stories/:id/graph
+            url: http://www.isislab.it:3000/stories/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/stories/:id/table
+            url: http://www.isislab.it:3000/stories/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/stories/:id/text_box
+            url: http://www.isislab.it:3000/stories/:id/text_box
           - type: channels
     widgets: []
   - name: Organization Z
@@ -150,45 +150,45 @@ organizations:
     sections:
       - name: Incidents
         id: "9"
-        url: http://172.16.15.1:3000/incidents
+        url: http://www.isislab.it:3000/incidents
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/incidents/:id/graph
+            url: http://www.isislab.it:3000/incidents/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/incidents/:id/table
+            url: http://www.isislab.it:3000/incidents/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/incidents/:id/text_box
+            url: http://www.isislab.it:3000/incidents/:id/text_box
           - type: channels
       - name: Policies
         id: "10"
-        url: http://172.16.15.1:3000/policies
+        url: http://www.isislab.it:3000/policies
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/policies/:id/graph
+            url: http://www.isislab.it:3000/policies/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/policies/:id/table
+            url: http://www.isislab.it:3000/policies/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/policies/:id/text_box
+            url: http://www.isislab.it:3000/policies/:id/text_box
           - type: channels
       - name: Stories
         id: "11"
         internal: true
-        url: http://172.16.15.1:3000/stories
+        url: http://www.isislab.it:3000/stories
         widgets:
           - name: My Graph
             type: graph
-            url: http://172.16.15.1:3000/stories/:id/graph
+            url: http://www.isislab.it:3000/stories/:id/graph
           - name: My Table
             type: table
-            url: http://172.16.15.1:3000/stories/:id/table
+            url: http://www.isislab.it:3000/stories/:id/table
           - name: My Text Box
             type: text-box
-            url: http://172.16.15.1:3000/stories/:id/text_box
+            url: http://www.isislab.it:3000/stories/:id/text_box
           - type: channels
     widgets: []
