@@ -1,14 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
+import styled from 'styled-components';
 
-// import {getSiteUrl} from 'src/clients';
-// import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
+import {getSiteUrl} from 'src/clients';
+import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 import {useOrganization, useOrganizionsNoEcosystem, useScrollIntoView} from 'src/hooks';
 import {StepData} from 'src/types/steps_modal';
-
-// import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
-
 import StepsModal from 'src/components/backstage/widgets/steps_modal/steps_modal';
 
 const EcosystemDetails = () => {
@@ -58,24 +57,29 @@ const EcosystemDetails = () => {
     useScrollIntoView(urlHash);
 
     return (
-        <>
-            {/* <OrganizationIdContext.Provider value={ecosystem.id}>
+        <Container>
+            <OrganizationIdContext.Provider value={ecosystem.id}>
                 <SectionsWidgetsContainer
                     headerPath={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${ecosystem.id}`}
                     name={ecosystem.name}
                     sectionPath={path}
                     sections={ecosystem.sections}
                     url={url}
-                    widgets={[]}
+                    widgets={ecosystem.widgets}
                 />
-            </OrganizationIdContext.Provider> */}
+            </OrganizationIdContext.Provider>
             {stepData.length > 0 &&
                 <StepsModal
                     elementKind='issues'
                     data={stepData}
                 />}
-        </>
+        </Container>
     );
 };
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 
 export default EcosystemDetails;

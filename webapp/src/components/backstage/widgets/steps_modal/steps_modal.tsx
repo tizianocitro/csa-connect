@@ -46,7 +46,7 @@ const StepsModal = ({data, elementKind}: Props) => {
                     {step.options.map((option, index) => (
                         <Checkbox
                             key={`${option.name}-${index}`}
-                            value={option.name}
+                            value={option}
                             style={{marginLeft: '8px', marginTop: '2px', borderBottom: '1px solid', borderBottomColor: '#888'}}
                         >
                             <div>{option.name}</div>
