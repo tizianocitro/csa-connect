@@ -79,6 +79,10 @@ export const useOrganization = (id: string): Organization => {
     return getOrganizationById(id);
 };
 
+export const useOrganizionsNoEcosystem = (): Organization[] => {
+    return getOrganizationsNoEcosystem();
+};
+
 export const useOrganizationsNoPageList = (): Organization[] => {
     const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const currentTeamId = useSelector(getCurrentTeamId);
