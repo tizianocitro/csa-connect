@@ -1,4 +1,4 @@
-import React, {createContext} from 'react';
+import React, {ReactNode, createContext} from 'react';
 
 import {
     Body,
@@ -22,6 +22,7 @@ type Props = {
     sections?: Section[];
     url: string;
     widgets: Widget[];
+    children?: ReactNode;
 };
 
 const SectionsWidgetsContainer = ({
@@ -32,6 +33,7 @@ const SectionsWidgetsContainer = ({
     sections,
     url,
     widgets,
+    children = [],
 }: Props) => {
     return (
         <IsRhsContext.Provider value={isRhs}>
@@ -55,6 +57,7 @@ const SectionsWidgetsContainer = ({
                             <Widgets
                                 widgets={widgets}
                             />
+                            {children}
                         </Body>
                     </Main>
                 </MainWrapper>

@@ -114,8 +114,6 @@ const PaginatedTable = ({
         saveSectionInfo(row, sectionUrl).
             then((result) => {
                 const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
-
-                // We are routing to a child of this section, so the parentId is the id of this section
                 navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
             }).
             catch(() => {
@@ -171,7 +169,7 @@ const PaginatedTable = ({
                     {internal &&
                         <Collapse>
                             <TablePanel
-                                header={formatMessage({defaultMessage: 'Create new'})}
+                                header={formatMessage({defaultMessage: 'Create New'})}
                                 key='add-new-row'
                             >
                                 <RowInputFields

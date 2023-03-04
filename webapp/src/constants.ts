@@ -31,3 +31,4 @@ export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
 
 export const ECOSYSTEM = 'ecosystem';
+export const ecosystemDefaultFields = ['name', 'description'];
