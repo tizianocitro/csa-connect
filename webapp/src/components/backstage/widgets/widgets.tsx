@@ -43,7 +43,7 @@ const buildWidgetByType = (
 };
 
 const filterWidgetsByType = (widgets: Widget[], type: string): Widget[] => {
-    if (widgets.length < 1) {
+    if (!widgets) {
         return [];
     }
     return widgets.filter((widget) => widget.type === type);
@@ -55,7 +55,7 @@ const Widgets = ({widgets}: Props) => {
 
     return (
         <>
-            {widgets.map((widget, index) => buildWidgetByType(widget, index))}
+            {widgets && widgets.map((widget, index) => buildWidgetByType(widget, index))}
             {channelWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
             }
