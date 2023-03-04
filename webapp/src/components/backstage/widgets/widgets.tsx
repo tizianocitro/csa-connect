@@ -43,6 +43,9 @@ const buildWidgetByType = (
 };
 
 const filterWidgetsByType = (widgets: Widget[], type: string): Widget[] => {
+    if (widgets.length < 1) {
+        return [];
+    }
     return widgets.filter((widget) => widget.type === type);
 };
 
