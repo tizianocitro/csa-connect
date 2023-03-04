@@ -12,11 +12,13 @@ import {
     FetchChannelsParams,
     FetchChannelsResult,
 } from 'src/types/channels';
-import {PLATFORM_CONFIG_CACHE_NAME} from 'src/config/config';
+
+// import {PLATFORM_CONFIG_CACHE_NAME} from 'src/config/config';
+
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
 
-import {getCachedResponse, putCacheResponse} from './cache';
+// import {getCachedResponse, putCacheResponse} from './cache';
 
 let siteURL = '';
 let basePath = '';
@@ -47,17 +49,18 @@ export const loadPlatformConfig = async (
 ): Promise<void> => {
     const url = `${apiUrl}${path}`;
 
-    const cachedConfig = await getCachedResponse<PlatformConfig>(PLATFORM_CONFIG_CACHE_NAME, url);
-    if (cachedConfig) {
-        setConfig(cachedConfig);
-        return;
-    }
+    // const cachedConfig = await getCachedResponse<PlatformConfig>(PLATFORM_CONFIG_CACHE_NAME, url);
+    // if (cachedConfig) {
+    //     setConfig(cachedConfig);
+    //     return;
+    // }
 
     const config = await doGet<PlatformConfig>(url);
     if (!config) {
         return;
     }
-    await putCacheResponse(PLATFORM_CONFIG_CACHE_NAME, url, config);
+
+    // await putCacheResponse(PLATFORM_CONFIG_CACHE_NAME, url, config);
     setConfig(config);
 };
 
