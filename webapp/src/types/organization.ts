@@ -28,6 +28,7 @@ export interface Widget {
 export interface SectionInfo {
     id: string;
     name: string;
+    [propName: string]: any;
 }
 
 export interface SectionInfoParams {

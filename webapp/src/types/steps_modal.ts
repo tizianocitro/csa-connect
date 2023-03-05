@@ -3,7 +3,7 @@ export interface StepData {
     options: StepValue[];
 }
 
-interface StepValue {
+export interface StepValue {
     name: string;
     description?: string;
     id: string;
