@@ -59,6 +59,13 @@ const StepsModal = ({
     const [inputValues, setInputValues] = useState<SectionInfoState>(initSectionInfoState());
     const [errors, setErrors] = useState<SectionInfoState>(initSectionInfoState());
 
+    const cleanModal = useCallback(() => {
+        setCurrentStep(0);
+        setStepValues({});
+        setInputValues(initSectionInfoState());
+        setErrors(initSectionInfoState());
+    }, []);
+
     const handleInputChange = ({target}: ChangeEvent<HTMLInputElement>, key: string) => {
         setInputValues({...inputValues, [key]: target.value});
         setErrors({...errors, [key]: ''});
@@ -73,22 +80,20 @@ const StepsModal = ({
                 allKeysNotEmpty = false;
             }
         });
-
         if (!allKeysNotEmpty) {
             setErrors(addRowErrors);
             return;
         }
 
         setVisible(false);
-        setCurrentStep(0);
-        setInputValues(initSectionInfoState());
-        setErrors(initSectionInfoState());
 
         saveSectionInfo({
             ...inputValues,
             elements: Object.values(stepValues).flat(),
         }, targetUrl).
             then((result) => {
+                cleanModal();
+
                 const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
                 navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
             }).
@@ -99,8 +104,7 @@ const StepsModal = ({
 
     const handleCancel = () => {
         setVisible(false);
-        setStepValues({});
-        setCurrentStep(0);
+        cleanModal();
     };
 
     const steps = data.map((step) => {
