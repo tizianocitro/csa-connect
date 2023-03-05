@@ -120,6 +120,7 @@ const PaginatedTable = ({
                 // TODO: Do something in case of error
             });
 
+        // In case you'd want to add the row, instead of redirect to it
         // setFilteredRows([...filteredRows, row]);
     };
 
