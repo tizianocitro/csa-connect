@@ -8,6 +8,8 @@ import {
     formatSectionPath,
     formatStringToLowerCase,
     getSection,
+    removeSectionNameFromPath,
+    useSection,
 } from 'src/hooks';
 import {StepValue} from 'src/types/steps_modal';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
@@ -30,18 +32,20 @@ const EcosystemPaginatedTableWrapper = ({
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentId = queryParams.parentId as string;
 
+    const section = useSection(parentId);
     const [data, setData] = useState<PaginatedTableData>({columns: [], rows: []});
     useEffect(() => {
         const rows = elements.map((element) => {
-            const section = getSection(element.parentId);
-            const basePath = `${formatSectionPath(path, element.organizationId)}/${formatStringToLowerCase(section.name)}`;
+            const parentSection = getSection(element.parentId);
+            const pathWithoutSectionName = removeSectionNameFromPath(path, section.name);
+            const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatStringToLowerCase(parentSection.name)}`;
             const row: PaginatedTableRow = {
                 id: element.id,
                 name: element.name,
                 description: element.description,
             };
             return {
-                ...fillRow(row, '', url, buildQuery(element.parentId, element.id)),
+                ...fillRow(row, '', url, buildQuery(parentId, sectionId)),
                 onClick: () => navigateToUrl(`${basePath}/${element.id}?${PARENT_ID_PARAM}=${element.parentId}`),
             };
         });
