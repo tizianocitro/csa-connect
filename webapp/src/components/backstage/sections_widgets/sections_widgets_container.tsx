@@ -23,6 +23,7 @@ type Props = {
     url: string;
     widgets: Widget[];
     children?: ReactNode;
+    childrenBottom?: boolean;
 };
 
 const SectionsWidgetsContainer = ({
@@ -34,6 +35,7 @@ const SectionsWidgetsContainer = ({
     url,
     widgets,
     children = [],
+    childrenBottom = true,
 }: Props) => {
     return (
         <IsRhsContext.Provider value={isRhs}>
@@ -47,6 +49,7 @@ const SectionsWidgetsContainer = ({
                     </Header>
                     <Main>
                         <Body>
+                            {!childrenBottom && children}
                             {sections && sectionPath &&
                                 <Sections
                                     path={sectionPath}
@@ -57,7 +60,7 @@ const SectionsWidgetsContainer = ({
                             <Widgets
                                 widgets={widgets}
                             />
-                            {children}
+                            {childrenBottom && children}
                         </Body>
                     </Main>
                 </MainWrapper>

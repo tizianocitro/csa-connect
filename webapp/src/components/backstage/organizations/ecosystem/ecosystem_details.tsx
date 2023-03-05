@@ -1,4 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {getSiteUrl} from 'src/clients';
@@ -8,6 +13,8 @@ import {StepData} from 'src/types/steps_modal';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import StepsModal from 'src/components/backstage/widgets/steps_modal/steps_modal';
+
+export const IsEcosystemContext = createContext(false);
 
 const EcosystemDetails = () => {
     const {url, path} = useRouteMatch();
@@ -59,23 +66,25 @@ const EcosystemDetails = () => {
 
     return (
         <OrganizationIdContext.Provider value={ecosystem.id}>
-            <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${ecosystem.id}`}
-                name={ecosystem.name}
-                sectionPath={path}
-                sections={ecosystem.sections}
-                url={url}
-                widgets={ecosystem.widgets}
-            >
-                {stepData.length > 0 &&
-                    <StepsModal
-                        data={stepData}
-                        fields={ecosystemDefaultFields}
-                        name={ecosystem.sections[currentSection].name}
-                        parentId={ecosystem.sections[currentSection].id}
-                        targetUrl={ecosystem.sections[currentSection].url}
-                    />}
-            </SectionsWidgetsContainer>
+            <IsEcosystemContext.Provider value={true}>
+                <SectionsWidgetsContainer
+                    headerPath={`${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}/${ecosystem.id}`}
+                    name={ecosystem.name}
+                    sectionPath={path}
+                    sections={ecosystem.sections}
+                    url={url}
+                    widgets={ecosystem.widgets}
+                >
+                    {stepData.length > 0 &&
+                        <StepsModal
+                            data={stepData}
+                            fields={ecosystemDefaultFields}
+                            name={ecosystem.sections[currentSection].name}
+                            parentId={ecosystem.sections[currentSection].id}
+                            targetUrl={ecosystem.sections[currentSection].url}
+                        />}
+                </SectionsWidgetsContainer>
+            </IsEcosystemContext.Provider>
         </OrganizationIdContext.Provider>
     );
 };
