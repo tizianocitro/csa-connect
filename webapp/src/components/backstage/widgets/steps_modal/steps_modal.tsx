@@ -87,6 +87,7 @@ const StepsModal = ({
 
         setVisible(false);
 
+        // TODO: this function has to be passed as a prop, to make the widget generic
         saveSectionInfo({
             ...inputValues,
             elements: Object.values(stepValues).flat(),
