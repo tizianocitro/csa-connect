@@ -106,7 +106,7 @@ const Graph = ({
     );
 
     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
-    const id = `${formatName(name)}-graph-widget`;
+    const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     return (
         <Container
             containerDirection={graphStyle.containerDirection}

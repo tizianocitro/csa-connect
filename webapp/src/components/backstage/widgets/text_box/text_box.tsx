@@ -35,7 +35,7 @@ const TextBox = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
-    const id = `${formatName(name)}-text-box-widget`;
+    const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
 
     return (

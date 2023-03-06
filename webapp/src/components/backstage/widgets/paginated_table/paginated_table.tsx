@@ -124,7 +124,8 @@ const PaginatedTable = ({
         // setFilteredRows([...filteredRows, row]);
     };
 
-    const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
+    const paginatedTableIdPrefix = sectionId ? `${id}-${sectionId}-${parentId}` : `${id}-${parentId}`;
+    const paginatedTableId = isSection ? `${paginatedTableIdPrefix}-section` : `${paginatedTableIdPrefix}-widget`;
 
     return (
         <Container

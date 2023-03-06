@@ -37,7 +37,8 @@ const Table = ({
     const fullUrl = useContext(FullUrlContext);
 
     const {caption, headers, rows} = data;
-    const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
+    const tableIdPrefix = `${id}-${sectionId}-${parentId}`;
+    const tableId = isSection ? `${tableIdPrefix}-section` : `${tableIdPrefix}-widget`;
 
     return (
         <Container
