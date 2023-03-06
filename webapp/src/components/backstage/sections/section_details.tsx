@@ -71,7 +71,10 @@ const SectionDetails = () => {
                 widgets={section.widgets}
                 childrenBottom={false}
             >
-                <EcosystemPaginatedTableWrapper elements={sectionInfo.elements}/>
+                <EcosystemPaginatedTableWrapper
+                    name={`${sectionInfo.name} Elements`}
+                    elements={sectionInfo.elements}
+                />
             </SectionsWidgetsContainer> :
             <SectionsWidgetsContainer
                 headerPath={`${getSiteUrl()}${url}?${PARENT_ID_PARAM}=${section.id}`}

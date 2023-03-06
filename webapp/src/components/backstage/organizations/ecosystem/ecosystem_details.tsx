@@ -8,7 +8,12 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {getSiteUrl} from 'src/clients';
 import {DEFAULT_PATH, ORGANIZATIONS_PATH, ecosystemDefaultFields} from 'src/constants';
-import {useOrganization, useOrganizionsNoEcosystem, useScrollIntoView} from 'src/hooks';
+import {
+    useForceDocumentTitle,
+    useOrganization,
+    useOrganizionsNoEcosystem,
+    useScrollIntoView,
+} from 'src/hooks';
 import {StepData} from 'src/types/steps_modal';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -61,6 +66,8 @@ const EcosystemDetails = () => {
 
         fetchData();
     }, []);
+
+    useForceDocumentTitle(ecosystem.name ? (ecosystem.name) : 'Organizations');
 
     useScrollIntoView(urlHash);
 

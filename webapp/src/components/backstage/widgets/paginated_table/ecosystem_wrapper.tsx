@@ -24,7 +24,7 @@ type Props = {
 };
 
 const EcosystemPaginatedTableWrapper = ({
-    name = 'Elements',
+    name = 'Issue Elements',
     elements = [],
 }: Props) => {
     const {path, url, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
