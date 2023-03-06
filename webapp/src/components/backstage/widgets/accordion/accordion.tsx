@@ -18,21 +18,25 @@ type Props = {
 
 const Accordion = ({elements, childComponent: ChildComponent, ...props}: Props) => {
     return (
-        <Collapse
-            accordion={true}
-        >
-            {elements && elements.length > 0 && elements.map((element) => (
-                <Panel
-                    key={element.id}
-                    header={element.name}
+        <>
+            {elements && elements.length > 0 &&
+                <Collapse
+                    defaultActiveKey={[elements[0].id]}
+                    accordion={true}
                 >
-                    <ChildComponent
-                        element={element}
-                        {...props}
-                    />
-                </Panel>
-            ))}
-        </Collapse>
+                    {elements.map((element) => (
+                        <Panel
+                            key={element.id}
+                            header={element.name}
+                        >
+                            <ChildComponent
+                                element={element}
+                                {...props}
+                            />
+                        </Panel>
+                    ))}
+                </Collapse>}
+        </>
     );
 };
 
