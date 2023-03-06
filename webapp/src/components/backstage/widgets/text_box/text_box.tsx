@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
-import {formatName} from 'src/hooks';
+import {buildQuery, formatName} from 'src/hooks';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 export type TextBoxStyle = {
     height?: string;
@@ -32,6 +32,7 @@ const TextBox = ({
         width: '100%',
     },
 }: Props) => {
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
     const id = `${formatName(name)}-text-box-widget`;
@@ -47,7 +48,7 @@ const TextBox = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
-                    query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
+                    query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                     text={name}
                     title={name}
                 />

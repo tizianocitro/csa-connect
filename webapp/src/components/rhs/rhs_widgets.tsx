@@ -1,4 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
@@ -16,6 +21,8 @@ import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 
 import {FullUrlContext} from './rhs';
 import EcosystemAccordionChild from './ecosystem_accordion_child';
+
+export const IsEcosystemRhsContext = createContext(false);
 
 type Props = {
     parentId: string;
@@ -41,11 +48,12 @@ const RHSWidgets = (props: Props) => {
     return (
         <Container>
             {(section && sectionInfo && isEcosystem) &&
-                <Accordion
-                    elements={sectionInfo.elements}
-                    childComponent={EcosystemAccordionChild}
-                />}
-
+                <IsEcosystemRhsContext.Provider value={isEcosystem}>
+                    <Accordion
+                        childComponent={EcosystemAccordionChild}
+                        elements={sectionInfo.elements}
+                    />
+                </IsEcosystemRhsContext.Provider>}
             {(section && sectionInfo && !isEcosystem) &&
                 <RhsSectionsWidgetsContainer
                     headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}

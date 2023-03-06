@@ -4,7 +4,6 @@ import {FormattedMessage} from 'react-intl';
 import {useSection, useSectionInfo} from 'src/hooks';
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 import RhsSectionsWidgetsContainer from 'src/components/rhs/rhs_sections_widgets_container';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {getSiteUrl} from 'src/clients';
 import {AccordionData} from 'src/types/accordion';
 
@@ -22,7 +21,7 @@ const EcosystemAccordionChild = ({element}: Props) => {
             {(section && sectionInfo) ?
                 <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id}}>
                     <RhsSectionsWidgetsContainer
-                        headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${element.id}&${PARENT_ID_PARAM}=${element.parentId}`}
+                        headerPath={`${getSiteUrl()}${fullUrl}`}
                         name={sectionInfo.name}
                         url={fullUrl}
                         widgets={section?.widgets}

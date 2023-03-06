@@ -5,6 +5,7 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {TableData} from 'src/types/table';
 import {buildQuery} from 'src/hooks';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
@@ -30,6 +31,7 @@ const Table = ({
     sectionId,
     urlHash,
 }: Props) => {
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
     const {caption, headers, rows} = data;
@@ -44,7 +46,7 @@ const Table = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={tableId}
-                    query={buildQuery(parentId, sectionId)}
+                    query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                     text={caption}
                     title={caption}
                 />
@@ -62,7 +64,7 @@ const Table = ({
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
-                        query={buildQuery(parentId, sectionId)}
+                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                         row={row}
                         urlHash={urlHash}
                     />

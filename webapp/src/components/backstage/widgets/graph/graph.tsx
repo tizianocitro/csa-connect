@@ -23,10 +23,10 @@ import styled from 'styled-components';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
-import {formatName} from 'src/hooks';
+import {buildQuery, formatName} from 'src/hooks';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 import GraphNodeType from './graph_node_type';
 
@@ -81,9 +81,10 @@ const Graph = ({
     sectionId,
     parentId,
 }: Props) => {
-    const fullUrl = useContext(FullUrlContext);
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
+    const fullUrl = useContext(FullUrlContext);
 
     const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
@@ -119,7 +120,7 @@ const Graph = ({
                     <AnchorLinkTitle
                         fullUrl={fullUrl}
                         id={id}
-                        query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
+                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                         text={name}
                         title={name}
                     />
