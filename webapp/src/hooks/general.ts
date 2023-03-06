@@ -79,6 +79,14 @@ export const useOrganization = (id: string): Organization => {
     return getOrganizationById(id);
 };
 
+export const useIsSectionFromEcosystem = (sectionId: string): boolean => {
+    const sections = getEcosystem()?.sections;
+    if (!sections) {
+        return false;
+    }
+    return sections.filter((section) => section.id === sectionId).length > 0;
+};
+
 export const useOrganizionsNoEcosystem = (): Organization[] => {
     return getOrganizationsNoEcosystem();
 };
