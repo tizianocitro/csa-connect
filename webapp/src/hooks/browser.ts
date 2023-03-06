@@ -7,7 +7,7 @@ export const useScrollIntoView = (hash: string) => {
     useEffect(() => {
         if (hash !== '') {
             setTimeout(() => {
-                document.querySelector(hash)?.scrollIntoView();
+                document.querySelector(hash)?.scrollIntoView({behavior: 'smooth'});
             }, 300);
         }
     }, [hash]);
