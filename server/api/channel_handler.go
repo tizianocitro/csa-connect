@@ -22,11 +22,11 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 		channelService: channelService,
 	}
 
-	channelsRouter := router.PathPrefix("/channels/{sectionId:[A-Za-z0-9]+}").Subrouter()
+	channelsRouter := router.PathPrefix("/channels/{sectionId}").Subrouter()
 	channelsRouter.HandleFunc("", withContext(handler.getChannels)).Methods(http.MethodGet)
 	channelsRouter.HandleFunc("", withContext(handler.addChannel)).Methods(http.MethodPost)
 
-	channelRouter := router.PathPrefix("/channel/{channelId:[A-Za-z0-9]+}").Subrouter()
+	channelRouter := router.PathPrefix("/channel/{channelId}").Subrouter()
 	channelRouter.HandleFunc("", withContext(handler.getChannelByID)).Methods(http.MethodGet)
 
 	return handler
