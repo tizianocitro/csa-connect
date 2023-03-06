@@ -14,6 +14,7 @@ type Props = {
     data: TableData;
     id: string;
     isSection?: boolean;
+    name: string;
     open?: (resourceId: string) => void;
     parentId: string;
     pointer?: boolean;
@@ -25,6 +26,7 @@ const Table = ({
     data,
     id,
     isSection = false,
+    name,
     open,
     parentId,
     pointer = false,
@@ -47,8 +49,8 @@ const Table = ({
                     fullUrl={fullUrl}
                     id={tableId}
                     query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
-                    text={caption}
-                    title={caption}
+                    text={name}
+                    title={name}
                 />
             </Header>
             <InnertTable
