@@ -8,8 +8,8 @@ import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {
+    buildQuery,
     useIsSectionFromEcosystem,
     useScrollIntoView,
     useSection,
@@ -17,10 +17,9 @@ import {
 } from 'src/hooks';
 import RhsSectionsWidgetsContainer from 'src/components/rhs/rhs_sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
-import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 
 import {FullUrlContext} from './rhs';
-import EcosystemAccordionChild from './ecosystem_accordion_child';
+import EcosystemRhs from './ecosystem/ecosystem_rhs';
 
 export const IsEcosystemRhsContext = createContext(false);
 
@@ -49,14 +48,16 @@ const RHSWidgets = (props: Props) => {
         <Container>
             {(section && sectionInfo && isEcosystem) &&
                 <IsEcosystemRhsContext.Provider value={isEcosystem}>
-                    <Accordion
-                        childComponent={EcosystemAccordionChild}
-                        elements={sectionInfo.elements}
+                    <EcosystemRhs
+                        headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}`}
+                        parentId={parentId}
+                        sectionId={sectionId}
+                        sectionInfo={sectionInfo}
                     />
                 </IsEcosystemRhsContext.Provider>}
             {(section && sectionInfo && !isEcosystem) &&
                 <RhsSectionsWidgetsContainer
-                    headerPath={`${getSiteUrl()}${fullUrl}?${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
+                    headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}`}
                     name={sectionInfo.name}
                     url={fullUrl}
                     widgets={section?.widgets}
