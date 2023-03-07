@@ -1,4 +1,5 @@
 import React from 'react';
+import {useIntl} from 'react-intl';
 
 import {
     Body,
@@ -26,6 +27,7 @@ const EcosystemRhs = ({
     sectionId,
     sectionInfo,
 }: Props) => {
+    const {formatMessage} = useIntl();
     return (
         <Container>
             <MainWrapper>
@@ -38,7 +40,7 @@ const EcosystemRhs = ({
                 <Main>
                     <Body>
                         <Accordion
-                            name={`${sectionInfo.name} Elements`}
+                            name={`${sectionInfo.name} ${formatMessage({defaultMessage: 'Elements'})}`}
                             childComponent={EcosystemAccordionChild}
                             elements={sectionInfo.elements}
                             parentId={parentId}

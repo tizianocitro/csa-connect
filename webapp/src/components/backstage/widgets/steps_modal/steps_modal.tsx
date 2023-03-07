@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import {useRouteMatch} from 'react-router-dom';
 import styled from 'styled-components';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {StepData} from 'src/types/steps_modal';
 import {formatSectionPath, formatStringToCapitalize, formatStringToLowerCase} from 'src/hooks';
@@ -44,6 +44,8 @@ const StepsModal = ({
     targetUrl,
 }: Props) => {
     const {path} = useRouteMatch();
+    const {formatMessage} = useIntl();
+
     const organizationId = useContext(OrganizationIdContext);
     const [visible, setVisible] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
@@ -76,7 +78,7 @@ const StepsModal = ({
         let allKeysNotEmpty = true;
         Object.keys(inputValues).forEach((key) => {
             if (!inputValues[key] || inputValues[key].trim() === '') {
-                addRowErrors[key] = `${formatStringToCapitalize(key)} is missing.`;
+                addRowErrors[key] = `${formatStringToCapitalize(key)} ${formatMessage({defaultMessage: 'is required.'})}`;
                 allKeysNotEmpty = false;
             }
         });
