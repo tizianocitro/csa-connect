@@ -12,7 +12,7 @@ import {PARENT_ID_PARAM} from 'src/constants';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
-import EcosystemPaginatedTableWrapper from 'src/components/backstage/widgets/paginated_table/ecosystem_wrapper';
+import EcosystemPaginatedTableWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_wrapper';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 

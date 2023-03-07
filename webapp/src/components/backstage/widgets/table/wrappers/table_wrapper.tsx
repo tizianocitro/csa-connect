@@ -2,45 +2,41 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
-import {formatUrlWithId, useGraphData} from 'src/hooks';
-
-import Graph from './graph';
+import {formatName, formatUrlWithId, useTableData} from 'src/hooks';
+import {SectionContext} from 'src/components/rhs/rhs';
+import Table from 'src/components/backstage/widgets/table/table';
 
 type Props = {
     name?: string;
     url?: string;
 };
 
-const GraphWrapper = ({
+const TableWrapper = ({
     name = 'default',
     url = '',
 }: Props) => {
-    const fullUrl = useContext(FullUrlContext);
     const sectionContextOptions = useContext(SectionContext);
-
-    const {url: sectionUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
+    const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
     const {hash: urlHash, search} = useLocation();
 
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
-
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
-    const isFullUrlProvided = fullUrl !== '';
-    const routeUrl = isFullUrlProvided ? fullUrl : sectionUrl;
 
-    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), urlHash, routeUrl);
+    const data = useTableData(formatUrlWithId(url, sectionIdForUrl));
 
     return (
-        <Graph
+        <Table
+            id={formatName(name)}
             data={data}
             name={name}
             sectionId={sectionIdForUrl}
             parentId={parentId}
+            urlHash={urlHash}
         />
     );
 };
 
-export default GraphWrapper;
+export default TableWrapper;

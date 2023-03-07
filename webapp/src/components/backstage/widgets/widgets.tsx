@@ -3,11 +3,11 @@ import React, {useContext} from 'react';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {Widget} from 'src/types/organization';
 
-import ChannelsWrapper from './channels/channels_wrapper';
-import GraphWrapper from './graph/graph_wrapper';
-import PaginatedTableWrapper from './paginated_table/paginated_table_wrapper';
-import TableWrapper from './table/table_wrapper';
-import TextBoxWrapper from './text_box/text_box_wrapper';
+import ChannelsWrapper from './channels/wrappers/channels_wrapper';
+import GraphWrapper from './graph/wrappers/graph_wrapper';
+import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wrapper';
+import TableWrapper from './table/wrappers/table_wrapper';
+import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 
 export enum WidgetType {
     Channels = 'channels',

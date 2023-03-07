@@ -5,8 +5,7 @@ import qs from 'qs';
 import {useSelector} from 'react-redux';
 
 import {SectionContext} from 'src/components/rhs/rhs';
-
-import ChannelsSection from './channels';
+import ChannelsSection from 'src/components/backstage/widgets/channels/channels';
 
 const ChannelsWrapper = () => {
     const sectionContextOptions = useContext(SectionContext);
