@@ -13,7 +13,6 @@ export const getSection = (id: string): Section => {
 export const hideOptions = () => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
-    // TODO: Check if it is possible to lower the timeout
     setTimeout(() => {
         const groups = document.getElementsByClassName('SidebarChannelGroup a11y__section') as HTMLCollectionOf<HTMLElement>;
         for (let i = 0; i < groups.length; i++) {
@@ -23,5 +22,5 @@ export const hideOptions = () => {
                 break;
             }
         }
-    }, 50);
+    }, 100);
 };
