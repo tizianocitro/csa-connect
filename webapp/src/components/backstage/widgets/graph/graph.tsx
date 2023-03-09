@@ -33,6 +33,7 @@ import GraphNodeType from './graph_node_type';
 type GraphStyle = {
     containerDirection: string,
     graphWidth: string;
+    graphHeight: string;
     textBoxStyle?: TextBoxStyle;
 };
 
@@ -46,6 +47,7 @@ type Props = {
 const defaultGraphStyle: GraphStyle = {
     containerDirection: 'row',
     graphWidth: '75%',
+    graphHeight: '40vh',
     textBoxStyle: {
         height: '5vh',
         marginTop: '0px',
@@ -56,6 +58,7 @@ const defaultGraphStyle: GraphStyle = {
 const rhsGraphStyle: GraphStyle = {
     containerDirection: 'column',
     graphWidth: '100%',
+    graphHeight: '40vh',
 };
 
 const fitViewOptions: FitViewOptions = {
@@ -90,6 +93,7 @@ const Graph = ({
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
+
     useEffect(() => {
         setDescription(data.description || emptyDescription);
         setNodes(data.nodes || []);
@@ -105,8 +109,24 @@ const Graph = ({
         [setEdges]
     );
 
+    // const getGraphStyle = useCallback<() => GraphStyle>((): GraphStyle => {
+    //     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+    //     const {graphHeight: graphHeightVh} = graphStyle;
+    //     if (!graphHeightVh.includes('vh')) {
+    //         return graphStyle;
+    //     }
+    //     const vh = window.innerHeight;
+    //     const graphHeightVhAsNumber = parseInt(graphHeightVh.substring(0, graphHeightVh.indexOf('vh')), 10);
+    //     const heightPixels = (vh * graphHeightVhAsNumber) / 100;
+    //     const graphHeight = `${heightPixels}px`;
+    //     return {...graphStyle, graphHeight};
+    // }, []);
+
+    // const graphStyle = getGraphStyle();
     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
+
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
@@ -115,6 +135,7 @@ const Graph = ({
                 id={id}
                 data-testid={id}
                 width={graphStyle.graphWidth}
+                height={graphStyle.graphHeight}
             >
                 <Header>
                     <AnchorLinkTitle
@@ -157,9 +178,9 @@ const Graph = ({
     );
 };
 
-const GraphContainer = styled.div<{width: string}>`
+const GraphContainer = styled.div<{width: string, height: string}>`
     width: ${(props) => props.width};
-    height: 40vh;
+    height: ${(props) => props.height};
     margin-bottom: 24px;
 `;
 

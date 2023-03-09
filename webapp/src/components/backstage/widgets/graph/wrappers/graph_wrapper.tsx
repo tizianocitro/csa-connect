@@ -5,6 +5,7 @@ import qs from 'qs';
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 import {formatUrlWithId, useGraphData} from 'src/hooks';
 import Graph from 'src/components/backstage/widgets/graph/graph';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 type Props = {
     name?: string;
@@ -17,8 +18,9 @@ const GraphWrapper = ({
 }: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const sectionContextOptions = useContext(SectionContext);
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
 
-    const {url: sectionUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
+    const {url: routeUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
     const {hash: urlHash, search} = useLocation();
 
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
@@ -28,9 +30,15 @@ const GraphWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
     const isFullUrlProvided = fullUrl !== '';
-    const routeUrl = isFullUrlProvided ? fullUrl : sectionUrl;
+    const sectionUrl = isFullUrlProvided ? fullUrl : routeUrl;
 
-    const data = useGraphData(formatUrlWithId(url, sectionIdForUrl), urlHash, routeUrl);
+    const graphUrl = formatUrlWithId(url, sectionIdForUrl);
+    const data = useGraphData(graphUrl, urlHash, {
+        applyOptions: !isEcosystemRhs,
+        parentId,
+        sectionId: sectionIdForUrl,
+        sectionUrl,
+    });
 
     return (
         <Graph
