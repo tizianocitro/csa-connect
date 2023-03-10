@@ -6,6 +6,7 @@ import {Widget} from 'src/types/organization';
 import ChannelsWrapper from './channels/wrappers/channels_wrapper';
 import GraphWrapper from './graph/wrappers/graph_wrapper';
 import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wrapper';
+import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapper';
 import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 
@@ -13,6 +14,7 @@ export enum WidgetType {
     Channels = 'channels',
     Graph = 'graph',
     PaginatedTable = 'paginated-table',
+    SingleChannel = 'channel',
     Table = 'table',
     TextBox = 'text-box',
 }
@@ -51,13 +53,17 @@ const filterWidgetsByType = (widgets: Widget[], type: string): Widget[] => {
 
 const Widgets = ({widgets}: Props) => {
     const isRhs = useContext(IsRhsContext);
-    const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const channelsWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const singleChannelWidgets = filterWidgetsByType(widgets, WidgetType.SingleChannel);
 
     return (
         <>
             {widgets && widgets.map((widget, index) => buildWidgetByType(widget, index))}
-            {channelWidgets.length > 0 && !isRhs &&
+            {channelsWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
+            }
+            {singleChannelWidgets.length > 0 && !isRhs &&
+                <SingleChannelWrapper/>
             }
         </>
     );
