@@ -17,6 +17,8 @@ export const DateTimeFormats = {
     DATE_MED_NO_YEAR: {...DateTime.DATE_MED, year: undefined},
 };
 
+export const estimatedOptionsLoadTime = 200;
+
 export const PRODUCT_ICON = 'power-plug-outline';
 export const PRODUCT_NAME = pluginName;
 
