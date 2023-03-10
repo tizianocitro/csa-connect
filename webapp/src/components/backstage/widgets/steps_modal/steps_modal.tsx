@@ -14,10 +14,18 @@ import {
 import {useRouteMatch} from 'react-router-dom';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
 
 import {StepData} from 'src/types/steps_modal';
-import {formatSectionPath, formatStringToCapitalize, formatStringToLowerCase} from 'src/hooks';
-import {saveSectionInfo} from 'src/clients';
+import {
+    formatName,
+    formatSectionPath,
+    formatStringToCapitalize,
+    formatStringToLowerCase,
+    useOrganization,
+} from 'src/hooks';
+import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -45,8 +53,10 @@ const StepsModal = ({
 }: Props) => {
     const {path} = useRouteMatch();
     const {formatMessage} = useIntl();
-
+    const teamId = useSelector(getCurrentTeamId);
     const organizationId = useContext(OrganizationIdContext);
+    const organization = useOrganization(organizationId);
+
     const [visible, setVisible] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [stepValues, setStepValues] = useState<any>({});
@@ -96,9 +106,17 @@ const StepsModal = ({
         }, targetUrl).
             then((result) => {
                 cleanModal();
-
-                const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
-                navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
+                addChannel({
+                    channelName: formatName(`${organization.name}-${result.name}`),
+                    createPublicChannel: true,
+                    parentId,
+                    sectionId: result.id,
+                    teamId,
+                }).
+                    then(() => {
+                        const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+                        navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
+                    });
             }).
             catch(() => {
                 // TODO: Do something in case of error

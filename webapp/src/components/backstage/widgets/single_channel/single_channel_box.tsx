@@ -50,7 +50,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
     useEffect(() => {
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
-            channelName: `${formatName(`${organization.name}-${sectionInfo.name}`)}`,
+            channelName: formatName(`${organization.name}-${sectionInfo.name}`),
         }));
     }, [sectionInfo]);
 
