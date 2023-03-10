@@ -8,7 +8,7 @@ organizations:
         id: "0"
         url: http://localhost:3000/issues
         widgets:
-          - type: channels
+          - type: channel
   - name: Organization X
     id: "1"
     description: This is the X organization
@@ -26,7 +26,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/1/incidents/:id/text_box
-          - type: channels
+          - type: channel
       - name: Policies
         id: "4"
         url: http://localhost:3000/organizations/1/policies
@@ -40,7 +40,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/1/policies/:id/text_box
-          - type: channels
+          - type: channel
       - name: Stories
         id: "5"
         internal: true
@@ -55,7 +55,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/1/stories/:id/text_box
-          - type: channels
+          - type: channel
     widgets: []
   - name: Organization Y
     id: "2"
@@ -74,7 +74,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/2/incidents/:id/text_box
-          - type: channels
+          - type: channel
       - name: Policies
         id: "7"
         url: http://localhost:3000/organizations/2/policies
@@ -88,7 +88,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/2/policies/:id/text_box
-          - type: channels
+          - type: channel
       - name: Stories
         id: "8"
         internal: true
@@ -103,7 +103,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/2/stories/:id/text_box
-          - type: channels
+          - type: channel
     widgets: []
   - name: Organization Z
     id: "3"
@@ -122,7 +122,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/3/incidents/:id/text_box
-          - type: channels
+          - type: channel
       - name: Policies
         id: "10"
         url: http://localhost:3000/organizations/3/policies
@@ -136,7 +136,7 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/3/policies/:id/text_box
-          - type: channels
+          - type: channel
       - name: Stories
         id: "11"
         internal: true
@@ -151,5 +151,5 @@ organizations:
           - name: My Text Box
             type: text-box
             url: http://localhost:3000/organizations/3/stories/:id/text_box
-          - type: channels
+          - type: channel
     widgets: []
