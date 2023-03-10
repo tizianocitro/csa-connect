@@ -39,9 +39,12 @@ const ChannelsList = ({
                         />
                     ))}
                 </InfiniteScroll>}
-            {isList &&
+            {isList ?
                 <div className='text-center pt-8'>
                     <FormattedMessage defaultMessage='All the related channels will show here.'/>
+                </div> :
+                <div className='text-center pt-8'>
+                    <FormattedMessage defaultMessage='The related channel will show here.'/>
                 </div>}
         </ChannelList>
     );

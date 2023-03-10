@@ -1,7 +1,7 @@
-import React, {useReducer} from 'react';
+import React, {useContext, useEffect, useReducer} from 'react';
 import styled from 'styled-components';
 
-import {addChannelErrorMessageAction, nameErrorMessageAction} from 'src/actions';
+import {addChannelErrorMessageAction, channelCreationAction, nameErrorMessageAction} from 'src/actions';
 import {
     setAddChannelErrorMessage,
     setChannelCreation,
@@ -11,7 +11,14 @@ import {
 import ChannelsList from 'src/components/backstage/widgets/channels/channels_list/channels_list';
 import {CreateChannel} from 'src/components/backstage/widgets/channels/controls';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
-import {useChannelsList} from 'src/hooks';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {
+    formatName,
+    useChannelsList,
+    useOrganization,
+    useSection,
+    useSectionInfo,
+} from 'src/hooks';
 
 import {CreateSingleChannel} from './single_channel_creation';
 
@@ -23,6 +30,10 @@ type Props = {
 
 const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
+    const organizationId = useContext(OrganizationIdContext);
+    const organization = useOrganization(organizationId);
+    const section = useSection(parentId);
+    const sectionInfo = useSectionInfo(sectionId, section.url);
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [_, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -36,6 +47,12 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
         createPublicChannel: true,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
+    useEffect(() => {
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
+            channelName: `${formatName(`${organization.name}-${sectionInfo.name}`)}`,
+        }));
+    }, [sectionInfo]);
 
     const cleanErrorMessages = () => {
         dispacthAddChannelErrorMessage(addChannelErrorMessageAction(''));
