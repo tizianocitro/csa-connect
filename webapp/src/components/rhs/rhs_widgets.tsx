@@ -49,7 +49,7 @@ const RHSWidgets = (props: Props) => {
             {(section && sectionInfo && isEcosystem) &&
                 <IsEcosystemRhsContext.Provider value={isEcosystem}>
                     <EcosystemRhs
-                        headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}`}
+                        headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
                         parentId={parentId}
                         sectionId={sectionId}
                         sectionInfo={sectionInfo}
@@ -57,8 +57,8 @@ const RHSWidgets = (props: Props) => {
                 </IsEcosystemRhsContext.Provider>}
             {(section && sectionInfo && !isEcosystem) &&
                 <RhsSectionsWidgetsContainer
-                    headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}`}
-                    name={sectionInfo.name}
+                    headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
+                    sectionInfo={sectionInfo}
                     url={fullUrl}
                     widgets={section?.widgets}
                 />}

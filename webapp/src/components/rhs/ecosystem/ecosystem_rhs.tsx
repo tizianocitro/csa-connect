@@ -33,6 +33,7 @@ const EcosystemRhs = ({
             <MainWrapper>
                 <Header>
                     <NameHeader
+                        id={sectionInfo.id}
                         path={headerPath}
                         name={sectionInfo.name}
                     />

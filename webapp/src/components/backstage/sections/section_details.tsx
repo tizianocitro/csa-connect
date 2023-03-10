@@ -3,12 +3,12 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {
+    buildQuery,
     useForceDocumentTitle,
     useScrollIntoView,
     useSection,
     useSectionInfo,
 } from 'src/hooks';
-import {PARENT_ID_PARAM} from 'src/constants';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
@@ -65,8 +65,8 @@ const SectionDetails = () => {
     return (
         isEcosystem ?
             <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}${url}?${PARENT_ID_PARAM}=${section.id}`}
-                name={sectionInfo.name}
+                headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+                sectionInfo={sectionInfo}
                 url={url}
                 widgets={section.widgets}
                 childrenBottom={false}
@@ -77,8 +77,8 @@ const SectionDetails = () => {
                 />
             </SectionsWidgetsContainer> :
             <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}${url}?${PARENT_ID_PARAM}=${section.id}`}
-                name={sectionInfo.name}
+                headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+                sectionInfo={sectionInfo}
                 sectionPath={path}
                 sections={section.sections}
                 url={url}

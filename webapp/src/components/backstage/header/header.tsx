@@ -10,15 +10,19 @@ import TextEdit from 'src/components/commons/text_edit';
 import {ContextMenu} from './context_menu';
 
 type Props = {
+    id: string;
     name: string;
     path: string;
 };
 
-export const NameHeader = ({name, path}: Props) => {
+export const NameHeader = ({id, name, path}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
-        <Container data-testid={'name-header-section'}>
+        <Container
+            id={`_${id}`}
+            data-testid={`_${id}`}
+        >
             <TextEdit
                 disabled={false}
                 placeholder={formatMessage({defaultMessage: 'Name'})}

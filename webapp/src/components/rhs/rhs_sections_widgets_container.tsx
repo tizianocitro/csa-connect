@@ -1,11 +1,11 @@
 import React from 'react';
 
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
-import {Widget} from 'src/types/organization';
+import {SectionInfo, Widget} from 'src/types/organization';
 
 type Props = {
     headerPath: string;
-    name: string;
+    sectionInfo: SectionInfo;
     url: string;
     widgets: Widget[];
 };
