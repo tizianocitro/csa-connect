@@ -37,7 +37,10 @@ const createChannel = (
     if (!channelCreation) {
         return;
     }
-
+    if (!teamId) {
+        dispacthAddChannelErrorMessage(addChannelErrorMessageAction('Please ensure the team is selected.'));
+        return;
+    }
     const {channelMode, channelId, channelName, createPublicChannel} = channelCreation;
     const createNewChannel = channelMode === 'create_new_channel';
     const linkExistingChannel = channelMode === 'link_existing_channel';
