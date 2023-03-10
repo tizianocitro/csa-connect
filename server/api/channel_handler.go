@@ -56,6 +56,7 @@ func (h *ChannelHandler) getChannelByID(c *Context, w http.ResponseWriter, r *ht
 }
 
 func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.Request) {
+	userID := r.Header.Get("Mattermost-User-Id")
 	vars := mux.Vars(r)
 	sectionID := vars["sectionId"]
 	var params app.AddChannelParams
@@ -63,7 +64,7 @@ func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode channel to add", err)
 		return
 	}
-	result, err := h.channelService.AddChannel(sectionID, params)
+	result, err := h.channelService.AddChannel(sectionID, userID, params)
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return
