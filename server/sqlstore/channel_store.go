@@ -17,9 +17,10 @@ import (
 // channelStore is a sql store for channels
 // Use NewChannelStore to create it
 type channelStore struct {
-	pluginAPI      PluginAPIClient
-	store          *SQLStore
-	queryBuilder   sq.StatementBuilderType
+	pluginAPI    PluginAPIClient
+	store        *SQLStore
+	queryBuilder sq.StatementBuilderType
+
 	channelsSelect sq.SelectBuilder
 }
 
@@ -121,7 +122,7 @@ func (s *channelStore) createChannel(sectionID string, userID string, params app
 	defer s.store.finalizeTransaction(tx)
 	channel, err := s.createAndAddChannel(userID, params)
 	if err != nil {
-		return app.AddChannelResult{}, errors.Wrap(err, "could not create channel")
+		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel")
 	}
 	if _, err := s.store.execBuilder(tx, sq.
 		Insert("CSA_Channel").
@@ -150,7 +151,7 @@ func (s *channelStore) createAndAddChannel(userID string, params app.AddChannelP
 		Name:        strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")),
 	})
 	if err != nil {
-		return nil, errors.Wrap(err, "could not create channel to add to the product")
+		return nil, errors.Wrap(err, "could not create channel to add")
 	}
 	if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, userID); err != nil {
 		return nil, errors.Wrap(err, "could not add channel to user's channel list")
