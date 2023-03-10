@@ -28,7 +28,7 @@ const EcosystemDetails = () => {
     const ecosystem = useOrganization(organizationId);
     const organizations = useOrganizionsNoEcosystem();
 
-    const [currentSection, setCurrentSection] = useState(0);
+    const [currentSection, _] = useState(0);
     const [stepData, setStepData] = useState<StepData[]>([]);
 
     useEffect(() => {
