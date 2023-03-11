@@ -10,9 +10,13 @@ import Row from './row';
 
 type Props = {
     channels: WidgetChannel[];
+    isList?: boolean;
 };
 
-const ChannelsList = ({channels}: Props) => {
+const ChannelsList = ({
+    channels,
+    isList = true,
+}: Props) => {
     const nextPage = () => null;
 
     return (
@@ -35,9 +39,10 @@ const ChannelsList = ({channels}: Props) => {
                         />
                     ))}
                 </InfiniteScroll>}
-            <div className='text-center pt-8'>
-                <FormattedMessage defaultMessage='All the related channels will show here.'/>
-            </div>
+            {isList &&
+                <div className='text-center pt-8'>
+                    <FormattedMessage defaultMessage='All the related channels will show here.'/>
+                </div>}
         </ChannelList>
     );
 };

@@ -11,6 +11,14 @@ export interface GraphDescription {
     text: string;
 }
 
+export type GraphSectionOptions = {
+    applyOptions: boolean;
+    parentId: string;
+    sectionId: string;
+    sectionUrl?: string;
+    sectionUrlHash?: string;
+};
+
 export const emptyDescription = {
     name: '',
     text: '',

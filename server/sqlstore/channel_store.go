@@ -17,9 +17,10 @@ import (
 // channelStore is a sql store for channels
 // Use NewChannelStore to create it
 type channelStore struct {
-	pluginAPI      PluginAPIClient
-	store          *SQLStore
-	queryBuilder   sq.StatementBuilderType
+	pluginAPI    PluginAPIClient
+	store        *SQLStore
+	queryBuilder sq.StatementBuilderType
+
 	channelsSelect sq.SelectBuilder
 }
 
@@ -77,14 +78,14 @@ func (s *channelStore) GetChannelByID(channelID string) (app.GetChannelByIDResul
 }
 
 // AddChannel adds a channel to a product
-func (s *channelStore) AddChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
+func (s *channelStore) AddChannel(sectionID string, userID string, params app.AddChannelParams) (app.AddChannelResult, error) {
 	if sectionID == "" {
 		return app.AddChannelResult{}, errors.New("SectionID cannot be empty")
 	}
 	if strings.TrimSpace(params.ChannelID) != "" {
 		return s.addExistingChannel(sectionID, params)
 	}
-	return s.createChannel(sectionID, params)
+	return s.createChannel(sectionID, userID, params)
 }
 
 func (s *channelStore) addExistingChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
@@ -93,11 +94,6 @@ func (s *channelStore) addExistingChannel(sectionID string, params app.AddChanne
 		return app.AddChannelResult{}, errors.Wrap(err, "could not begin transaction")
 	}
 	defer s.store.finalizeTransaction(tx)
-
-	// channelsIds, err := s.getChannelsIdsBySectionID(sectionID, tx)
-	// if err != nil {
-	// 	return app.AddChannelResult{}, err
-	// }
 
 	if _, err := s.store.execBuilder(tx, sq.
 		Insert("CSA_Channel").
@@ -118,21 +114,15 @@ func (s *channelStore) addExistingChannel(sectionID string, params app.AddChanne
 	}, nil
 }
 
-func (s *channelStore) createChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
-	tx, txErr := s.store.db.Beginx()
-	if txErr != nil {
-		return app.AddChannelResult{}, errors.Wrap(txErr, "could not begin transaction")
+func (s *channelStore) createChannel(sectionID string, userID string, params app.AddChannelParams) (app.AddChannelResult, error) {
+	tx, err := s.store.db.Beginx()
+	if err != nil {
+		return app.AddChannelResult{}, errors.Wrap(err, "could not begin transaction")
 	}
 	defer s.store.finalizeTransaction(tx)
-
-	channel, err := s.pluginAPI.API.CreateChannel(&model.Channel{
-		TeamId:      params.TeamID,
-		Type:        s.getChannelType(params),
-		DisplayName: params.ChannelName,
-		Name:        strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")),
-	})
+	channel, err := s.createAndAddChannel(userID, params)
 	if err != nil {
-		return app.AddChannelResult{}, errors.Wrap(err, "could not create channel to add to the product")
+		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel")
 	}
 	if _, err := s.store.execBuilder(tx, sq.
 		Insert("CSA_Channel").
@@ -151,6 +141,22 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 		ParentID:  params.ParentID,
 		SectionID: sectionID,
 	}, nil
+}
+
+func (s *channelStore) createAndAddChannel(userID string, params app.AddChannelParams) (*model.Channel, error) {
+	channel, err := s.pluginAPI.API.CreateChannel(&model.Channel{
+		TeamId:      params.TeamID,
+		Type:        s.getChannelType(params),
+		DisplayName: params.ChannelName,
+		Name:        strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")),
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "could not create channel to add")
+	}
+	if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, userID); err != nil {
+		return nil, errors.Wrap(err, "could not add channel to user's channel list")
+	}
+	return channel, nil
 }
 
 func (s *channelStore) getChannelsIdsBySectionID(sectionID string, tx *sqlx.Tx) ([]string, error) {

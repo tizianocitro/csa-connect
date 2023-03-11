@@ -1,41 +1,31 @@
 import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import qs from 'qs';
+import {useSelector} from 'react-redux';
 
-import {formatUrlWithId, useTextBoxData} from 'src/hooks';
 import {SectionContext} from 'src/components/rhs/rhs';
+import SingleChannel from 'src/components/backstage/widgets/single_channel/single_channel';
 
-import TextBox from './text_box';
-
-type Props = {
-    name?: string;
-    url?: string;
-};
-
-const TextBoxWrapper = ({
-    name = 'default',
-    url = '',
-}: Props) => {
+const SingleChannelWrapper = () => {
     const sectionContextOptions = useContext(SectionContext);
-    const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
+    const {params} = useRouteMatch<{sectionId: string}>();
     const location = useLocation();
     const queryParams = qs.parse(location.search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
+    const teamId = useSelector(getCurrentTeamId);
 
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
-    const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
-
-    const {text} = useTextBoxData(formatUrlWithId(url, sectionIdForUrl));
+    const sectionId = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : params.sectionId;
 
     return (
-        <TextBox
-            name={name}
+        <SingleChannel
             parentId={parentId}
-            sectionId={sectionIdForUrl}
-            text={text}
+            sectionId={sectionId}
+            teamId={teamId}
         />
     );
 };
 
-export default TextBoxWrapper;
+export default SingleChannelWrapper;

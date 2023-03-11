@@ -9,8 +9,7 @@ import {
     usePaginatedTableData,
 } from 'src/hooks';
 import {SectionContext} from 'src/components/rhs/rhs';
-
-import PaginatedTable from './paginated_table';
+import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 
 type Props = {
     name?: string;

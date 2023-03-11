@@ -23,16 +23,17 @@ import styled from 'styled-components';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
-import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
-import {formatName} from 'src/hooks';
+import {buildQuery, formatName} from 'src/hooks';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 import GraphNodeType from './graph_node_type';
 
 type GraphStyle = {
     containerDirection: string,
     graphWidth: string;
+    graphHeight: string;
     textBoxStyle?: TextBoxStyle;
 };
 
@@ -46,6 +47,7 @@ type Props = {
 const defaultGraphStyle: GraphStyle = {
     containerDirection: 'row',
     graphWidth: '75%',
+    graphHeight: '40vh',
     textBoxStyle: {
         height: '5vh',
         marginTop: '0px',
@@ -56,6 +58,7 @@ const defaultGraphStyle: GraphStyle = {
 const rhsGraphStyle: GraphStyle = {
     containerDirection: 'column',
     graphWidth: '100%',
+    graphHeight: '40vh',
 };
 
 const fitViewOptions: FitViewOptions = {
@@ -81,14 +84,16 @@ const Graph = ({
     sectionId,
     parentId,
 }: Props) => {
-    const fullUrl = useContext(FullUrlContext);
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
+    const fullUrl = useContext(FullUrlContext);
 
     const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
+
     useEffect(() => {
         setDescription(data.description || emptyDescription);
         setNodes(data.nodes || []);
@@ -104,8 +109,24 @@ const Graph = ({
         [setEdges]
     );
 
+    // const getGraphStyle = useCallback<() => GraphStyle>((): GraphStyle => {
+    //     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+    //     const {graphHeight: graphHeightVh} = graphStyle;
+    //     if (!graphHeightVh.includes('vh')) {
+    //         return graphStyle;
+    //     }
+    //     const vh = window.innerHeight;
+    //     const graphHeightVhAsNumber = parseInt(graphHeightVh.substring(0, graphHeightVh.indexOf('vh')), 10);
+    //     const heightPixels = (vh * graphHeightVhAsNumber) / 100;
+    //     const graphHeight = `${heightPixels}px`;
+    //     return {...graphStyle, graphHeight};
+    // }, []);
+
+    // const graphStyle = getGraphStyle();
     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
-    const id = `${formatName(name)}-graph-widget`;
+
+    const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
+
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
@@ -114,12 +135,13 @@ const Graph = ({
                 id={id}
                 data-testid={id}
                 width={graphStyle.graphWidth}
+                height={graphStyle.graphHeight}
             >
                 <Header>
                     <AnchorLinkTitle
                         fullUrl={fullUrl}
                         id={id}
-                        query={`${SECTION_ID_PARAM}=${sectionId}&${PARENT_ID_PARAM}=${parentId}`}
+                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                         text={name}
                         title={name}
                     />
@@ -156,9 +178,9 @@ const Graph = ({
     );
 };
 
-const GraphContainer = styled.div<{width: string}>`
+const GraphContainer = styled.div<{width: string, height: string}>`
     width: ${(props) => props.width};
-    height: 40vh;
+    height: ${(props) => props.height};
     margin-bottom: 24px;
 `;
 

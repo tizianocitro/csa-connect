@@ -3,16 +3,18 @@ import React, {useContext} from 'react';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {Widget} from 'src/types/organization';
 
-import ChannelsWrapper from './channels/channels_wrapper';
-import GraphWrapper from './graph/graph_wrapper';
-import PaginatedTableWrapper from './paginated_table/paginated_table_wrapper';
-import TableWrapper from './table/table_wrapper';
-import TextBoxWrapper from './text_box/text_box_wrapper';
+import ChannelsWrapper from './channels/wrappers/channels_wrapper';
+import GraphWrapper from './graph/wrappers/graph_wrapper';
+import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wrapper';
+import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapper';
+import TableWrapper from './table/wrappers/table_wrapper';
+import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 
 export enum WidgetType {
     Channels = 'channels',
     Graph = 'graph',
     PaginatedTable = 'paginated-table',
+    SingleChannel = 'channel',
     Table = 'table',
     TextBox = 'text-box',
 }
@@ -43,18 +45,25 @@ const buildWidgetByType = (
 };
 
 const filterWidgetsByType = (widgets: Widget[], type: string): Widget[] => {
+    if (!widgets) {
+        return [];
+    }
     return widgets.filter((widget) => widget.type === type);
 };
 
 const Widgets = ({widgets}: Props) => {
     const isRhs = useContext(IsRhsContext);
-    const channelWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const channelsWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
+    const singleChannelWidgets = filterWidgetsByType(widgets, WidgetType.SingleChannel);
 
     return (
         <>
-            {widgets.map((widget, index) => buildWidgetByType(widget, index))}
-            {channelWidgets.length > 0 && !isRhs &&
+            {widgets && widgets.map((widget, index) => buildWidgetByType(widget, index))}
+            {channelsWidgets.length > 0 && !isRhs &&
                 <ChannelsWrapper/>
+            }
+            {singleChannelWidgets.length > 0 && !isRhs &&
+                <SingleChannelWrapper/>
             }
         </>
     );

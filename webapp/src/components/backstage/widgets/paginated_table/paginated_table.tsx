@@ -114,18 +114,18 @@ const PaginatedTable = ({
         saveSectionInfo(row, sectionUrl).
             then((result) => {
                 const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
-
-                // We are routing to a child of this section, so the parentId is the id of this section
                 navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
             }).
             catch(() => {
                 // TODO: Do something in case of error
             });
 
+        // In case you'd want to add the row, instead of redirect to it
         // setFilteredRows([...filteredRows, row]);
     };
 
-    const paginatedTableId = isSection ? `${id}-section` : `${id}-paginated-table-widget`;
+    const paginatedTableIdPrefix = sectionId ? `${id}-${sectionId}-${parentId}` : `${id}-${parentId}`;
+    const paginatedTableId = isSection ? `${paginatedTableIdPrefix}-section` : `${paginatedTableIdPrefix}-widget`;
 
     return (
         <Container
@@ -171,7 +171,7 @@ const PaginatedTable = ({
                     {internal &&
                         <Collapse>
                             <TablePanel
-                                header={formatMessage({defaultMessage: 'Create new'})}
+                                header={formatMessage({defaultMessage: 'Create New'})}
                                 key='add-new-row'
                             >
                                 <RowInputFields

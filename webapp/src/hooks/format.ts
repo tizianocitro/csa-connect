@@ -28,3 +28,14 @@ export const formatSectionPath = (path: string, organizatioId: string): string =
     const lastSlashIndex = formattedPath.lastIndexOf('/');
     return formattedPath.substring(0, lastSlashIndex);
 };
+
+export const removeSectionNameFromPath = (path: string, sectionName: string) => {
+    const lowerCaseSectioName = formatStringToLowerCase(sectionName);
+    const sectionSegment = `/${lowerCaseSectioName}`;
+    const sectionSegmentIndex = path.indexOf(sectionSegment);
+    const isSectionNameInPath = sectionSegmentIndex !== -1;
+    if (!isSectionNameInPath) {
+        return path;
+    }
+    return path.replace(sectionSegment, '');
+};

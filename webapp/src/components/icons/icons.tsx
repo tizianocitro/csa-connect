@@ -11,12 +11,15 @@ import {
     RHS_PARAM_VALUE,
     ROOT,
 } from 'src/components/rhs/rhs';
+import {hideOptions} from 'src/hooks';
 
 export const ChannelHeaderButtonIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
     const {hash: urlHash, search} = useLocation();
     const history = useHistory();
+
+    useEffect(hideOptions);
 
     useEffect(() => {
         const queryParams = qs.parse(search, {ignoreQueryPrefix: true});

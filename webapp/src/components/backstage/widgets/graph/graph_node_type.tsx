@@ -11,16 +11,22 @@ import styled from 'styled-components';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
+import {GraphSectionOptions} from 'src/types/graph';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';
 
-export const buildNodeUrl = (parentId: string, sectionId: string, sectionUrl: string) => {
+export const buildNodeUrl = (options: GraphSectionOptions) => {
+    const {applyOptions, parentId, sectionId, sectionUrl} = options;
     let nodeUrl = `${getSiteUrl()}${sectionUrl}`;
+    if (!applyOptions) {
+        return nodeUrl;
+    }
+
     if (parentId) {
         nodeUrl = `${nodeUrl}?${PARENT_ID_PARAM}=${parentId}`;
     }
-    if (sectionId) {
+    if (parentId && sectionId) {
         nodeUrl = `${nodeUrl}&${SECTION_ID_PARAM}=${sectionId}`;
     }
     return nodeUrl;
@@ -39,19 +45,20 @@ export const fillEdges = (edges: Edge[]) => {
 
 export const fillNodes = (
     nodes: Node[],
-    parentId: string,
-    sectionId: string,
-    sectionUrl: string,
-    sectionUrlHash: string,
+    options: GraphSectionOptions,
 ) => {
     const filledNodes: Node[] = [];
     nodes.forEach((node) => {
+        const {parentId, sectionId, sectionUrlHash} = options;
+        const url = buildNodeUrl(options);
         filledNodes.push({
             ...node,
             data: {
                 ...node.data,
-                url: buildNodeUrl(parentId, sectionId, sectionUrl),
-                isUrlHashed: `#${node.id}` === sectionUrlHash,
+                url,
+                isUrlHashed: `#${node.id}-${sectionId}-${parentId}` === sectionUrlHash,
+                parentId,
+                sectionId,
             },
             type: nodeType,
         });
@@ -69,9 +76,12 @@ const GraphNodeType = ({id, data}: NodeProps) => {
                 type={'target'}
                 position={Position.Top}
             />
-            <NodeContainer isUrlHashed={data.isUrlHashed}>
+            <NodeContainer
+                id={`${id}-${data.sectionId}-${data.parentId}`}
+                isUrlHashed={data.isUrlHashed}
+            >
                 <CopyLinkMenuItem
-                    path={`${data.url}#${id}`}
+                    path={`${data.url}#${id}-${data.sectionId}-${data.parentId}`}
                     placeholder={data.label}
                     showIcon={false}
                     text={data.label}

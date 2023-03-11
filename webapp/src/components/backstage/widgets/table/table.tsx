@@ -5,6 +5,7 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {TableData} from 'src/types/table';
 import {buildQuery} from 'src/hooks';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 import TableHeader from './table_header';
 import TableRow from './table_row';
@@ -13,6 +14,7 @@ type Props = {
     data: TableData;
     id: string;
     isSection?: boolean;
+    name: string;
     open?: (resourceId: string) => void;
     parentId: string;
     pointer?: boolean;
@@ -24,16 +26,19 @@ const Table = ({
     data,
     id,
     isSection = false,
+    name,
     open,
     parentId,
     pointer = false,
     sectionId,
     urlHash,
 }: Props) => {
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
     const {caption, headers, rows} = data;
-    const tableId = isSection ? `${id}-section` : `${id}-table-widget`;
+    const tableIdPrefix = `${id}-${sectionId}-${parentId}`;
+    const tableId = isSection ? `${tableIdPrefix}-section` : `${tableIdPrefix}-widget`;
 
     return (
         <Container
@@ -44,9 +49,9 @@ const Table = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={tableId}
-                    query={buildQuery(parentId, sectionId)}
-                    text={caption}
-                    title={caption}
+                    query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
+                    text={name}
+                    title={name}
                 />
             </Header>
             <InnertTable
@@ -62,7 +67,7 @@ const Table = ({
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
-                        query={buildQuery(parentId, sectionId)}
+                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
                         row={row}
                         urlHash={urlHash}
                     />

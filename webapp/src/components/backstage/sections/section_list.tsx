@@ -21,6 +21,7 @@ const SectionList = ({section}: Props) => {
                 <PaginatedTable
                     id={formatName(name)}
                     internal={internal}
+                    isSection={true}
                     name={name}
                     data={data}
                     parentId={id}

@@ -1,5 +1,5 @@
 import {Input} from 'antd';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import styled from 'styled-components';
 import React, {ChangeEvent, useCallback, useState} from 'react';
 
@@ -16,6 +16,8 @@ type Props = {
 type RowState = any;
 
 const RowInputFields = ({columns, createRow}: Props) => {
+    const {formatMessage} = useIntl();
+
     const initRowState = useCallback<RowState>(() => {
         const state: RowState = {};
         columns.forEach(({key}) => {
@@ -36,7 +38,7 @@ const RowInputFields = ({columns, createRow}: Props) => {
         let allKeysNotEmpty = true;
         Object.keys(inputValues).forEach((key) => {
             if (!inputValues[key] || inputValues[key].trim() === '') {
-                addRowErrors[key] = `${formatStringToCapitalize(key)} is missing.`;
+                addRowErrors[key] = `${formatStringToCapitalize(key)} ${formatMessage({defaultMessage: 'is required.'})}`;
                 allKeysNotEmpty = false;
             }
         });

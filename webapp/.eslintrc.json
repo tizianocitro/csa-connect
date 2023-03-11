@@ -212,7 +212,7 @@
     "newline-per-chained-call": 0,
     // "no-alert": 2,
     "no-array-constructor": 2,
-    "no-await-in-loop": 2,
+    // "no-await-in-loop": 2,
     "no-caller": 2,
     "no-case-declarations": 2,
     "no-class-assign": 2,

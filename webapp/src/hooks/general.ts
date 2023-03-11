@@ -37,7 +37,7 @@ import {
     getOrganizations,
     getOrganizationsNoEcosystem,
 } from 'src/config/config';
-import {GraphData} from 'src/types/graph';
+import {GraphData, GraphSectionOptions} from 'src/types/graph';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {PaginatedTableData} from 'src/types/paginated_table';
 import {TableData} from 'src/types/table';
@@ -77,6 +77,18 @@ export const useEcosystem = (): Organization => {
 
 export const useOrganization = (id: string): Organization => {
     return getOrganizationById(id);
+};
+
+export const useIsSectionFromEcosystem = (sectionId: string): boolean => {
+    const sections = getEcosystem()?.sections;
+    if (!sections) {
+        return false;
+    }
+    return sections.filter((section) => section.id === sectionId).length > 0;
+};
+
+export const useOrganizionsNoEcosystem = (): Organization[] => {
+    return getOrganizationsNoEcosystem();
 };
 
 export const useOrganizationsNoPageList = (): Organization[] => {
@@ -196,20 +208,20 @@ export const useSectionData = ({id, name, url}: Section): PaginatedTableData => 
     return sectionData as PaginatedTableData;
 };
 
-export const useGraphData = (url: string, hash: string, routeUrl: string): GraphData => {
+export const useGraphData = (
+    url: string,
+    hash: string,
+    options: GraphSectionOptions,
+): GraphData => {
     const [graphData, setGraphData] = useState<GraphData | {}>({});
-    const {hash: urlHash, search} = useLocation();
-
-    const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
-    const parentIdParam = queryParams.parentId as string;
-    const sectionIdParam = queryParams.sectionId as string;
+    const {hash: sectionUrlHash} = useLocation();
 
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
             const graphDataResult = await fetchGraphData(url);
             if (!isCanceled) {
-                const filledNodes = fillNodes(graphDataResult.nodes, parentIdParam, sectionIdParam, routeUrl, urlHash);
+                const filledNodes = fillNodes(graphDataResult.nodes, {...options, sectionUrlHash});
                 const filledEdges = fillEdges(graphDataResult.edges);
                 setGraphData({
                     description: graphDataResult.description,

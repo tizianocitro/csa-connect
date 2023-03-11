@@ -1,4 +1,4 @@
-import React, {createContext} from 'react';
+import React, {ReactNode, createContext} from 'react';
 
 import {
     Body,
@@ -7,7 +7,7 @@ import {
     Main,
     MainWrapper,
 } from 'src/components/backstage/shared';
-import {Section, Widget} from 'src/types/organization';
+import {Section, SectionInfo, Widget} from 'src/types/organization';
 import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
@@ -17,21 +17,27 @@ export const IsRhsContext = createContext(false);
 type Props = {
     headerPath: string;
     isRhs?: boolean;
-    name: string;
+    name?: string
+    sectionInfo?: SectionInfo;
     sectionPath?: string;
     sections?: Section[];
     url: string;
     widgets: Widget[];
+    children?: ReactNode;
+    childrenBottom?: boolean;
 };
 
 const SectionsWidgetsContainer = ({
     headerPath,
     isRhs = false,
-    name,
+    name = 'default',
+    sectionInfo,
     sectionPath,
     sections,
     url,
     widgets,
+    children = [],
+    childrenBottom = true,
 }: Props) => {
     return (
         <IsRhsContext.Provider value={isRhs}>
@@ -39,12 +45,14 @@ const SectionsWidgetsContainer = ({
                 <MainWrapper>
                     <Header>
                         <NameHeader
+                            id={sectionInfo?.id || name}
                             path={headerPath}
-                            name={name}
+                            name={sectionInfo?.name || name}
                         />
                     </Header>
                     <Main>
                         <Body>
+                            {!childrenBottom && children}
                             {sections && sectionPath &&
                                 <Sections
                                     path={sectionPath}
@@ -55,6 +63,7 @@ const SectionsWidgetsContainer = ({
                             <Widgets
                                 widgets={widgets}
                             />
+                            {childrenBottom && children}
                         </Body>
                     </Main>
                 </MainWrapper>

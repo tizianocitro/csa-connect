@@ -1,4 +1,3 @@
-
 export interface PlatformConfig {
     organizations: Organization[];
 }
@@ -29,11 +28,12 @@ export interface Widget {
 export interface SectionInfo {
     id: string;
     name: string;
+    [key: string]: any;
 }
 
 export interface SectionInfoParams {
     name: string;
-    [propName: string]: any;
+    [key: string]: any;
 }
 
 export interface FetchOrganizationsParams {
