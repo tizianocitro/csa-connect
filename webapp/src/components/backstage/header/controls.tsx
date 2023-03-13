@@ -15,6 +15,8 @@ type Props = {
     path: string;
     placeholder?: string;
     showIcon?: boolean;
+    showPlaceholder?: boolean;
+    svgMarginRight?: string;
     text: string;
 };
 
@@ -26,21 +28,24 @@ export const CopyLinkMenuItem = ({
     path,
     placeholder,
     showIcon = true,
+    showPlaceholder = true,
+    svgMarginRight,
     text,
 }: Props) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
 
-    const showPlaceholder = placeholder ? <span>{placeholder}</span> : <FormattedMessage defaultMessage='Copy link'/>;
+    const placeholderText = placeholder ? <span>{placeholder}</span> : <FormattedMessage defaultMessage='Copy link'/>;
     return (
         <StyledDropdownMenuItem
+            svgMarginRight={svgMarginRight}
             onClick={() => {
                 copyToClipboard(formatUrlAsMarkdown(path, text));
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
         >
             {showIcon && <LinkVariantIcon size={16}/>}
-            {showPlaceholder}
+            {showPlaceholder && placeholderText}
         </StyledDropdownMenuItem>
     );
 };

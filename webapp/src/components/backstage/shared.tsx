@@ -11,12 +11,12 @@ export const DotMenuButtonStyled = styled(DotMenuButton)`
     justify-content: center;
 `;
 
-export const StyledDropdownMenuItem = styled(DropdownMenuItem)`
+export const StyledDropdownMenuItem = styled(DropdownMenuItem)<{svgMarginRight?: string}>`
     display: flex;
     align-items: center;
 
     svg {
-        margin-right: 11px;
+        margin-right: ${(props) => (props.svgMarginRight ? props.svgMarginRight : '11px')};
         fill: rgb(var(--center-channel-color-rgb), 0.56);
     }
 `;
