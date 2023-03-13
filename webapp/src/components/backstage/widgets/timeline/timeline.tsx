@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
 import CopyLink from 'src/components/commons/copy_link';
-import {buildIdForUrlHashReference} from 'src/hooks';
+import {buildIdForUrlHashReference, isReferencedByUrlHash} from 'src/hooks';
 
 const ItemsTimeline = () => {
     const {hash: urlHash} = useLocation();
@@ -12,7 +12,7 @@ const ItemsTimeline = () => {
     const items = useMemo<any[]>(() => (data.map(({id, text}) => {
         const itemId = buildIdForUrlHashReference('timeline-item', id);
         return {
-            color: urlHash === '#' + itemId ? 'green' : 'blue',
+            color: isReferencedByUrlHash(urlHash, itemId) ? 'green' : 'blue',
             children: (
                 <TimelineItem
                     id={itemId}
