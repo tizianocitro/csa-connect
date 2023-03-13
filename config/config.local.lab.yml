@@ -17,29 +17,26 @@ organizations:
         id: "3"
         url: http://www.isislab.it:3000/organizations/1/incidents
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/1/incidents/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/1/incidents/:id/table
-          - name: My Text Box
+          - name: Description
             type: text-box
             url: http://www.isislab.it:3000/organizations/1/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/organizations/1/incidents/:id/graph
+          - name: Observed Data
+            type: table
+            url: http://www.isislab.it:3000/organizations/1/incidents/:id/table
           - type: channel
       - name: Policies
         id: "4"
         url: http://www.isislab.it:3000/organizations/1/policies
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/1/policies/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/1/policies/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://www.isislab.it:3000/organizations/1/policies/:id/text_box
+          - name: Dos
+            type: list
+            url: http://www.isislab.it:3000/organizations/1/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: http://www.isislab.it:3000/organizations/1/policies/:id/donts
           - type: channel
       - name: Stories
         id: "5"
@@ -65,29 +62,26 @@ organizations:
         id: "6"
         url: http://www.isislab.it:3000/organizations/2/incidents
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/2/incidents/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/2/incidents/:id/table
-          - name: My Text Box
+          - name: Description
             type: text-box
             url: http://www.isislab.it:3000/organizations/2/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/organizations/2/incidents/:id/graph
+          - name: Observed Data
+            type: table
+            url: http://www.isislab.it:3000/organizations/2/incidents/:id/table
           - type: channel
       - name: Policies
         id: "7"
         url: http://www.isislab.it:3000/organizations/2/policies
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/2/policies/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/2/policies/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://www.isislab.it:3000/organizations/2/policies/:id/text_box
+          - name: Dos
+            type: list
+            url: http://www.isislab.it:3000/organizations/2/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: http://www.isislab.it:3000/organizations/2/policies/:id/donts
           - type: channel
       - name: Stories
         id: "8"
@@ -113,29 +107,26 @@ organizations:
         id: "9"
         url: http://www.isislab.it:3000/organizations/3/incidents
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/3/incidents/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/3/incidents/:id/table
-          - name: My Text Box
+          - name: Description
             type: text-box
             url: http://www.isislab.it:3000/organizations/3/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/organizations/3/incidents/:id/graph
+          - name: Observed Data
+            type: table
+            url: http://www.isislab.it:3000/organizations/3/incidents/:id/table
           - type: channel
       - name: Policies
         id: "10"
         url: http://www.isislab.it:3000/organizations/3/policies
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://www.isislab.it:3000/organizations/3/policies/:id/graph
-          - name: My Table
-            type: table
-            url: http://www.isislab.it:3000/organizations/3/policies/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://www.isislab.it:3000/organizations/3/policies/:id/text_box
+          - name: Dos
+            type: list
+            url: http://www.isislab.it:3000/organizations/3/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: http://www.isislab.it:3000/organizations/3/policies/:id/donts
           - type: channel
       - name: Stories
         id: "11"
