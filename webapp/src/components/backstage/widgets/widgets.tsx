@@ -10,6 +10,7 @@ import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wr
 import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapper';
 import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
+import ItemsTimeline from './timeline/timeline';
 
 export enum WidgetType {
     Channels = 'channels',
@@ -69,6 +70,7 @@ const Widgets = ({widgets}: Props) => {
             {singleChannelWidgets.length > 0 && !isRhs &&
                 <SingleChannelWrapper/>
             }
+            <ItemsTimeline/>
         </>
     );
 };
