@@ -6,6 +6,7 @@ import {PaginatedTableData} from 'src/types/paginated_table';
 import {SectionInfo, SectionInfoParams} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
+import {ListData} from 'src/types/list';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet<SectionInfo>(`${url}/${id}`);
@@ -54,6 +55,14 @@ export const fetchTextBoxData = async (url: string): Promise<TextBoxData> => {
     let data = await doGet<TextBoxData>(url);
     if (!data) {
         data = {text: ''} as TextBoxData;
+    }
+    return data;
+};
+
+export const fetchListData = async (url: string): Promise<ListData> => {
+    let data = await doGet<ListData>(url);
+    if (!data) {
+        data = {items: []} as ListData;
     }
     return data;
 };
