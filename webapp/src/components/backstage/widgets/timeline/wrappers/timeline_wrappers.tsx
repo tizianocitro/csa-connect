@@ -2,8 +2,9 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-// import {formatUrlWithId, useTimelineData} from 'src/hooks';
+import {formatUrlWithId, useTimelineData} from 'src/hooks';
 import {SectionContext} from 'src/components/rhs/rhs';
+
 import ItemsTimeline from 'src/components/backstage/widgets/timeline/timeline';
 
 const items = [
@@ -48,14 +49,18 @@ const TimelineWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    // const data = useTimelineData(formatUrlWithId(url, sectionIdForUrl));
+    const data = useTimelineData(formatUrlWithId(url, sectionIdForUrl));
+
     return (
-        <ItemsTimeline
-            data={{items}}
-            name={name}
-            sectionId={sectionIdForUrl}
-            parentId={parentId}
-        />
+        <>
+            {data &&
+                <ItemsTimeline
+                    data={data}
+                    name={name}
+                    sectionId={sectionIdForUrl}
+                    parentId={parentId}
+                />}
+        </>
     );
 };
 

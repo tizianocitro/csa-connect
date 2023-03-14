@@ -36,7 +36,7 @@ const ItemsTimeline = ({
     const query = buildQuery(parentId, sectionId);
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 
-    const items = useMemo<TimelineDataItem[]>(() => (data.items.map((item) => {
+    const items = useMemo<TimelineDataItem[]>(() => (data?.items?.map((item) => {
         const itemId = buildIdForUrlHashReference('timeline-item', item.id);
         return {
             color: isReferencedByUrlHash(urlHash, itemId) ? 'green' : 'blue',
@@ -59,7 +59,7 @@ const ItemsTimeline = ({
                 />
             ),
         };
-    })), [data, urlHash]);
+    })), [data.items, urlHash]);
 
     return (
         <Container
