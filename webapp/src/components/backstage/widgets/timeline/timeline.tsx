@@ -1,89 +1,93 @@
-import React, {useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 import {Timeline} from 'antd';
-import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
+import styled from 'styled-components';
 
-import CopyLink from 'src/components/commons/copy_link';
-import {buildIdForUrlHashReference, isReferencedByUrlHash} from 'src/hooks';
+import {
+    buildIdForUrlHashReference,
+    buildQuery,
+    formatName,
+    isReferencedByUrlHash,
+} from 'src/hooks';
+import {TimelineData, TimelineDataItem} from 'src/types/timeline';
+import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
+import {FullUrlContext} from 'src/components/rhs/rhs';
+import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 
-const ItemsTimeline = () => {
+import {CopyLinkTimelineItem, CopyPosition} from './timeline_item';
+
+type Props = {
+    data: TimelineData;
+    name: string;
+    parentId: string;
+    sectionId: string;
+};
+
+const ItemsTimeline = ({
+    data,
+    name = 'default',
+    parentId,
+    sectionId,
+}: Props) => {
+    const isEcosystemRhs = useContext(IsEcosystemRhsContext);
+    const fullUrl = useContext(FullUrlContext);
+
     const {hash: urlHash} = useLocation();
+    const query = buildQuery(parentId, sectionId);
+    const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 
-    const items = useMemo<any[]>(() => (data.map(({id, text}) => {
-        const itemId = buildIdForUrlHashReference('timeline-item', id);
+    const items = useMemo<TimelineDataItem[]>(() => (data.items.map((item) => {
+        const itemId = buildIdForUrlHashReference('timeline-item', item.id);
         return {
             color: isReferencedByUrlHash(urlHash, itemId) ? 'green' : 'blue',
+            label: (
+                <CopyLinkTimelineItem
+                    itemId={itemId}
+                    item={item}
+                    isLabel={true}
+                    query={isEcosystemRhs ? '' : query}
+                    copyPosition={CopyPosition.Left}
+                    style={{display: 'inline-block', iconMarginLeft: '0px'}}
+                />
+            ),
             children: (
-                <TimelineItem
-                    id={itemId}
-                    key={itemId}
-                >
-                    <TimelineText>{text}</TimelineText>
-                    <CopyLink
-                        id={itemId}
-                        text={text}
-                        to={'to'}
-                        name={text}
-                        area-hidden={true}
-                        iconWidth={'1.45em'}
-                        iconHeight={'1.45em'}
-                    />
-                </TimelineItem>
+                <CopyLinkTimelineItem
+                    itemId={itemId}
+                    item={item}
+                    query={isEcosystemRhs ? '' : query}
+                    style={{iconMarginRight: '0px'}}
+                />
             ),
         };
     })), [data, urlHash]);
 
     return (
-        <Timeline
-            mode='left'
-            items={items}
-        />
+        <Container
+            id={id}
+            data-testid={id}
+        >
+            <Header>
+                <AnchorLinkTitle
+                    fullUrl={fullUrl}
+                    id={id}
+                    query={isEcosystemRhs ? '' : query}
+                    text={name}
+                    title={name}
+                />
+            </Header>
+            <Timeline
+                mode='left'
+                items={items}
+            />
+        </Container>
     );
 };
 
-const TimelineItem = styled.span<{isUrlHashed?: boolean, pointer?: boolean}>`
+const Container = styled.div`
+    width: 100%;
     display: flex;
-    align-items: center;
-    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
-    cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
-    ${CopyLink} {
-        margin-left: 8px;
-        opacity: 1;
-        transition: opacity ease 0.15s;
-    }
-
-    &:not(:hover) ${CopyLink}:not(:hover) {
-        opacity: 0;
-    }
+    flex-direction: column;
+    margin-top: 24px;
 `;
-
-const TimelineText = styled.span`
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 12px;
-`;
-
-const data = [
-    {
-        id: 'item-1',
-        label: 'blue',
-        text: 'An incident occurred',
-    },
-    {
-        id: 'item-2',
-        label: 'blue',
-        text: 'Another incident occurred',
-    },
-    {
-        id: 'item-3',
-        label: 'blue',
-        text: 'Incident solved',
-    },
-    {
-        id: 'item-4',
-        label: 'blue',
-        text: 'Incident report',
-    },
-];
 
 export default ItemsTimeline;
