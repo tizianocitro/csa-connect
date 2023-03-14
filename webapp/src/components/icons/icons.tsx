@@ -19,7 +19,12 @@ export const ChannelHeaderButtonIcon = () => {
     const {hash: urlHash, search} = useLocation();
     const history = useHistory();
 
-    useEffect(hideOptions);
+    useEffect(() => {
+        const timeouts = hideOptions();
+        return () => {
+            timeouts.forEach((timeout) => clearTimeout(timeout));
+        };
+    });
 
     useEffect(() => {
         const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
