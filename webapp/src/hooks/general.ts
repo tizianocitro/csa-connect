@@ -30,6 +30,7 @@ import {
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
+    fetchTimelineData,
 } from 'src/clients';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
 import {
@@ -49,6 +50,7 @@ import {resolve} from 'src/utils';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {ListData} from 'src/types/list';
+import {TimelineData} from 'src/types/timeline';
 
 import {formatSectionPath, formatStringToLowerCase} from './format';
 
@@ -334,6 +336,27 @@ export const useListData = (url: string): ListData => {
         };
     }, [url]);
     return listData as ListData;
+};
+
+export const useTimelineData = (url: string): TimelineData => {
+    const [timelineData, setTimelineData] = useState<TimelineData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTimelineDataAsync() {
+            const listDataResult = await fetchTimelineData(url);
+            if (!isCanceled) {
+                setTimelineData(listDataResult);
+            }
+        }
+
+        fetchTimelineDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return timelineData as TimelineData;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {
