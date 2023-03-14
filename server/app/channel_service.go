@@ -25,7 +25,7 @@ func (s *ChannelService) GetChannelByID(channelID string) (GetChannelByIDResult,
 	return s.store.GetChannelByID(channelID)
 }
 
-func (s *ChannelService) AddChannel(sectionID string, userID string, params AddChannelParams) (AddChannelResult, error) {
-	s.api.LogInfo("Adding channel", "sectionId", sectionID, "userId", userID, "params", params)
-	return s.store.AddChannel(sectionID, userID, params)
+func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error) {
+	s.api.LogInfo("Adding channel", "sectionId", sectionID, "params", params)
+	return s.store.AddChannel(sectionID, params)
 }
