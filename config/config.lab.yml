@@ -43,15 +43,9 @@ organizations:
         internal: true
         url: http://172.16.15.1:3000/organizations/1/stories
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://172.16.15.1:3000/organizations/1/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://172.16.15.1:3000/organizations/1/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://172.16.15.1:3000/organizations/1/stories/:id/text_box
+          - name: Events
+            type: timeline
+            url: http://172.16.15.1:3000/organizations/1/stories/:id/timeline
           - type: channel
     widgets: []
   - name: Organization Y
@@ -88,15 +82,9 @@ organizations:
         internal: true
         url: http://172.16.15.1:3000/organizations/2/stories
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://172.16.15.1:3000/organizations/2/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://172.16.15.1:3000/organizations/2/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://172.16.15.1:3000/organizations/2/stories/:id/text_box
+          - name: Events
+            type: timeline
+            url: http://172.16.15.1:3000/organizations/2/stories/:id/timeline
           - type: channel
     widgets: []
   - name: Organization Z
@@ -133,14 +121,8 @@ organizations:
         internal: true
         url: http://172.16.15.1:3000/organizations/3/stories
         widgets:
-          - name: My Graph
-            type: graph
-            url: http://172.16.15.1:3000/organizations/3/stories/:id/graph
-          - name: My Table
-            type: table
-            url: http://172.16.15.1:3000/organizations/3/stories/:id/table
-          - name: My Text Box
-            type: text-box
-            url: http://172.16.15.1:3000/organizations/3/stories/:id/text_box
+          - name: Events
+            type: timeline
+            url: http://172.16.15.1:3000/organizations/3/stories/:id/timeline
           - type: channel
     widgets: []

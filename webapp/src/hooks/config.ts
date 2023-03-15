@@ -11,10 +11,10 @@ export const getSection = (id: string): Section => {
         filter((s: Section) => s.id === id)[0];
 };
 
-export const hideOptions = () => {
+export const hideOptions = (): NodeJS.Timeout[] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
         const indicator = document.getElementById('unreadIndicatorTop');
         if (indicator) {
             indicator.style.display = 'none';
@@ -29,4 +29,6 @@ export const hideOptions = () => {
             }
         }
     }, estimatedOptionsLoadTime);
+
+    return [timeout];
 };

@@ -78,14 +78,14 @@ func (s *channelStore) GetChannelByID(channelID string) (app.GetChannelByIDResul
 }
 
 // AddChannel adds a channel to a product
-func (s *channelStore) AddChannel(sectionID string, userID string, params app.AddChannelParams) (app.AddChannelResult, error) {
+func (s *channelStore) AddChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
 	if sectionID == "" {
 		return app.AddChannelResult{}, errors.New("SectionID cannot be empty")
 	}
 	if strings.TrimSpace(params.ChannelID) != "" {
 		return s.addExistingChannel(sectionID, params)
 	}
-	return s.createChannel(sectionID, userID, params)
+	return s.createChannel(sectionID, params)
 }
 
 func (s *channelStore) addExistingChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
@@ -114,13 +114,13 @@ func (s *channelStore) addExistingChannel(sectionID string, params app.AddChanne
 	}, nil
 }
 
-func (s *channelStore) createChannel(sectionID string, userID string, params app.AddChannelParams) (app.AddChannelResult, error) {
+func (s *channelStore) createChannel(sectionID string, params app.AddChannelParams) (app.AddChannelResult, error) {
 	tx, err := s.store.db.Beginx()
 	if err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not begin transaction")
 	}
 	defer s.store.finalizeTransaction(tx)
-	channel, err := s.createAndAddChannel(userID, params)
+	channel, err := s.createAndAddChannel(params)
 	if err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel")
 	}
@@ -143,7 +143,7 @@ func (s *channelStore) createChannel(sectionID string, userID string, params app
 	}, nil
 }
 
-func (s *channelStore) createAndAddChannel(userID string, params app.AddChannelParams) (*model.Channel, error) {
+func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.Channel, error) {
 	channel, err := s.pluginAPI.API.CreateChannel(&model.Channel{
 		TeamId:      params.TeamID,
 		Type:        s.getChannelType(params),
@@ -153,8 +153,14 @@ func (s *channelStore) createAndAddChannel(userID string, params app.AddChannelP
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create channel to add")
 	}
-	if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, userID); err != nil {
-		return nil, errors.Wrap(err, "could not add channel to user's channel list")
+	members, err := s.pluginAPI.API.GetTeamMembers(params.TeamID, 0, 200)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not add channel to users in team")
+	}
+	for _, member := range members {
+		if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, member.UserId); err != nil {
+			return nil, errors.Wrap(err, "could not add channel to user's channel list")
+		}
 	}
 	return channel, nil
 }

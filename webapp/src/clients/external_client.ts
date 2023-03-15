@@ -7,6 +7,7 @@ import {SectionInfo, SectionInfoParams} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 import {ListData} from 'src/types/list';
+import {TimelineData} from 'src/types/timeline';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet<SectionInfo>(`${url}/${id}`);
@@ -63,6 +64,14 @@ export const fetchListData = async (url: string): Promise<ListData> => {
     let data = await doGet<ListData>(url);
     if (!data) {
         data = {items: []} as ListData;
+    }
+    return data;
+};
+
+export const fetchTimelineData = async (url: string): Promise<TimelineData> => {
+    let data = await doGet<TimelineData>(url);
+    if (!data) {
+        data = {items: []} as TimelineData;
     }
     return data;
 };

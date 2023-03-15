@@ -39,7 +39,7 @@ const ItemsList = ({
 
     const {items} = data;
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
-    const query = buildQuery(parentId, sectionId);
+    const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
     return (
         <Container
@@ -50,7 +50,7 @@ const ItemsList = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
-                    query={isEcosystemRhs ? '' : query}
+                    query={ecosystemQuery}
                     text={name}
                     title={name}
                 />
@@ -67,7 +67,7 @@ const ItemsList = ({
                             actions={[
                                 <CopyLinkMenuItem
                                     key={`copy-list-item-${item.id}`}
-                                    path={buildToForCopy(buildTo(fullUrl, itemId, query, url))}
+                                    path={buildToForCopy(buildTo(fullUrl, itemId, ecosystemQuery, url))}
                                     showPlaceholder={false}
                                     svgMarginRight={'0px'}
                                     text={item.text}

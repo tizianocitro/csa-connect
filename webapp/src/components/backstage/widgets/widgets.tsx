@@ -10,6 +10,7 @@ import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wr
 import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapper';
 import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
+import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
 
 export enum WidgetType {
     Channels = 'channels',
@@ -19,6 +20,7 @@ export enum WidgetType {
     SingleChannel = 'channel',
     Table = 'table',
     TextBox = 'text-box',
+    Timeline = 'timeline',
 }
 
 type Props = {
@@ -43,6 +45,8 @@ const buildWidgetByType = (
         return <TableWrapper {...props}/>;
     case WidgetType.TextBox:
         return <TextBoxWrapper {...props}/>;
+    case WidgetType.Timeline:
+        return <TimelineWrapper {...props}/>;
     default:
         return <></>;
     }
