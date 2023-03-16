@@ -45,7 +45,7 @@ const ChannelsList = ({
                 </div>}
             {!isList &&
                 <div className='text-center pt-4'>
-                    <FormattedMessage defaultMessage='If you do not see the channel, please ensure that the team is selected or that you have joined the channel.'/>
+                    <FormattedMessage defaultMessage='If you do not see the channel, please ensure that the team is selected.'/>
                 </div>}
         </ChannelList>
     );
