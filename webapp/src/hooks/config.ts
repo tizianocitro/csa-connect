@@ -28,6 +28,15 @@ export const hideOptions = (): NodeJS.Timeout[] => {
                 break;
             }
         }
+
+        const townSquare = document.getElementById('sidebarItem_town-square')?.parentElement;
+        if (townSquare) {
+            townSquare.style.display = 'none';
+        }
+        const offTopic = document.getElementById('sidebarItem_off-topic')?.parentElement;
+        if (offTopic) {
+            offTopic.style.display = 'none';
+        }
     }, estimatedOptionsLoadTime);
 
     return [timeout];
