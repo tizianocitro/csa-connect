@@ -1,6 +1,11 @@
 import {getSiteUrl} from 'src/clients';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 
+export const isUrlEqualWithoutQueryParams = (url: string) => {
+    const currentUrlWithoutQueryParams = window.location.href.split('?')[0];
+    return currentUrlWithoutQueryParams === url || `${currentUrlWithoutQueryParams}/` === url;
+};
+
 export const isReferencedByUrlHash = (urlHash: string, id: string): boolean => {
     return urlHash === `#${id}`;
 };

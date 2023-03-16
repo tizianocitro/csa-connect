@@ -11,6 +11,8 @@ import {Section, SectionInfo, Widget} from 'src/types/organization';
 import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
+import {isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {getSiteUrl} from 'src/clients';
 
 export const IsRhsContext = createContext(false);
 
@@ -39,6 +41,7 @@ const SectionsWidgetsContainer = ({
     children = [],
     childrenBottom = true,
 }: Props) => {
+    const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`);
     return (
         <IsRhsContext.Provider value={isRhs}>
             <Container>
@@ -52,7 +55,7 @@ const SectionsWidgetsContainer = ({
                     </Header>
                     <Main>
                         <Body>
-                            {!childrenBottom && children}
+                            {(showChildren && !childrenBottom) && children}
                             {sections && sectionPath &&
                                 <Sections
                                     path={sectionPath}
@@ -63,7 +66,7 @@ const SectionsWidgetsContainer = ({
                             <Widgets
                                 widgets={widgets}
                             />
-                            {childrenBottom && children}
+                            {(showChildren && childrenBottom) && children}
                         </Body>
                     </Main>
                 </MainWrapper>
