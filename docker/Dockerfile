@@ -1,8 +1,11 @@
+FROM mm-ubuntu-upgrated AS BUILDER
+WORKDIR home/mattermost/csa-connect
+COPY . .
+RUN make
+
 FROM mattermost/mattermost-enterprise-edition:7.8.0
-
 WORKDIR /mattermost
-
-COPY artifact/cs-aware-connect-+.tar.gz ./prepackaged_plugins/cs-aware-connect-+.tar.gz
+COPY --from=BUILDER /home/mattermost/csa-connect/dist/cs-aware-connect-+.tar.gz ./prepackaged_plugins/cs-aware-connect-+.tar.gz
 
 # The config.json file will always be overritten at the startup
 # RUN sed -i 's/"PluginStates": {/"PluginStates": \n{\n"cs-aware-connect": {\n"Enable": true\n},/g' ./config/config.json
