@@ -87,9 +87,9 @@ func (p *Plugin) OnActivate() error {
 		p.platformService,
 	)
 
-	if err := p.registerCommands(); err != nil {
-		return errors.Wrapf(err, "failed to register commands")
-	}
+	// if err := p.registerCommands(); err != nil {
+	// 	return errors.Wrapf(err, "failed to register commands")
+	// }
 
 	p.API.LogInfo("Plugin activated successfully", "pluginID", p.pluginID, "botID", p.botID)
 	return nil
