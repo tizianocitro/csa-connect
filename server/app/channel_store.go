@@ -9,5 +9,5 @@ type ChannelStore interface {
 	GetChannelByID(channelID string) (GetChannelByIDResult, error)
 
 	// AddChannel adds a channel to a section
-	AddChannel(sectionID string, userID string, params AddChannelParams) (AddChannelResult, error)
+	AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error)
 }

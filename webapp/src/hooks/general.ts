@@ -25,10 +25,12 @@ import {
     fetchChannelById,
     fetchChannels,
     fetchGraphData,
+    fetchListData,
     fetchPaginatedTableData,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
+    fetchTimelineData,
 } from 'src/clients';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
 import {
@@ -47,6 +49,8 @@ import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {ListData} from 'src/types/list';
+import {TimelineData} from 'src/types/timeline';
 
 import {formatSectionPath, formatStringToLowerCase} from './format';
 
@@ -311,6 +315,48 @@ export const useTextBoxData = (url: string): TextBoxData => {
         };
     }, [url]);
     return textBoxData as TextBoxData;
+};
+
+export const useListData = (url: string): ListData => {
+    const [listData, setListData] = useState<ListData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchListDataAsync() {
+            const listDataResult = await fetchListData(url);
+            if (!isCanceled) {
+                setListData(listDataResult);
+            }
+        }
+
+        fetchListDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return listData as ListData;
+};
+
+export const useTimelineData = (url: string): TimelineData => {
+    const [timelineData, setTimelineData] = useState<TimelineData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchTimelineDataAsync() {
+            const listDataResult = await fetchTimelineData(url);
+            if (!isCanceled) {
+                setTimelineData(listDataResult);
+            }
+        }
+
+        fetchTimelineDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return timelineData as TimelineData;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

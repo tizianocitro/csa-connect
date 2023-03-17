@@ -11,10 +11,10 @@ export const getSection = (id: string): Section => {
         filter((s: Section) => s.id === id)[0];
 };
 
-export const hideOptions = () => {
+export const hideOptions = (): NodeJS.Timeout[] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
         const indicator = document.getElementById('unreadIndicatorTop');
         if (indicator) {
             indicator.style.display = 'none';
@@ -28,5 +28,16 @@ export const hideOptions = () => {
                 break;
             }
         }
+
+        const townSquare = document.getElementById('sidebarItem_town-square')?.parentElement;
+        if (townSquare) {
+            townSquare.style.display = 'none';
+        }
+        const offTopic = document.getElementById('sidebarItem_off-topic')?.parentElement;
+        if (offTopic) {
+            offTopic.style.display = 'none';
+        }
     }, estimatedOptionsLoadTime);
+
+    return [timeout];
 };

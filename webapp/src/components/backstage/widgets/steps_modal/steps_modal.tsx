@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
+import {ClientError} from '@mattermost/client';
 
 import {StepData} from 'src/types/steps_modal';
 import {
@@ -29,8 +30,9 @@ import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
-import {PaddedErrorMessage} from 'src/components/commons/messages';
+import {ErrorMessage, PaddedErrorMessage} from 'src/components/commons/messages';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
+import {HorizontalSpacer} from 'src/components/backstage/grid';
 
 const {Step} = Steps;
 
@@ -58,6 +60,7 @@ const StepsModal = ({
     const organization = useOrganization(organizationId);
 
     const [visible, setVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
     const [stepValues, setStepValues] = useState<any>({});
 
@@ -72,8 +75,10 @@ const StepsModal = ({
     const [errors, setErrors] = useState<SectionInfoState>(initSectionInfoState());
 
     const cleanModal = useCallback(() => {
+        setVisible(false);
         setCurrentStep(0);
         setStepValues({});
+        setErrorMessage('');
         setInputValues(initSectionInfoState());
         setErrors(initSectionInfoState());
     }, []);
@@ -83,7 +88,7 @@ const StepsModal = ({
         setErrors({...errors, [key]: ''});
     };
 
-    const handleOk = () => {
+    const handleOk = async () => {
         const addRowErrors: SectionInfoState = initSectionInfoState();
         let allKeysNotEmpty = true;
         Object.keys(inputValues).forEach((key) => {
@@ -97,34 +102,32 @@ const StepsModal = ({
             return;
         }
 
-        setVisible(false);
-
         // TODO: this function has to be passed as a prop, to make the widget generic
         saveSectionInfo({
             ...inputValues,
             elements: Object.values(stepValues).flat(),
         }, targetUrl).
-            then((result) => {
-                cleanModal();
+            then((savedSectionInfo) => {
                 addChannel({
-                    channelName: formatName(`${organization.name}-${result.name}`),
+                    channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
                     createPublicChannel: true,
                     parentId,
-                    sectionId: result.id,
+                    sectionId: savedSectionInfo.id,
                     teamId,
                 }).
                     then(() => {
+                        cleanModal();
                         const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
-                        navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
+                        navigateToUrl(`${basePath}/${savedSectionInfo.id}?${PARENT_ID_PARAM}=${parentId}`);
                     });
             }).
-            catch(() => {
-                // TODO: Do something in case of error
+            catch((err: ClientError) => {
+                const message = JSON.parse(err.message);
+                setErrorMessage(message.error);
             });
     };
 
     const handleCancel = () => {
-        setVisible(false);
         cleanModal();
     };
 
@@ -142,10 +145,10 @@ const StepsModal = ({
                         <Checkbox
                             key={`${option.name}-${index}`}
                             value={option}
-                            style={{marginLeft: '8px', marginTop: '2px', borderBottom: '1px solid', borderBottomColor: '#888'}}
+                            style={{marginLeft: '8px', marginTop: '2px', marginBottom: '2px', borderBottom: '1px solid rgba(var(--center-channel-color-rgb), 0.08)'}}
                         >
                             <div>{option.name}</div>
-                            <div style={{fontSize: '12px', color: '#888', marginTop: '2px'}}>
+                            <div style={{fontSize: '12px', color: 'rgba(var(--center-channel-color-rgb), 0.72)', marginTop: '2px'}}>
                                 {option.description}
                             </div>
                         </Checkbox>))}
@@ -219,6 +222,10 @@ const StepsModal = ({
                         />))}
                 </Steps>
                 {steps[currentStep].content}
+                <HorizontalSpacer size={1}/>
+                <ErrorMessage display={errorMessage !== ''}>
+                    {errorMessage}
+                </ErrorMessage>
             </Modal>
         </Container>
     );

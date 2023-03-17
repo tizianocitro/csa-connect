@@ -40,6 +40,8 @@ const Table = ({
     const tableIdPrefix = `${id}-${sectionId}-${parentId}`;
     const tableId = isSection ? `${tableIdPrefix}-section` : `${tableIdPrefix}-widget`;
 
+    const query = buildQuery(parentId, sectionId);
+
     return (
         <Container
             id={tableId}
@@ -49,7 +51,7 @@ const Table = ({
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={tableId}
-                    query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
+                    query={isEcosystemRhs ? '' : query}
                     text={name}
                     title={name}
                 />
@@ -67,7 +69,7 @@ const Table = ({
                         key={row.id}
                         onClick={open ? () => open(row.id) : undefined}
                         pointer={pointer}
-                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
+                        query={isEcosystemRhs ? '' : query}
                         row={row}
                         urlHash={urlHash}
                     />

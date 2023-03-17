@@ -40,8 +40,12 @@ const ChannelsList = ({
                     ))}
                 </InfiniteScroll>}
             {isList &&
-                <div className='text-center pt-8'>
+                <div className='text-center pt-4'>
                     <FormattedMessage defaultMessage='All the related channels will show here.'/>
+                </div>}
+            {!isList &&
+                <div className='text-center pt-4'>
+                    <FormattedMessage defaultMessage='If you do not see the channel, please ensure that the team is selected.'/>
                 </div>}
         </ChannelList>
     );
