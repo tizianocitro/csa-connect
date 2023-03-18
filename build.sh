@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VERSION=latest
-IMAGE_NAME=csconnect/mattermost:$VERSION
+IMAGE_NAME=tizianocitro/mattermost:$VERSION
 
 echo "Removing old $IMAGE_NAME image..."
 docker rmi "$IMAGE_NAME"
