@@ -1,4 +1,4 @@
-FROM mm-ubuntu-upgrated AS BUILDER
+FROM cs-connect-base AS BUILDER
 WORKDIR home/mattermost/csa-connect
 COPY . .
 RUN make
